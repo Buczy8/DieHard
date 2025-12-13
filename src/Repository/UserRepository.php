@@ -1,18 +1,22 @@
 <?php
 namespace App\Repository;
 
+use App\Models\User;
 use PDO;
 class UserRepository extends Repository{
-    public function getUser(): ?array {
+    public function getUserByEmail(string $email) {
 
         $stmt = $this->database->prepare(
-            "SELECT * FROM users"
+            "SELECT * FROM users WHERE email = :email"
         );
+        $stmt->bindParam(':email', $email, PDO::PARAM_STR);
         $stmt->execute();
 
-        $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        // Tutaj mapujemy w przyszłości tablicę na obiekt User
-        return $users;
+        if (!$user) {
+            return null;
+        }
+        return User::fromArray($user);
     }
 }
