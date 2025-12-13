@@ -19,4 +19,32 @@ class UserRepository extends Repository{
         }
         return User::fromArray($user);
     }
+    public function getUserById(int $id): ?User {
+        $stmt = $this->database->prepare(
+            "SELECT * FROM users WHERE id = :id"
+        );
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$user) {
+            return null;
+        }
+        return User::fromArray($user);
+    }
+
+    public function createUser(User $user): void {
+        $stmt = $this->database->prepare(
+            "INSERT INTO users (username, email, password, role) 
+             VALUES (:username, :email, :password, :role)"
+        );
+
+        $stmt->execute([
+            ':username' => $user->username,
+            ':email'    => $user->email,
+            ':password' => $user->password,
+            ':role'     => $user->role
+        ]);
+    }
 }
