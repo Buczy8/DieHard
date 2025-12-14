@@ -6,6 +6,7 @@ use App\Database;
 use App\DTO\CreateUserDTO;
 use App\Models\User;
 use App\Repository\UserRepository;
+use App\DTO\LoginDTO;
 
 class SecurityController extends AppController
 {
@@ -23,19 +24,18 @@ class SecurityController extends AppController
             return $this->render("login");
         }
 
-        $email = $_POST["email"] ?? '';
-        $password = $_POST["password"] ?? '';
+        $loginDto = LoginDTO::fromRequest($_POST);
 
-        if (empty($email) || empty($password)) {
+        if (empty($loginDto->email) || empty($loginDto->password)){
             return $this->render("login", ["message" => "Fill all fields"]);
         }
 
-        $user = $this->userRepository->getUserByEmail($email);
+        $user = $this->userRepository->getUserByEmail($loginDto->email);
 
         if (!$user) {
             return $this->render("login", ["message" => "User not found"]);
         }
-        if (!password_verify($password, $user->password)) {
+        if (!password_verify($loginDto->password, $user->password)) {
             return $this->render("login", ["message" => "Wrong password"]);
         }
 
