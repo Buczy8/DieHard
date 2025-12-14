@@ -6,6 +6,14 @@ class Routing{
             'controller' => 'App\Controllers\DiceGameController',
             'action' => 'index'
         ],
+        'login' => [
+            'controller' => 'App\Controllers\SecurityController',
+            'action' => 'login'
+        ],
+        'register' => [
+            'controller' => 'App\Controllers\SecurityController',
+            'action' => 'register'
+        ]
     ];
     public static function run(string $path)
     {
