@@ -1,14 +1,17 @@
 <?php
 namespace App\Models;
+use DateTimeImmutable;
+
 class User
 {
     public function __construct(
-        public int     $id,
         public string  $email,
         public string  $username,
         public string  $password,
-        public string  $role,
-        public ?string $createdAt = null
+
+        public ?int $id = null,
+        public string  $role = 'user',
+        public ?DateTimeImmutable $createdAt = null
     )
     {
     }
@@ -16,12 +19,14 @@ class User
     public static function fromArray(array $data): self
     {
         return new self(
-            id: (int)$data['id'],
+            id: isset($data['id']) ? (int)$data['id'] : null,
             email: $data['email'],
             username: $data['username'],
             password: $data['password'],
             role: $data['role'],
-            createdAt: $data['created_at'] ?? null
+            createdAt: isset($data['created_at'])
+                ? new DateTimeImmutable($data['created_at'])
+                : null
         );
     }
 }
