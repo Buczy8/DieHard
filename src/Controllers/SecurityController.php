@@ -15,7 +15,7 @@ class SecurityController extends AppController
     public function __construct()
     {
         $db = Database::getInstance();
-        $this->userRepository = new UserRepository($db);
+        $this->userRepository = UserRepository::getInstance();
     }
 
     public function login()
@@ -29,14 +29,14 @@ class SecurityController extends AppController
         if (empty($loginDto->email) || empty($loginDto->password)){
             return $this->render("login", ["message" => "Fill all fields"]);
         }
+        if (!filter_var($loginDto->email, FILTER_VALIDATE_EMAIL)) {
+            return $this->render('login', ['messages' => 'Invalid email format']);
+        }
 
         $user = $this->userRepository->getUserByEmail($loginDto->email);
 
-        if (!$user) {
-            return $this->render("login", ["message" => "User not found"]);
-        }
-        if (!password_verify($loginDto->password, $user->password)) {
-            return $this->render("login", ["message" => "Wrong password"]);
+        if (!password_verify($loginDto->password, $user->password) || (!$user)) {
+            return $this->render("login", ["message" => "Invalid email or password"]);
         }
 
         $_SESSION['user_id'] = $user->id;
@@ -93,10 +93,7 @@ class SecurityController extends AppController
             return $this->render("login", ["message" => "Zarejestrowano poprawnie! Zaloguj się."]);
 
         } catch (\Exception $e) {
-            return $this->render('register', [
-                'messages' => ['Wystąpił błąd serwera. Spróbuj ponownie później.'],
-                'old_values' => ['email' => $formData['email'], 'nickname' => $formData['username']]
-            ]);
+            return $this->render('register', ["message" => "Wystąpił błąd serwera. Spróbuj ponownie później."]);
         }
     }
 }
