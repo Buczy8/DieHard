@@ -27,3 +27,13 @@ yarn-error.log*
 .DS_Store
 Thumbs.db
 .idea/
+
+# Lokalne certyfikaty SSL
+docker/nginx/certs/*
+!docker/nginx/certs/.gitkeep
+*.key
+*.crt
+*.pem
+
+# Narzędzia lokalne
+mkcert.exe

@@ -5,8 +5,10 @@ services:
       dockerfile: docker/nginx/Dockerfile
     ports:
       - "8080:80"
+      - "443:443"
     volumes:
       - .:/app/
+      - ./docker/nginx/certs:/etc/nginx/certs
     links:
       - php
     networks:

@@ -2,7 +2,6 @@
 
 namespace App\Controllers;
 
-use App\Database;
 use App\DTO\CreateUserDTO;
 use App\Models\User;
 use App\Repository\UserRepository;
@@ -14,12 +13,24 @@ class SecurityController extends AppController
 
     public function __construct()
     {
-        $db = Database::getInstance();
         $this->userRepository = UserRepository::getInstance();
     }
 
+    private function ensureHttps()
+    {
+        $isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+            || $_SERVER['SERVER_PORT'] == 443;
+
+        if (!$isHttps) {
+            $redirect = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+            header('Location: ' . $redirect);
+            exit();
+        }
+    }
     public function login()
     {
+        $this->ensureHttps();
+
         if ($this->isGet()) {
             return $this->render("login");
         }
@@ -35,19 +46,24 @@ class SecurityController extends AppController
 
         $user = $this->userRepository->getUserByEmail($loginDto->email);
 
-        if (!password_verify($loginDto->password, $user->password) || (!$user)) {
+        if ((!$user) || !password_verify($loginDto->password, $user->password)) {
             return $this->render("login", ["message" => "Invalid email or password"]);
         }
+
+        session_regenerate_id(true);
 
         $_SESSION['user_id'] = $user->id;
         $_SESSION['user_email'] = $user->email;
 
-        $url = "http://$_SERVER[HTTP_HOST]";
+        $url = "https://" . $_SERVER['HTTP_HOST'];
         header("Location: {$url}/dicegame");
+        exit();
     }
 
     public function register()
     {
+        $this->ensureHttps();
+
         if ($this->isGet()) {
             return $this->render("register");
         }
@@ -59,8 +75,6 @@ class SecurityController extends AppController
             'role' => 'user'
         ];
         $passwordConfirmation = $_POST["passwordConfirmation"] ?? '';
-
-        $messages = [];
 
         if (empty($formData['email']) || empty($formData['password']) || empty($formData['username']) || empty($passwordConfirmation)) {
             return $this->render("register", ["message" => "nie wszytkie pola są wypiełnoine"]);
