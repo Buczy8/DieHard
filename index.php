@@ -41,17 +41,32 @@ try {
 
     Routing::run($path);
 } catch (\Exception $e) {
-    if ($e->getCode() === 405) {
+    $errorCode = $e->getCode();
+
+    if ($errorCode === 405) {
         http_response_code(405);
         echo "<h1>Błąd 405</h1>";
         echo "<p>Niedozwolona metoda żądania. " . htmlspecialchars($e->getMessage()) . "</p>";
         exit;
     }
-    if ($e->getCode() === 401) {
-        // Obsługa błędu braku logowania
+    if ($errorCode === 401 || $errorCode === 403) {
         header("Location: /login");
-        var_dump($e->getMessage());
-
+        exit;
     }
+
+    http_response_code(500);
+
+    error_log("Critical Error: " . htmlspecialchars($e->getMessage() . " in " . $e->getFile() . ":" . $e->getLine()));
+
+    if ($environment === 'production') {
+        echo "<h1>Wystąpił błąd serwera</h1>";
+        echo "<p>Przepraszamy, coś poszło nie tak. Spróbuj ponownie później.</p>";
+    } else {
+        echo "<h1>Error 500</h1>";
+        echo "<strong>Message:</strong> " . $e->getMessage() . "<br>";
+        echo "<strong>File:</strong> " . $e->getFile() . ":" . $e->getLine() . "<br>";
+        echo "<pre>" . $e->getTraceAsString() . "</pre>";
+    }
+    exit;
 }
 ?>

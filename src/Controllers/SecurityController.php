@@ -39,19 +39,23 @@ class SecurityController extends AppController
             }
 
             if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf']) {
+                http_response_code(400);
                 return $this->render("login", ["message" => "Session expired or invalid request."]);
             }
             $loginDto = LoginDTO::fromRequest($_POST);
 
             if (empty($loginDto->email) || empty($loginDto->password)) {
+                http_response_code(400);
                 return $this->render("login", ["message" => "Fill all fields"]);
             }
 
             if (strlen($loginDto->email) > 100) {
+                http_response_code(400);
                 return $this->render("login", ["message" => "Email is too long"]);
             }
 
             if (!filter_var($loginDto->email, FILTER_VALIDATE_EMAIL)) {
+                http_response_code(400);
                 return $this->render('login', ['message' => 'Invalid email format']);
             }
 
@@ -59,6 +63,7 @@ class SecurityController extends AppController
 
             if (!$user || !password_verify($loginDto->password, $user->password)) {
                 $_SESSION['login_failures'] = $failures + 1;
+                http_response_code(400);
                 return $this->render("login", ["message" => "Invalid email or password"]);
             }
 
@@ -90,6 +95,7 @@ class SecurityController extends AppController
 
         if ($this->isPost()) {
             if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf']) {
+                http_response_code(400);
                 return $this->render("register", ["message" => "Session expired."]);
             }
             $formData = [
@@ -101,17 +107,21 @@ class SecurityController extends AppController
             $passwordConfirmation = $_POST["passwordConfirmation"] ?? '';
 
             if (empty($formData['email']) || empty($formData['password']) || empty($formData['username']) || empty($passwordConfirmation)) {
+                http_response_code(400);
                 return $this->render("register", ["message" => "Fill all fields."]);
             }
 
             if (strlen($formData['email']) > 100) {
+                http_response_code(400);
                 return $this->render("register", ["message" => "Email is too long"]);
             }
             if (strlen($formData['password']) < 8) {
+                http_response_code(400);
                 return $this->render("register", ["message" => "Password is too weak"]);
             }
 
             if ($formData['password'] !== $passwordConfirmation) {
+                http_response_code(400);
                 return $this->render("register", ["message" => "hasła się nie zgdzaja"]);
             }
 
@@ -119,6 +129,7 @@ class SecurityController extends AppController
             $existingUser = $this->userRepository->getUserByEmail($userDTO->email);
 
             if ($existingUser) {
+                http_response_code(400);
                 return $this->render("register", ["message" => "Unable to create an account for the given information"]);
             }
 

@@ -32,6 +32,7 @@ class CheckHttps
 
         if (!$isHttps) {
             $redirect = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+            http_response_code(301);
             header('Location: ' . $redirect);
             exit();
         }
