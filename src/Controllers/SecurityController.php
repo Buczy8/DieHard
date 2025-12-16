@@ -119,7 +119,7 @@ class SecurityController extends AppController
             $existingUser = $this->userRepository->getUserByEmail($userDTO->email);
 
             if ($existingUser) {
-                return $this->render("register", ["message" => "If there is a user with this address, we will send instructions to that email address"]);
+                return $this->render("register", ["message" => "Unable to create an account for the given information"]);
             }
 
             $hashedPassword = password_hash($userDTO->password, PASSWORD_DEFAULT);
@@ -133,7 +133,7 @@ class SecurityController extends AppController
 
             $this->userRepository->createUser($user);
 
-            return $this->render("login", ["message" => "Zarejestrowano poprawnie! Zaloguj się."]);
+            return $this->render("login", ["message" => "You have registered successfully! Log in"]);
         }
     }
 
