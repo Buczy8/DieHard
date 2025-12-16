@@ -2,6 +2,8 @@
 
 namespace App\Controllers;
 
+use App\Annotation\AllowedMethods;
+use App\Annotation\RequiresHttps;
 use App\DTO\CreateUserDTO;
 use App\Models\User;
 use App\Repository\UserRepository;
@@ -16,20 +18,10 @@ class SecurityController extends AppController
         $this->userRepository = UserRepository::getInstance();
     }
 
-    private function ensureHttps()
-    {
-        $isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
-            || $_SERVER['SERVER_PORT'] == 443;
-
-        if (!$isHttps) {
-            $redirect = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-            header('Location: ' . $redirect);
-            exit();
-        }
-    }
+    #[RequiresHttps]
+    #[AllowedMethods(['POST', 'GET'])]
     public function login()
     {
-        $this->ensureHttps();
 
         if ($this->isGet()) {
             return $this->render("login");
@@ -37,7 +29,7 @@ class SecurityController extends AppController
 
         $loginDto = LoginDTO::fromRequest($_POST);
 
-        if (empty($loginDto->email) || empty($loginDto->password)){
+        if (empty($loginDto->email) || empty($loginDto->password)) {
             return $this->render("login", ["message" => "Fill all fields"]);
         }
         if (!filter_var($loginDto->email, FILTER_VALIDATE_EMAIL)) {
@@ -59,10 +51,10 @@ class SecurityController extends AppController
         header("Location: {$url}/dicegame");
         exit();
     }
-
+    #[RequiresHttps]
+    #[AllowedMethods(['POST', 'GET'])]
     public function register()
     {
-        $this->ensureHttps();
 
         if ($this->isGet()) {
             return $this->render("register");
@@ -110,4 +102,33 @@ class SecurityController extends AppController
             return $this->render('register', ["message" => "Wystąpił błąd serwera. Spróbuj ponownie później."]);
         }
     }
+
+    public function logout()
+    {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        $_SESSION = [];
+
+        if (ini_get("session.use_cookies")) {
+            $params = session_get_cookie_params();
+            setcookie(
+                session_name(),
+                '',
+                time() - 42000,
+                $params["path"],
+                $params["domain"],
+                $params["secure"],
+                $params["httponly"]
+            );
+        }
+
+        session_destroy();
+
+        $url = "https://" . $_SERVER['HTTP_HOST'];
+        header("Location: {$url}/login");
+        exit();
+    }
+
 }
