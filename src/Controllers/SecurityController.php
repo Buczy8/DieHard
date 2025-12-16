@@ -64,6 +64,7 @@ class SecurityController extends AppController
             if (!$user || !password_verify($loginDto->password, $user->password)) {
                 $_SESSION['login_failures'] = $failures + 1;
                 http_response_code(400);
+                error_log("Failed login for {$loginDto->email} from IP ".$_SERVER['REMOTE_ADDR']);
                 return $this->render("login", ["message" => "Invalid email or password"]);
             }
 
