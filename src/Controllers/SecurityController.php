@@ -101,11 +101,14 @@ class SecurityController extends AppController
             $passwordConfirmation = $_POST["passwordConfirmation"] ?? '';
 
             if (empty($formData['email']) || empty($formData['password']) || empty($formData['username']) || empty($passwordConfirmation)) {
-                return $this->render("register", ["message" => "nie wszytkie pola są wypiełnoine"]);
+                return $this->render("register", ["message" => "Fill all fields."]);
             }
 
-            if(strlen($formData['email']) > 100) {
+            if (strlen($formData['email']) > 100) {
                 return $this->render("register", ["message" => "Email is too long"]);
+            }
+            if (strlen($formData['password']) < 8) {
+                return $this->render("register", ["message" => "Password is too weak"]);
             }
 
             if ($formData['password'] !== $passwordConfirmation) {
@@ -116,7 +119,7 @@ class SecurityController extends AppController
             $existingUser = $this->userRepository->getUserByEmail($userDTO->email);
 
             if ($existingUser) {
-                return $this->render("register", ["message" => "Użytkownik o tym adresie email już istnieje!"]);
+                return $this->render("register", ["message" => "If there is a user with this address, we will send instructions to that email address"]);
             }
 
             $hashedPassword = password_hash($userDTO->password, PASSWORD_DEFAULT);
