@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        .message { color: red; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+<form action="\login" method="POST">
+    <h1 id="title">LOGIN</h1>
+    <div class="message">
+        <?php if(isset($message)) { echo htmlspecialchars($message); } ?>
+    </div>
+    <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf'] ?? '' ?>">
+    <input name="email" type="email" placeholder="Podaj email">
+    <input name="password" type="password" placeholder="Podaj hasło">
+    <button type="submit">LOGIN</button>
+</form>
+</body>
+</html>
