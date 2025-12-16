@@ -31,6 +31,13 @@ class SecurityController extends AppController
         }
 
         if ($this->isPost()) {
+
+            $failures = $_SESSION['login_failures'] ?? 0;
+
+            if ($failures > 5) {
+                sleep(2);
+            }
+
             if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf']) {
                 return $this->render("login", ["message" => "Session expired or invalid request."]);
             }
@@ -51,8 +58,11 @@ class SecurityController extends AppController
             $user = $this->userRepository->getUserByEmail($loginDto->email);
 
             if (!$user || !password_verify($loginDto->password, $user->password)) {
+                $_SESSION['login_failures'] = $failures + 1;
                 return $this->render("login", ["message" => "Invalid email or password"]);
             }
+
+            unset($_SESSION['login_failures']);
 
             session_regenerate_id(true);
             $_SESSION['user_id'] = $user->id;
