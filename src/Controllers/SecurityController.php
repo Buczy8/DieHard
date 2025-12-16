@@ -24,10 +24,16 @@ class SecurityController extends AppController
     {
 
         if ($this->isGet()) {
+            if (empty($_SESSION['csrf'])) {
+                $_SESSION['csrf'] = bin2hex(random_bytes(32));
+            }
             return $this->render("login");
         }
 
         if ($this->isPost()) {
+            if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf']) {
+                return $this->render("login", ["message" => "Session expired or invalid request."]);
+            }
             $loginDto = LoginDTO::fromRequest($_POST);
 
             if (empty($loginDto->email) || empty($loginDto->password)) {
@@ -47,6 +53,8 @@ class SecurityController extends AppController
             $_SESSION['user_id'] = $user->id;
             $_SESSION['user_email'] = $user->email;
 
+            unset($_SESSION['csrf']);
+
             $url = "https://" . $_SERVER['HTTP_HOST'];
             header("Location: {$url}/dicegame");
             exit();
@@ -59,10 +67,16 @@ class SecurityController extends AppController
     {
 
         if ($this->isGet()) {
+            if (empty($_SESSION['csrf'])) {
+                $_SESSION['csrf'] = bin2hex(random_bytes(32));
+            }
             return $this->render("register");
         }
 
         if ($this->isPost()) {
+            if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf']) {
+                return $this->render("register", ["message" => "Session expired."]);
+            }
             $formData = [
                 'email' => $_POST["email"] ?? '',
                 'password' => $_POST["password"] ?? '',
