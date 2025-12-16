@@ -27,30 +27,32 @@ class SecurityController extends AppController
             return $this->render("login");
         }
 
-        $loginDto = LoginDTO::fromRequest($_POST);
+        if ($this->isPost()) {
+            $loginDto = LoginDTO::fromRequest($_POST);
 
-        if (empty($loginDto->email) || empty($loginDto->password)) {
-            return $this->render("login", ["message" => "Fill all fields"]);
+            if (empty($loginDto->email) || empty($loginDto->password)) {
+                return $this->render("login", ["message" => "Fill all fields"]);
+            }
+            if (!filter_var($loginDto->email, FILTER_VALIDATE_EMAIL)) {
+                return $this->render('login', ['message' => 'Invalid email format']);
+            }
+
+            $user = $this->userRepository->getUserByEmail($loginDto->email);
+
+            if (!$user || !password_verify($loginDto->password, $user->password)) {
+                return $this->render("login", ["message" => "Invalid email or password"]);
+            }
+
+            session_regenerate_id(true);
+            $_SESSION['user_id'] = $user->id;
+            $_SESSION['user_email'] = $user->email;
+
+            $url = "https://" . $_SERVER['HTTP_HOST'];
+            header("Location: {$url}/dicegame");
+            exit();
         }
-        if (!filter_var($loginDto->email, FILTER_VALIDATE_EMAIL)) {
-            return $this->render('login', ['messages' => 'Invalid email format']);
-        }
-
-        $user = $this->userRepository->getUserByEmail($loginDto->email);
-
-        if ((!$user) || !password_verify($loginDto->password, $user->password)) {
-            return $this->render("login", ["message" => "Invalid email or password"]);
-        }
-
-        session_regenerate_id(true);
-
-        $_SESSION['user_id'] = $user->id;
-        $_SESSION['user_email'] = $user->email;
-
-        $url = "https://" . $_SERVER['HTTP_HOST'];
-        header("Location: {$url}/dicegame");
-        exit();
     }
+
     #[RequiresHttps]
     #[AllowedMethods(['POST', 'GET'])]
     public function register()
@@ -60,24 +62,23 @@ class SecurityController extends AppController
             return $this->render("register");
         }
 
-        $formData = [
-            'email' => $_POST["email"] ?? '',
-            'password' => $_POST["password"] ?? '',
-            'username' => trim($_POST["user-name"] ?? ''),
-            'role' => 'user'
-        ];
-        $passwordConfirmation = $_POST["passwordConfirmation"] ?? '';
+        if ($this->isPost()) {
+            $formData = [
+                'email' => $_POST["email"] ?? '',
+                'password' => $_POST["password"] ?? '',
+                'username' => trim($_POST["user-name"] ?? ''),
+                'role' => 'user'
+            ];
+            $passwordConfirmation = $_POST["passwordConfirmation"] ?? '';
 
-        if (empty($formData['email']) || empty($formData['password']) || empty($formData['username']) || empty($passwordConfirmation)) {
-            return $this->render("register", ["message" => "nie wszytkie pola są wypiełnoine"]);
-        }
+            if (empty($formData['email']) || empty($formData['password']) || empty($formData['username']) || empty($passwordConfirmation)) {
+                return $this->render("register", ["message" => "nie wszytkie pola są wypiełnoine"]);
+            }
 
-        if ($formData['password'] !== $passwordConfirmation) {
-            return $this->render("register", ["message" => "hasła się nie zgdzaja"]);
-        }
+            if ($formData['password'] !== $passwordConfirmation) {
+                return $this->render("register", ["message" => "hasła się nie zgdzaja"]);
+            }
 
-
-        try {
             $userDTO = CreateUserDTO::fromRequest($formData);
             $existingUser = $this->userRepository->getUserByEmail($userDTO->email);
 
@@ -97,9 +98,6 @@ class SecurityController extends AppController
             $this->userRepository->createUser($user);
 
             return $this->render("login", ["message" => "Zarejestrowano poprawnie! Zaloguj się."]);
-
-        } catch (\Exception $e) {
-            return $this->render('register', ["message" => "Wystąpił błąd serwera. Spróbuj ponownie później."]);
         }
     }
 
