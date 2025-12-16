@@ -39,6 +39,11 @@ class SecurityController extends AppController
             if (empty($loginDto->email) || empty($loginDto->password)) {
                 return $this->render("login", ["message" => "Fill all fields"]);
             }
+
+            if (strlen($loginDto->email) > 100) {
+                return $this->render("login", ["message" => "Email is too long"]);
+            }
+
             if (!filter_var($loginDto->email, FILTER_VALIDATE_EMAIL)) {
                 return $this->render('login', ['message' => 'Invalid email format']);
             }
@@ -87,6 +92,10 @@ class SecurityController extends AppController
 
             if (empty($formData['email']) || empty($formData['password']) || empty($formData['username']) || empty($passwordConfirmation)) {
                 return $this->render("register", ["message" => "nie wszytkie pola są wypiełnoine"]);
+            }
+
+            if(strlen($formData['email']) > 100) {
+                return $this->render("register", ["message" => "Email is too long"]);
             }
 
             if ($formData['password'] !== $passwordConfirmation) {
