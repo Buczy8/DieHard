@@ -123,7 +123,7 @@ class SecurityController extends AppController
 
             if ($formData['password'] !== $passwordConfirmation) {
                 http_response_code(400);
-                return $this->render("register", ["message" => "hasła się nie zgdzaja"]);
+                return $this->render("register", ["message" => "passwords does not match"]);
             }
 
             $userDTO = CreateUserDTO::fromRequest($formData);
@@ -131,7 +131,13 @@ class SecurityController extends AppController
 
             if ($existingUser) {
                 http_response_code(400);
-                return $this->render("register", ["message" => "Unable to create an account for the given information"]);
+                return $this->render("register", ["message" => "This account already exists"]);
+            }
+
+            $existingUsername = $this->userRepository->getUserByUserName($userDTO->username);
+            if ($existingUsername) {
+                http_response_code(400);
+                return $this->render("register", ["message" => "This username already exists"]);
             }
 
             $hashedPassword = password_hash($userDTO->password, PASSWORD_DEFAULT);
