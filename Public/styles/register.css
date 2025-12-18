@@ -1,0 +1,259 @@
+/* register.css */
+
+/* --- RESET PODSTAWOWY --- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+body {
+    background-color: var(--bg-page);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-image: var(--bg-pattern-url);
+    background-repeat: repeat;
+    background-position: center;
+    background-size: 300px 300px;
+}
+
+/* --- NAWIGACJA (Zmniejszona wysokość) --- */
+nav {
+    background-color: var(--bg-card);
+    border-bottom: 1px solid var(--border-light);
+    padding: 12px 40px; /* Zmniejszono z 20px */
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo-icon {
+    color: var(--accent-color);
+    width: 20px; /* Nieco mniejsza ikona */
+    height: 20px;
+}
+
+.logo-text {
+    font-weight: 700;
+    font-size: 16px; /* Nieco mniejszy tekst */
+    color: var(--text-main);
+}
+
+/* --- UKŁAD (LAYOUT) --- */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Centrowanie pionowe */
+    flex-grow: 1;
+    padding: 20px; /* Mniej miejsca wokół karty */
+}
+
+.card {
+    background-color: var(--bg-card);
+    padding: 30px; /* ZMNIEJSZONO z 40px - kluczowa zmiana */
+    border-radius: 12px;
+    box-shadow: var(--shadow-card);
+    width: 100%;
+    max-width: 400px; /* Nieco węższa karta (było 450px) */
+    text-align: center;
+    border: 1px solid var(--border-subtle);
+}
+
+/* --- TYPOGRAFIA --- */
+h1 {
+    font-size: 22px; /* Było 24px */
+    font-weight: 800;
+    color: var(--text-main);
+    margin-bottom: 8px; /* Mniejszy odstęp */
+}
+
+.subtitle {
+    color: var(--text-secondary);
+    font-size: 13px;
+    margin-bottom: 20px; /* ZMNIEJSZONO z 32px */
+    line-height: 1.4;
+}
+
+/* --- FORMULARZ --- */
+form {
+    text-align: left;
+}
+
+.form-group {
+    margin-bottom: 14px; /* ZMNIEJSZONO z 20px - gęstsze pola */
+}
+
+label {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-bottom: 6px;
+}
+
+input {
+    width: 100%;
+    padding: 10px 12px; /* ZMNIEJSZONO wysokość inputów */
+    background-color: var(--bg-input);
+    border: 1px solid transparent;
+    border-radius: 6px;
+    font-size: 14px;
+    color: var(--text-main);
+    transition: all 0.2s;
+}
+
+input:focus {
+    outline: none;
+    background-color: var(--bg-card);
+    box-shadow: 0 0 0 2px var(--accent-color);
+}
+
+input::placeholder {
+    color: var(--text-placeholder);
+}
+
+/* --- PRZYCISK --- */
+.btn-register {
+    width: 100%;
+    padding: 10px; /* ZMNIEJSZONO z 12px */
+    background-color: var(--primary-color);
+    color: black;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: background-color 0.2s;
+}
+
+.btn-register:hover {
+    background-color: var(--primary-hover);
+}
+
+/* --- STOPKA FORMULARZA --- */
+.form-footer {
+    margin-top: 16px; /* ZMNIEJSZONO z 24px */
+    font-size: 12px;
+    color: var(--text-secondary);
+    padding-top: 16px; /* ZMNIEJSZONO z 24px */
+    border-top: 1px solid var(--border-subtle);
+}
+
+.form-footer a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.form-footer a:hover {
+    text-decoration: underline;
+}
+.message {
+    /* Domyślny styl (ukryty jeśli pusty) */
+    display: none;
+    padding: 12px 16px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.4;
+    text-align: left;
+
+    /* Domyślnie traktujemy jako błąd (można zmienić w PHP) */
+    background-color: var(--color-error-bg);
+    color: var(--color-error-text);
+    border: 1px solid var(--color-error-border);
+
+    /* Animacja pojawiania się */
+    animation: slideIn 0.3s ease-out forwards;
+}
+
+/* Jeśli div NIE jest pusty, pokaż go */
+.message:not(:empty) {
+    display: block;
+    /* Opcjonalnie: dodaj małą ikonkę błędu przed tekstem używając CSS */
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Opcjonalnie: Ikona wykrzyknika przed tekstem (SVG lub unicode) */
+.message:not(:empty)::before {
+    content: "⚠️"; /* Możesz tu dać też SVG */
+    font-size: 16px;
+}
+
+/* Klasa dla sukcesu (gdybyś chciał wyświetlić "Konto założone") */
+.message.success {
+    background-color: var(--color-success-bg);
+    color: var(--color-success-text);
+    border-color: var(--color-success-border);
+}
+.message.success:not(:empty)::before {
+    content: "✅";
+}
+
+/* Animacja wjazdu */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+/* --- RESPONSYWNOŚĆ I MAŁE EKRANY --- */
+
+/* Specjalna zasada dla niskich ekranów (np. laptopy 1366x768) */
+@media (max-height: 750px) {
+    .container {
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+    .card {
+        padding: 20px 24px; /* Jeszcze mniejszy padding na niskich ekranach */
+    }
+    .subtitle {
+        margin-bottom: 15px;
+    }
+    nav {
+        padding: 10px 20px;
+    }
+}
+
+/* Standardowe mobile */
+@media (max-width: 640px) {
+    nav {
+        padding: 12px 16px;
+    }
+
+    .container {
+        padding: 10px;
+        align-items: center; /* Na mobile też centrujemy, chyba że klawiatura wyjedzie */
+    }
+
+    .card {
+        padding: 20px;
+        max-width: 100%;
+        box-shadow: none; /* Usuwamy cień na mobile, żeby wyglądało lżej */
+        border: none;     /* Opcjonalnie: usuwamy ramkę na mobile */
+    }
+
+    /* Fix dla iPhone (zoom), ale staramy się trzymać kompaktowość */
+    input {
+        font-size: 16px;
+        padding: 8px 10px; /* Trochę niższe */
+    }
+}

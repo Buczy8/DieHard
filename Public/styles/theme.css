@@ -1,0 +1,34 @@
+/* theme.css */
+:root {
+    /* --- Kolory marki --- */
+    --primary-color: #38e17b;       /* Twój główny zielony przycisku */
+    --primary-hover: #10b981;       /* Ciemniejszy zielony po najechaniu */
+    --accent-color: #34d399;        /* Zielony kolor gwiazdki */
+
+    /* --- Kolory tekstu --- */
+    --text-main: #111827;           /* Ciemny tekst nagłówków */
+    --text-secondary: #6b7280;      /* Szary tekst pomocniczy */
+    --text-placeholder: #9ca3af;
+
+    /* --- Tła --- */
+    --bg-page: #f8f9fa;             /* Jasne tło strony */
+    --bg-card: #ffffff;             /* Białe tło karty */
+    --bg-input: #f3f4f6;            /* Tło inputów */
+
+    /* --- Obramowania --- */
+    --border-light: #e5e7eb;
+    --border-subtle: #f3f4f6;
+    --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+
+    /* Dodajemy kolory komunikatów */
+    --color-error-bg: #fee2e2;      /* Bardzo jasny czerwony */
+    --color-error-text: #991b1b;    /* Ciemny czerwony dla tekstu */
+    --color-error-border: #fca5a5;  /* Obramowanie błędu */
+
+    --color-success-bg: #d1fae5;    /* Jasny miętowy */
+    --color-success-text: #065f46;  /* Ciemna zieleń */
+    --color-success-border: #6ee7b7;
+
+    /* --- Wzór tła (SVG) --- */
+    --bg-pattern-url: url("../assets/background.svg");
+}
