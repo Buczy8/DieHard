@@ -29,6 +29,11 @@
     --color-success-text: #065f46;  /* Ciemna zieleń */
     --color-success-border: #6ee7b7;
 
+    /* Kolory dla szarego przycisku (secondary) */
+    --btn-secondary-bg: #e5e7eb;
+    --btn-secondary-text: #111827;
+    --btn-secondary-hover: #d1d5db;
+
     /* --- Wzór tła (SVG) --- */
     --bg-pattern-url: url("../assets/background.svg");
 }
