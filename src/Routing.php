@@ -9,6 +9,10 @@ class Routing{
             'controller' => 'App\Controllers\DiceGameController',
             'action' => 'game'
         ],
+        'api/dice' => [
+            'controller' => 'App\Controllers\DiceGameController',
+            'action' => 'gameApi'
+        ],
         'login' => [
             'controller' => 'App\Controllers\SecurityController',
             'action' => 'login'
