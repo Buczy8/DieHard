@@ -9,17 +9,9 @@ class Routing{
             'controller' => 'App\Controllers\DiceGameController',
             'action' => 'game'
         ],
-        'login' => [
-            'controller' => 'App\Controllers\SecurityController',
-            'action' => 'login'
-        ],
-        'register' => [
-            'controller' => 'App\Controllers\SecurityController',
-            'action' => 'register'
-        ],
-        'logout' => [
-            'controller' => 'App\Controllers\SecurityController',
-            'action' => 'logout'
+        'api/dice' => [
+            'controller' => 'App\Controllers\DiceGameController',
+            'action' => 'gameApi'
         ],
         'login' => [
             'controller' => 'App\Controllers\SecurityController',
