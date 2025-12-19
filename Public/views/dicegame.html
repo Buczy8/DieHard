@@ -1,10 +1,228 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dice Game</title>
+    <link rel="stylesheet" href="public/styles/dicegame.css">
+    <link rel="stylesheet" href="public/styles/theme.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
 </head>
-<body>
-<h1>dicegame</h1>
+<nav>
+    <img src="Public/assets/dice-solid-full.svg" alt="Logo" class="logo-icon">
+    <span class="logo-text">DieHard</span>
+</nav>
+<body class="casino-app">
+
+<div class="app-wrapper">
+
+    <main class="game-container">
+
+        <aside class="scorecard-column">
+            <h2>Your Scorecard</h2>
+
+            <div class="score-section">
+                <h3>Upper Section</h3>
+                <div class="score-item" data-category="ones" data-score-type="static">
+                    <span class="score-category">Aces (1)</span>
+                    <span class="score-value" id="score-aces">0</span>
+                </div>
+                <div class="score-item" data-category="twos" data-score-type="static">
+                    <span class="score-category">Twos (2)</span>
+                    <span class="score-value" id="score-twos">0</span>
+                </div>
+                <div class="score-item" data-category="threes" data-score-type="static">
+                    <span class="score-category">Threes (3)</span>
+                    <span class="score-value" id="score-threes">0</span>
+                </div>
+                <div class="score-item" data-category="fours" data-score-type="static">
+                    <span class="score-category">Fours (4)</span>
+                    <span class="score-value" id="score-fours">0</span>
+                </div>
+                <div class="score-item" data-category="fives" data-score-type="static">
+                    <span class="score-category">Fives (5)</span>
+                    <span class="score-value" id="score-fives">0</span>
+                </div>
+                <div class="score-item" data-category="sixes" data-score-type="static">
+                    <span class="score-category">Sixes (6)</span>
+                    <span class="score-value" id="score-sixes">0</span>
+                </div>
+
+                <div class="score-item total">
+                    <span class="score-category">Upper Total</span>
+                    <span class="score-value" id="upper-total">0</span>
+                </div>
+            </div>
+
+            <div class="score-section">
+                <h3>Lower Section</h3>
+                <div class="score-item" data-category="three-of-a-kind" data-score-type="sum">
+                    <span class="score-category">3 of a Kind</span>
+                    <span class="score-value" id="score-three-of-a-kind">0</span>
+                </div>
+                <div class="score-item" data-category="four-of-a-kind" data-score-type="sum">
+                    <span class="score-category">4 of a Kind</span>
+                    <span class="score-value" id="score-four-of-a-kind">0</span>
+                </div>
+                <div class="score-item" data-category="full-house" data-score-type="fixed">
+                    <span class="score-category">Full House</span>
+                    <span class="score-value" id="score-full-house">0</span>
+                </div>
+                <div class="score-item" data-category="small-straight" data-score-type="fixed">
+                    <span class="score-category">Sm. Straight</span>
+                    <span class="score-value" id="score-small-straight">0</span>
+                </div>
+                <div class="score-item" data-category="large-straight" data-score-type="fixed">
+                    <span class="score-category">Lg. Straight</span>
+                    <span class="score-value" id="score-large-straight">0</span>
+                </div>
+                <div class="score-item" data-category="yahtzee" data-score-type="fixed">
+                    <span class="score-category">Yahtzee</span>
+                    <span class="score-value" id="score-yahtzee">0</span>
+                </div>
+                <div class="score-item" data-category="chance" data-score-type="sum">
+                    <span class="score-category">Chance</span>
+                    <span class="score-value" id="score-chance">0</span>
+                </div>
+
+                <div class="score-item total">
+                    <span class="score-category">Lower Total</span>
+                    <span class="score-value" id="lower-total">0</span>
+                </div>
+            </div>
+
+            <div class="grand-total">
+                <span>Grand Total</span>
+                <span class="score-value" id="grand-total-value">0</span>
+            </div>
+        </aside>
+
+        <section class="game-column">
+            <header>
+                <div class="nav-buttons">
+                    <button class="btn-new-game">New Game</button>
+                </div>
+            </header>
+
+            <h2>Your Turn</h2>
+            <div class="dice-container">
+                <div class="die">
+                    <i class="fa-solid fa-dice-one"></i>
+                </div>
+                <div class="die">
+                    <i class="fa-solid fa-dice-two"></i>
+                </div>
+                <div class="die">
+                    <i class="fa-solid fa-dice-three"></i>
+                </div>
+                <div class="die">
+                    <i class="fa-solid fa-dice-four"></i>
+                </div>
+                <div class="die">
+                    <i class="fa-solid fa-dice-five"></i>
+                </div>
+            </div>
+            <p class="roll-info">Roll 2 of 3</p>
+            <button class="roll-button">Roll Dice</button>
+        </section>
+
+        <aside class="players-column scorecard-column" >
+            <h2>Computer's Scorecard</h2>
+
+            <div class="score-section">
+                <h3>Upper Section</h3>
+                <div class="score-item readonly">
+                    <span class="score-category">Aces (1)</span>
+                    <span class="score-value" id="comp-score-aces"></span>
+                </div>
+                <div class="score-item readonly">
+                    <span class="score-category">Twos (2)</span>
+                    <span class="score-value" id="comp-score-twos"></span>
+                </div>
+                <div class="score-item readonly">
+                    <span class="score-category">Threes (3)</span>
+                    <span class="score-value" id="comp-score-threes"></span>
+                </div>
+                <div class="score-item readonly">
+                    <span class="score-category">Fours (4)</span>
+                    <span class="score-value" id="comp-score-fours"></span>
+                </div>
+                <div class="score-item readonly">
+                    <span class="score-category">Fives (5)</span>
+                    <span class="score-value" id="comp-score-fives"></span>
+                </div>
+                <div class="score-item readonly">
+                    <span class="score-category">Sixes (6)</span>
+                    <span class="score-value" id="comp-score-sixes"></span>
+                </div>
+
+                <div class="score-item total">
+                    <span class="score-category">Upper Total</span>
+                    <span class="score-value" id="comp-upper-total">0</span>
+                </div>
+            </div>
+
+            <div class="score-section">
+                <h3>Lower Section</h3>
+                <div class="score-item readonly">
+                    <span class="score-category">3 of a Kind</span>
+                    <span class="score-value" id="comp-score-three-of-a-kind"></span>
+                </div>
+                <div class="score-item readonly">
+                    <span class="score-category">4 of a Kind</span>
+                    <span class="score-value" id="comp-score-four-of-a-kind"></span>
+                </div>
+                <div class="score-item readonly">
+                    <span class="score-category">Full House</span>
+                    <span class="score-value" id="comp-score-full-house"></span>
+                </div>
+                <div class="score-item readonly">
+                    <span class="score-category">Sm. Straight</span>
+                    <span class="score-value" id="comp-score-small-straight"></span>
+                </div>
+                <div class="score-item readonly">
+                    <span class="score-category">Lg. Straight</span>
+                    <span class="score-value" id="comp-score-large-straight"></span>
+                </div>
+                <div class="score-item readonly">
+                    <span class="score-category">Yahtzee</span>
+                    <span class="score-value" id="comp-score-yahtzee"></span>
+                </div>
+                <div class="score-item readonly">
+                    <span class="score-category">Chance</span>
+                    <span class="score-value" id="comp-score-chance"></span>
+                </div>
+
+                <div class="score-item total">
+                    <span class="score-category">Lower Total</span>
+                    <span class="score-value" id="comp-lower-total">0</span>
+                </div>
+            </div>
+
+            <div class="grand-total">
+                <span>Grand Total</span>
+                <span class="score-value" id="comp-grand-total-value">0</span>
+            </div>
+        </aside>
+    </main>
+</div> <template id="game-over-template">
+    <div class="game-over-panel">
+        <div class="winner-text"></div>
+        <div class="score-comparison">
+            <div class="result-box">
+                <span class="result-label">You</span>
+                <span class="result-score" id="p-score"></span>
+            </div>
+            <div class="result-box">
+                <span class="result-label">Computer</span>
+                <span class="result-score" id="c-score"></span>
+            </div>
+        </div>
+        <button class="btn-restart">Play Again</button>
+    </div>
+</template>
+<script type="module" src="/Public/scripts/DiceGame/api.js"></script>
+<script type="module" src="/Public/scripts/DiceGame/main.js"></script>
+<script type="module" src="/Public/scripts/DiceGame/ui.js"></script>
 </body>
 </html>

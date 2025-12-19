@@ -7,7 +7,19 @@ class Routing{
     public static $routes = [
         'dicegame' => [
             'controller' => 'App\Controllers\DiceGameController',
-            'action' => 'index'
+            'action' => 'game'
+        ],
+        'login' => [
+            'controller' => 'App\Controllers\SecurityController',
+            'action' => 'login'
+        ],
+        'register' => [
+            'controller' => 'App\Controllers\SecurityController',
+            'action' => 'register'
+        ],
+        'logout' => [
+            'controller' => 'App\Controllers\SecurityController',
+            'action' => 'logout'
         ],
         'login' => [
             'controller' => 'App\Controllers\SecurityController',

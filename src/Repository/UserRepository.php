@@ -22,7 +22,21 @@ class UserRepository extends Repository
         }
         return User::fromArray($user);
     }
+    public function getUserByUserName(string $username): ?User
+    {
+        $stmt = $this->database->prepare(
+            "SELECT * FROM users WHERE username = :username"
+        );
+        $stmt->bindParam(':username', $username, PDO::PARAM_STR);
+        $stmt->execute();
 
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$user) {
+            return null;
+        }
+        return User::fromArray($user);
+    }
     public function getUserById(int $id): ?User
     {
         $stmt = $this->database->prepare(
