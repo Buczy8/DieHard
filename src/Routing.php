@@ -21,6 +21,18 @@ class Routing{
             'controller' => 'App\Controllers\SecurityController',
             'action' => 'logout'
         ],
+        'login' => [
+            'controller' => 'App\Controllers\SecurityController',
+            'action' => 'login'
+        ],
+        'register' => [
+            'controller' => 'App\Controllers\SecurityController',
+            'action' => 'register'
+        ],
+        'logout' => [
+            'controller' => 'App\Controllers\SecurityController',
+            'action' => 'logout'
+        ],
     ];
     public static function run(string $path)
     {
