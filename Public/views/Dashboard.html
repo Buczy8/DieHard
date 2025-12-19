@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - DieHard</title>
+    <link rel="stylesheet" href="Public/styles/theme.css">
+    <link rel="stylesheet" href="Public/styles/dashboard.css"> </head>
+<body>
+
+<nav>
+    <div class="nav-left">
+        <img src="Public/assets/dice-solid-full.svg" alt="Logo" class="logo-icon">
+        <span class="logo-text">DieHard</span>
+    </div>
+    <div class="nav-right">
+        <div class="user-avatar-small">P1</div>
+        <a href="/logout" class="nav-icon-btn" title="Wyloguj się">
+            <img src="Public/assets/logout.svg" alt="Logout">
+        </a>
+
+    </div>
+</nav>
+
+<div class="dashboard-container">
+
+    <div class="welcome-card">
+        <div class="welcome-content">
+            <h1>Welcome back, Player 1!</h1>
+            <p>You're on a roll. Your current win streak is 3 games. Ready to make it 4?</p>
+        </div>
+        <div class="welcome-actions">
+            <a href="/dicegame" class="btn-primary">
+                <span class="icon-play">▶</span> New Game
+            </a>
+            <a href="/join-game" class="btn-secondary">Join Game</a>
+        </div>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon icon-blue">🏆</div>
+            <div class="stat-info">
+                <span class="stat-label">High Score</span>
+                <span class="stat-value">412</span>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon icon-green">🎲</div> <div class="stat-info">
+            <span class="stat-label">Games Played</span>
+            <span class="stat-value">87</span>
+        </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon icon-orange">★</div>
+            <div class="stat-info">
+                <span class="stat-label">Win Rate</span>
+                <span class="stat-value">64%</span>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon icon-purple">👥</div>
+            <div class="stat-info">
+                <span class="stat-label">Friends Online</span>
+                <span class="stat-value">3</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="dashboard-bottom-grid">
+
+        <div class="recent-games-section">
+            <div class="section-header">
+                <h2>Recent Games</h2>
+                <a href="/history" class="view-all-link">View All</a>
+            </div>
+
+            <div class="games-table-card">
+                <table class="games-table">
+                    <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Opponent</th>
+                        <th>Result</th>
+                        <th>Score</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td class="col-date">Today, 10:23 AM</td>
+                        <td class="col-opponent">
+                            <div class="opponent-info">
+                                <span class="avatar avatar-blue">P2</span>
+                                <span>Player 2</span>
+                            </div>
+                        </td>
+                        <td><span class="badge badge-win">Win</span></td>
+                        <td class="col-score">285</td>
+                        <td><button class="btn-icon">👁</button></td>
+                    </tr>
+                    <tr>
+                        <td class="col-date">Yesterday</td>
+                        <td class="col-opponent">
+                            <div class="opponent-info">
+                                <span class="avatar avatar-red">B</span>
+                                <span>Bot (Hard)</span>
+                            </div>
+                        </td>
+                        <td><span class="badge badge-loss">Loss</span></td>
+                        <td class="col-score">190</td>
+                        <td><button class="btn-icon">👁</button></td>
+                    </tr>
+                    <tr>
+                        <td class="col-date">Oct 24, 2023</td>
+                        <td class="col-opponent">
+                            <div class="opponent-info">
+                                <span class="avatar avatar-yellow">SJ</span>
+                                <span>Sarah J.</span>
+                            </div>
+                        </td>
+                        <td><span class="badge badge-win">Win</span></td>
+                        <td class="col-score">312</td>
+                        <td><button class="btn-icon">👁</button></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="friends-section">
+            <div class="section-header">
+                <h2>Friends</h2>
+                <button class="btn-icon-plus">+</button>
+            </div>
+
+            <div class="friends-card">
+                <div class="friend-item">
+                    <div class="friend-avatar-wrapper">
+                        <span class="avatar avatar-blue">P2</span>
+                        <span class="status-dot online"></span>
+                    </div>
+                    <div class="friend-info">
+                        <span class="friend-name">Player 2</span>
+                        <span class="friend-status">Playing vs Bot</span>
+                    </div>
+                </div>
+
+                <div class="friend-item">
+                    <div class="friend-avatar-wrapper">
+                        <span class="avatar avatar-yellow">SJ</span>
+                        <span class="status-dot offline"></span>
+                    </div>
+                    <div class="friend-info">
+                        <span class="friend-name">Sarah J.</span>
+                        <span class="friend-status">Offline • 2h ago</span>
+                    </div>
+                </div>
+
+                <div class="friend-item">
+                    <div class="friend-avatar-wrapper">
+                        <span class="avatar avatar-pink">MK</span>
+                        <span class="status-dot online"></span>
+                    </div>
+                    <div class="friend-info">
+                        <span class="friend-name">Mike K.</span>
+                        <span class="friend-status">Online</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div> </div>
+
+</body>
+</html>
