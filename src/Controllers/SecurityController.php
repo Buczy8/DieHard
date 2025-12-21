@@ -77,7 +77,7 @@ class SecurityController extends AppController
             unset($_SESSION['csrf']);
 
             $url = "https://" . $_SERVER['HTTP_HOST'];
-            header("Location: {$url}/dicegame");
+            header("Location: {$url}/");
             exit();
         }
     }
