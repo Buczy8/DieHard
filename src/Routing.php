@@ -43,7 +43,7 @@ class Routing{
 
             $controllerObj->$action();
         } else {
-            include 'public/views/404.html';
+            include 'Public/views/404.html';
         }
     }
 }
