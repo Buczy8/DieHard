@@ -24,6 +24,7 @@ services:
       - pg-network
     volumes:
       - pg-data:/var/lib/postgresql/data
+      - ./Config/init.sql:/docker-entrypoint-initdb.d/init.sql
 
   php:
     build:
