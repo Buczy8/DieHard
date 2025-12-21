@@ -15,8 +15,8 @@ class AppController
 
     protected function render(?string $template = null, array $variables = []): void
     {
-        $templatePath = 'public/views/' . $template . '.html';
-        $output = 'public/views/404.html';
+        $templatePath = 'Public/views/' . $template . '.html';
+        $output = 'Public/views/404.html';
 
         if (file_exists($templatePath)) {
             extract($variables);
