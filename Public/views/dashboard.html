@@ -91,42 +91,20 @@
                     </tr>
                     </thead>
                     <tbody>
+                    <?php foreach ($recentGames as $game): ?>
                     <tr>
-                        <td class="col-date">Today, 10:23 AM</td>
+                        <td class="col-date"><?= $game->playedAtFormatted ?></td>
                         <td class="col-opponent">
                             <div class="opponent-info">
-                                <span class="avatar avatar-blue">P2</span>
-                                <span>Player 2</span>
+                                <span class="avatar avatar-blue"><?= $game->opponentInitials ?></span>
+                                <span><?= htmlspecialchars($game->opponentName) ?></span>
                             </div>
                         </td>
-                        <td><span class="badge badge-win">Win</span></td>
-                        <td class="col-score">285</td>
+                        <td><span class="badge <?= $game->resultBadgeClass ?>"><?= $game->resultLabel ?></span></td>
+                        <td class="col-score"><?= $game->score ?></td>
                         <td><button class="btn-icon">👁</button></td>
                     </tr>
-                    <tr>
-                        <td class="col-date">Yesterday</td>
-                        <td class="col-opponent">
-                            <div class="opponent-info">
-                                <span class="avatar avatar-red">B</span>
-                                <span>Bot (Hard)</span>
-                            </div>
-                        </td>
-                        <td><span class="badge badge-loss">Loss</span></td>
-                        <td class="col-score">190</td>
-                        <td><button class="btn-icon">👁</button></td>
-                    </tr>
-                    <tr>
-                        <td class="col-date">Oct 24, 2023</td>
-                        <td class="col-opponent">
-                            <div class="opponent-info">
-                                <span class="avatar avatar-yellow">SJ</span>
-                                <span>Sarah J.</span>
-                            </div>
-                        </td>
-                        <td><span class="badge badge-win">Win</span></td>
-                        <td class="col-score">312</td>
-                        <td><button class="btn-icon">👁</button></td>
-                    </tr>
+                    <?php endforeach; ?>
                     </tbody>
                 </table>
             </div>
