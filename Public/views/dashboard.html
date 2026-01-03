@@ -14,7 +14,7 @@
         <span class="logo-text">DieHard</span>
     </div>
     <div class="nav-right">
-        <div class="user-avatar-small">P1</div>
+        <div class="user-avatar-small"><?= strtoupper(substr($username, 0, 2)) ?></div>
         <a href="/logout" class="nav-icon-btn" title="Wyloguj się">
             <img src="Public/assets/logout.svg" alt="Logout">
         </a>
@@ -26,8 +26,8 @@
 
     <div class="welcome-card">
         <div class="welcome-content">
-            <h1>Welcome back, Player 1!</h1>
-            <p>You're on a roll. Your current win streak is 3 games. Ready to make it 4?</p>
+            <h1>Welcome back <?= htmlspecialchars($username) ?>!</h1>
+            <p>You're on a roll. Ready to play some more?</p>
         </div>
         <div class="welcome-actions">
             <a href="/dicegame" class="btn-primary">
@@ -42,22 +42,23 @@
             <div class="stat-icon icon-blue">🏆</div>
             <div class="stat-info">
                 <span class="stat-label">High Score</span>
-                <span class="stat-value">412</span>
+                <span class="stat-value"><?= $stats->highScore ?></span>
             </div>
         </div>
 
         <div class="stat-card">
-            <div class="stat-icon icon-green">🎲</div> <div class="stat-info">
-            <span class="stat-label">Games Played</span>
-            <span class="stat-value">87</span>
-        </div>
+            <div class="stat-icon icon-green">🎲</div>
+            <div class="stat-info">
+                <span class="stat-label">Games Played</span>
+                <span class="stat-value"><?= $stats->gamesPlayed ?></span>
+            </div>
         </div>
 
         <div class="stat-card">
             <div class="stat-icon icon-orange">★</div>
             <div class="stat-info">
                 <span class="stat-label">Win Rate</span>
-                <span class="stat-value">64%</span>
+                <span class="stat-value"><?= $stats->winRate ?>%</span>
             </div>
         </div>
 
@@ -65,7 +66,7 @@
             <div class="stat-icon icon-purple">✌️</div>
             <div class="stat-info">
                 <span class="stat-label">Games won</span>
-                <span class="stat-value">43</span>
+                <span class="stat-value"><?= $stats->gamesWon ?></span>
             </div>
         </div>
     </div>
