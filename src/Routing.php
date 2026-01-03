@@ -29,6 +29,10 @@ class Routing{
             'controller' => 'App\Controllers\DashboardController',
             'action' => 'index'
         ],
+        'history' => [
+            'controller' => 'App\Controllers\HistoryController',
+            'action' => 'index'
+        ],
     ];
     public static function run(string $path)
     {

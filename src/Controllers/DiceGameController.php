@@ -1,11 +1,22 @@
 <?php
 
 namespace App\Controllers;
+use App\Repository\GamesRepository;
+use App\Repository\UserStatisticsRepository;
 use App\Services\DiceGameService;
 use App\Annotation\RequireLogin;
 
 class DiceGameController extends AppController
 {
+
+    private GamesRepository $gamesRepository;
+    private UserStatisticsRepository $statsRepository;
+
+    public function __construct()
+    {
+        $this->gamesRepository = GamesRepository::getInstance();
+        $this->statsRepository = UserStatisticsRepository::getInstance();
+    }
     #[RequireLogin]
     public function game()
     {
@@ -22,6 +33,10 @@ class DiceGameController extends AppController
 
         $input = json_decode(file_get_contents('php://input'), true);
         $action = $input['action'] ?? '';
+
+        if ($action === 'restart') {
+            unset($_SESSION['game_saved']);
+        }
 
         if (!isset($_SESSION['game_state']) || $action === 'restart') {
             $game = new diceGameService();
@@ -63,6 +78,14 @@ class DiceGameController extends AppController
             }
 
             $state = $game->getState();
+
+            if ($state['gameOver']) {
+                if (empty($_SESSION['game_saved'])) {
+                    $this->saveGameResult($state);
+                    $_SESSION['game_saved'] = true;
+                }
+            }
+
             $_SESSION['game_state'] = [
                 'dice' => $state['dice'],
                 'rollsLeft' => $state['rollsLeft'],
@@ -78,5 +101,29 @@ class DiceGameController extends AppController
 
         echo json_encode($response);
         exit;
+    }
+    private function saveGameResult(array $state): void
+    {
+        // Zakładamy, że user_id jest w sesji (dzięki RequireLogin)
+        $userId = $_SESSION['user_id'];
+
+        $playerScore = $state['playerTotals']['grand'];
+        $computerScore = $state['computerTotals']['grand'];
+
+        $result = 'draw';
+        $isWin = false;
+
+        if ($playerScore > $computerScore) {
+            $result = 'win';
+            $isWin = true;
+        } elseif ($playerScore < $computerScore) {
+            $result = 'loss';
+        }
+
+        // 1. Zapisujemy historię gry
+        $this->gamesRepository->saveGame($userId, $playerScore, $result, 'Bot');
+
+        // 2. Aktualizujemy statystyki globalne gracza
+        $this->statsRepository->updateStats($userId, $playerScore, $isWin);
     }
 }

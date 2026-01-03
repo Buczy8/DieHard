@@ -14,7 +14,7 @@
         <span class="logo-text">DieHard</span>
     </div>
     <div class="nav-right">
-        <div class="user-avatar-small">P1</div>
+        <div class="user-avatar-small"><?= strtoupper(substr($username, 0, 2)) ?></div>
         <a href="/logout" class="nav-icon-btn" title="Wyloguj się">
             <img src="Public/assets/logout.svg" alt="Logout">
         </a>
@@ -26,8 +26,8 @@
 
     <div class="welcome-card">
         <div class="welcome-content">
-            <h1>Welcome back, Player 1!</h1>
-            <p>You're on a roll. Your current win streak is 3 games. Ready to make it 4?</p>
+            <h1>Welcome back <?= htmlspecialchars($username) ?>!</h1>
+            <p>You're on a roll. Ready to play some more?</p>
         </div>
         <div class="welcome-actions">
             <a href="/dicegame" class="btn-primary">
@@ -42,30 +42,31 @@
             <div class="stat-icon icon-blue">🏆</div>
             <div class="stat-info">
                 <span class="stat-label">High Score</span>
-                <span class="stat-value">412</span>
+                <span class="stat-value"><?= $stats->highScore ?></span>
             </div>
         </div>
 
         <div class="stat-card">
-            <div class="stat-icon icon-green">🎲</div> <div class="stat-info">
-            <span class="stat-label">Games Played</span>
-            <span class="stat-value">87</span>
-        </div>
+            <div class="stat-icon icon-green">🎲</div>
+            <div class="stat-info">
+                <span class="stat-label">Games Played</span>
+                <span class="stat-value"><?= $stats->gamesPlayed ?></span>
+            </div>
         </div>
 
         <div class="stat-card">
             <div class="stat-icon icon-orange">★</div>
             <div class="stat-info">
                 <span class="stat-label">Win Rate</span>
-                <span class="stat-value">64%</span>
+                <span class="stat-value"><?= $stats->winRate ?>%</span>
             </div>
         </div>
 
         <div class="stat-card">
-            <div class="stat-icon icon-purple">👥</div>
+            <div class="stat-icon icon-purple">✌️</div>
             <div class="stat-info">
-                <span class="stat-label">Friends Online</span>
-                <span class="stat-value">3</span>
+                <span class="stat-label">Games won</span>
+                <span class="stat-value"><?= $stats->gamesWon ?></span>
             </div>
         </div>
     </div>
@@ -86,92 +87,68 @@
                         <th>Opponent</th>
                         <th>Result</th>
                         <th>Score</th>
-                        <th>Action</th>
                     </tr>
                     </thead>
                     <tbody>
+                    <?php foreach ($recentGames as $game): ?>
                     <tr>
-                        <td class="col-date">Today, 10:23 AM</td>
+                        <td class="col-date"><?= $game->playedAtFormatted ?></td>
                         <td class="col-opponent">
                             <div class="opponent-info">
-                                <span class="avatar avatar-blue">P2</span>
-                                <span>Player 2</span>
+                                <span class="avatar avatar-blue"><?= $game->opponentInitials ?></span>
+                                <span><?= htmlspecialchars($game->opponentName) ?></span>
                             </div>
                         </td>
-                        <td><span class="badge badge-win">Win</span></td>
-                        <td class="col-score">285</td>
-                        <td><button class="btn-icon">👁</button></td>
+                        <td><span class="badge <?= $game->resultBadgeClass ?>"><?= $game->resultLabel ?></span></td>
+                        <td class="col-score"><?= $game->score ?></td>
                     </tr>
-                    <tr>
-                        <td class="col-date">Yesterday</td>
-                        <td class="col-opponent">
-                            <div class="opponent-info">
-                                <span class="avatar avatar-red">B</span>
-                                <span>Bot (Hard)</span>
-                            </div>
-                        </td>
-                        <td><span class="badge badge-loss">Loss</span></td>
-                        <td class="col-score">190</td>
-                        <td><button class="btn-icon">👁</button></td>
-                    </tr>
-                    <tr>
-                        <td class="col-date">Oct 24, 2023</td>
-                        <td class="col-opponent">
-                            <div class="opponent-info">
-                                <span class="avatar avatar-yellow">SJ</span>
-                                <span>Sarah J.</span>
-                            </div>
-                        </td>
-                        <td><span class="badge badge-win">Win</span></td>
-                        <td class="col-score">312</td>
-                        <td><button class="btn-icon">👁</button></td>
-                    </tr>
+                    <?php endforeach; ?>
                     </tbody>
                 </table>
             </div>
         </div>
 
-        <div class="friends-section">
-            <div class="section-header">
-                <h2>Friends</h2>
-                <button class="btn-icon-plus">+</button>
-            </div>
+<!--        <div class="friends-section">-->
+<!--            <div class="section-header">-->
+<!--                <h2>Friends</h2>-->
+<!--                <button class="btn-icon-plus">+</button>-->
+<!--            </div>-->
 
-            <div class="friends-card">
-                <div class="friend-item">
-                    <div class="friend-avatar-wrapper">
-                        <span class="avatar avatar-blue">P2</span>
-                        <span class="status-dot online"></span>
-                    </div>
-                    <div class="friend-info">
-                        <span class="friend-name">Player 2</span>
-                        <span class="friend-status">Playing vs Bot</span>
-                    </div>
-                </div>
+<!--            <div class="friends-card">-->
+<!--                <div class="friend-item">-->
+<!--                    <div class="friend-avatar-wrapper">-->
+<!--                        <span class="avatar avatar-blue">P2</span>-->
+<!--                        <span class="status-dot online"></span>-->
+<!--                    </div>-->
+<!--                    <div class="friend-info">-->
+<!--                        <span class="friend-name">Player 2</span>-->
+<!--                        <span class="friend-status">Playing vs Bot</span>-->
+<!--                    </div>-->
+<!--                </div>-->
 
-                <div class="friend-item">
-                    <div class="friend-avatar-wrapper">
-                        <span class="avatar avatar-yellow">SJ</span>
-                        <span class="status-dot offline"></span>
-                    </div>
-                    <div class="friend-info">
-                        <span class="friend-name">Sarah J.</span>
-                        <span class="friend-status">Offline • 2h ago</span>
-                    </div>
-                </div>
+<!--                <div class="friend-item">-->
+<!--                    <div class="friend-avatar-wrapper">-->
+<!--                        <span class="avatar avatar-yellow">SJ</span>-->
+<!--                        <span class="status-dot offline"></span>-->
+<!--                    </div>-->
+<!--                    <div class="friend-info">-->
+<!--                        <span class="friend-name">Sarah J.</span>-->
+<!--                        <span class="friend-status">Offline • 2h ago</span>-->
+<!--                    </div>-->
+<!--                </div>-->
 
-                <div class="friend-item">
-                    <div class="friend-avatar-wrapper">
-                        <span class="avatar avatar-pink">MK</span>
-                        <span class="status-dot online"></span>
-                    </div>
-                    <div class="friend-info">
-                        <span class="friend-name">Mike K.</span>
-                        <span class="friend-status">Online</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+<!--                <div class="friend-item">-->
+<!--                    <div class="friend-avatar-wrapper">-->
+<!--                        <span class="avatar avatar-pink">MK</span>-->
+<!--                        <span class="status-dot online"></span>-->
+<!--                    </div>-->
+<!--                    <div class="friend-info">-->
+<!--                        <span class="friend-name">Mike K.</span>-->
+<!--                        <span class="friend-status">Online</span>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
 
     </div> </div>
 

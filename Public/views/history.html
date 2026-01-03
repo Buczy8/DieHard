@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game History - DieHard</title>
+    <link rel="stylesheet" href="Public/styles/theme.css">
+    <link rel="stylesheet" href="Public/styles/dashboard.css">
+    <link rel="stylesheet" href="Public/styles/history.css">
+</head>
+<body>
+
+<nav>
+    <div class="nav-left">
+        <a href="/" class="nav-logo-link">
+            <img src="Public/assets/dice-solid-full.svg" alt="Logo" class="logo-icon">
+            <span class="logo-text">DieHard</span>
+        </a>
+    </div>
+    <div class="nav-right">
+        <div class="user-avatar-small"><?= strtoupper(substr($username, 0, 2)) ?></div>
+        <a href="/logout" class="nav-icon-btn" title="Log out">
+            <img src="Public/assets/logout.svg" alt="Logout">
+        </a>
+    </div>
+</nav>
+
+<div class="history-layout">
+
+    <div class="section-header">
+        <h2>Full Game History</h2>
+        <a href="/dicegame" class="btn-primary btn-sm">
+            Play New Game
+        </a>
+    </div>
+
+    <div class="games-table-card">
+        <table class="games-table">
+            <thead>
+            <tr>
+                <th>Date</th>
+                <th>Opponent</th>
+                <th>Result</th>
+                <th>Score</th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php if (empty($games)): ?>
+            <tr>
+                <td colspan="4" class="empty-state">
+                    No games played yet.
+                    <a href="/dicegame" class="text-link">Start playing!</a>
+                </td>
+            </tr>
+            <?php else: ?>
+            <?php foreach ($games as $game): ?>
+            <tr>
+                <td class="col-date"><?= $game->playedAtFormatted ?></td>
+                <td class="col-opponent">
+                    <div class="opponent-info">
+                        <span class="avatar avatar-blue"><?= $game->opponentInitials ?></span>
+                        <span><?= htmlspecialchars($game->opponentName) ?></span>
+                    </div>
+                </td>
+                <td><span class="badge <?= $game->resultBadgeClass ?>"><?= $game->resultLabel ?></span></td>
+                <td class="col-score"><?= $game->score ?></td>
+            </tr>
+            <?php endforeach; ?>
+            <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
+
+    <?php if ($totalPages > 1): ?>
+    <div class="pagination-container">
+        <?php if ($currentPage > 1): ?>
+        <a href="/history?page=<?= $currentPage - 1 ?>" class="page-link">←</a>
+        <?php else: ?>
+        <span class="page-link disabled">←</span>
+        <?php endif; ?>
+
+        <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+        <a href="/history?page=<?= $i ?>" class="page-link <?= ($i == $currentPage) ? 'active' : '' ?>">
+            <?= $i ?>
+        </a>
+        <?php endfor; ?>
+
+        <?php if ($currentPage < $totalPages): ?>
+        <a href="/history?page=<?= $currentPage + 1 ?>" class="page-link">→</a>
+        <?php else: ?>
+        <span class="page-link disabled">→</span>
+        <?php endif; ?>
+    </div>
+    <?php endif; ?>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,138 @@
+/* Public/styles/history.css */
+
+/* --- Layout Główny --- */
+.history-layout {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 24px;
+}
+
+/* --- Nawigacja (Elementy specyficzne) --- */
+.nav-logo-link {
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* --- Nagłówek Sekcji --- */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+/* Klasa pomocnicza do mniejszego przycisku (zastępuje inline style) */
+.btn-sm {
+    padding: 8px 16px;
+    font-size: 14px;
+}
+
+/* --- Tabela Historii --- */
+.games-table-card {
+    background: #fff;
+    border: 1px solid var(--border-light, #e5e7eb);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.games-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.games-table th,
+.games-table td {
+    padding: 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-light, #e5e7eb);
+}
+
+.games-table th {
+    background-color: var(--bg-input, #f9fafb);
+    font-weight: 600;
+    color: var(--text-secondary, #6b7280);
+    font-size: 0.875rem;
+}
+
+/* --- Elementy wewnątrz tabeli --- */
+.col-date {
+    white-space: nowrap;
+    color: var(--text-main, #111827);
+}
+
+.opponent-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.col-score {
+    font-family: monospace; /* np. "Courier New", monospace */
+    font-weight: 600;
+    font-size: 1.1em;
+}
+
+/* --- Pusty stan (brak gier) --- */
+.empty-state {
+    text-align: center;
+    padding: 40px;
+    color: var(--text-secondary, #6b7280);
+}
+
+.text-link {
+    color: var(--primary-color, #4f46e5);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.text-link:hover {
+    text-decoration: underline;
+}
+
+/* --- Paginacja --- */
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 24px;
+    padding-bottom: 24px;
+}
+
+.page-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+    height: 36px;
+    padding: 0 12px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-secondary, #6b7280);
+    background-color: #fff;
+    border: 1px solid var(--border-light, #e5e7eb);
+    transition: all 0.2s;
+}
+
+.page-link:hover:not(.disabled) {
+    background-color: var(--bg-input, #f9fafb);
+    color: var(--text-main, #111827);
+    border-color: #d1d5db;
+}
+
+.page-link.active {
+    background-color: var(--primary-color, #4f46e5);
+    color: #fff;
+    border-color: var(--primary-color, #4f46e5);
+}
+
+.page-link.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
