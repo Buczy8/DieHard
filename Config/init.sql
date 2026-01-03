@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS users
     created_at TIMESTAMP   DEFAULT CURRENT_TIMESTAMP
 );
 
+
 CREATE TABLE IF NOT EXISTS user_statistics
 (
     id           SERIAL PRIMARY KEY,
@@ -37,3 +38,6 @@ CREATE TABLE IF NOT EXISTS games
             REFERENCES users (id)
             ON DELETE CASCADE
 );
+INSERT INTO users (email, username, password, role)
+VALUES ('admin@admin.com', 'admin', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'admin')
+ON CONFLICT (email) DO NOTHING;
