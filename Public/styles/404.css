@@ -28,7 +28,12 @@
     line-height: 1;
     cursor: default;
 }
-
+.nav-logo-link {
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
 /* Biała kostka (dostosowana do theme.css) */
 .die-white {
     background-color: white;

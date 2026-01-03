@@ -12,7 +12,7 @@
 
 <nav>
     <div class="nav-left">
-        <a href="/" style="text-decoration: none; display: flex; align-items: center; gap: 10px;">
+        <a href="/" class="nav-logo-link">
             <img src="Public/assets/dice-solid-full.svg" alt="Logo" class="logo-icon">
             <span class="logo-text">DieHard</span>
         </a>
@@ -29,7 +29,7 @@
 
     <div class="section-header">
         <h2>Full Game History</h2>
-        <a href="/dicegame" class="btn-primary" style="padding: 8px 16px; font-size: 14px;">
+        <a href="/dicegame" class="btn-primary btn-sm">
             Play New Game
         </a>
     </div>
@@ -47,8 +47,9 @@
             <tbody>
             <?php if (empty($games)): ?>
             <tr>
-                <td colspan="4" style="text-align: center; padding: 40px; color: var(--text-secondary);">
-                    No games played yet. <a href="/dicegame" style="color: var(--primary-color);">Start playing!</a>
+                <td colspan="4" class="empty-state">
+                    No games played yet.
+                    <a href="/dicegame" class="text-link">Start playing!</a>
                 </td>
             </tr>
             <?php else: ?>

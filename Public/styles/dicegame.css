@@ -32,7 +32,12 @@ nav {
     flex-shrink: 0;
     z-index: 20;
 }
-
+.nav-logo-link {
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
 .logo-icon {
     /* Jeśli to SVG inline lub font, kolor zadziała. Jeśli img, color nie wpłynie na src */
     color: var(--accent-color);
