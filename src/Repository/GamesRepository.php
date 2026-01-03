@@ -30,4 +30,19 @@ class GamesRepository extends Repository
 
         return $gamesCollection;
     }
+
+    public function saveGame(int $userId, int $score, string $result, string $opponentName = 'Bot'): void
+    {
+        $stmt = $this->database->prepare("
+            INSERT INTO games (user_id, score, opponent_name, result, played_at)
+            VALUES (:user_id, :score, :opponent_name, :result, NOW())
+        ");
+
+        $stmt->execute([
+            ':user_id' => $userId,
+            ':score' => $score,
+            ':opponent_name' => $opponentName,
+            ':result' => $result
+        ]);
+    }
 }
