@@ -35,7 +35,7 @@ class DashboardController extends AppController {
 
         $statsDTO = UserStatisticsResponseDTO::fromEntity($statsModel);
 
-        $gamesModels = $this->gamesRepository->getRecentGamesByUserEmail($user->email);
+        $gamesModels = $this->gamesRepository->getGamesByUserId($userId, 5);
 
         $recentGamesDTOs = [];
 

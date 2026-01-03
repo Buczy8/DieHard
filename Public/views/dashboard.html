@@ -87,7 +87,6 @@
                         <th>Opponent</th>
                         <th>Result</th>
                         <th>Score</th>
-                        <th>Action</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -102,7 +101,6 @@
                         </td>
                         <td><span class="badge <?= $game->resultBadgeClass ?>"><?= $game->resultLabel ?></span></td>
                         <td class="col-score"><?= $game->score ?></td>
-                        <td><button class="btn-icon">👁</button></td>
                     </tr>
                     <?php endforeach; ?>
                     </tbody>
