@@ -29,17 +29,19 @@
 
                 <ul class="dropdown-list">
                     <li>
-                        <a href="/settings" class="dropdown-item">
-                            <i class="fa-solid fa-gear"></i> Settings
-                        </a>
-                    </li>
-                    <li>
                         <a href="/profile" class="dropdown-item">
                             <i class="fa-solid fa-user"></i> My profile
                         </a>
                     </li>
+                    <?php if (isset($user) && $user->role === 'admin'): ?>
+                        <li>
+                            <a href="/admin-users" class="dropdown-item">
+                                <i class="fa-solid fa-user-shield"></i> Manage Users
+                            </a>
+                        </li>
+                    <?php endif; ?>
                     <li>
-                        <a href="#" class="dropdown-item" onclick="alert('Zasady: Rzuć kośćmi i wygraj z botem!')">
+                        <a href="/rules" class="dropdown-item">
                             <i class="fa-solid fa-book-open"></i> Rules
                         </a>
                     </li>

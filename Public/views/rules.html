@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yahtzee Game Rules - DieHard</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Noto+Sans:wght@400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+          rel="stylesheet"/>
+
+    <link rel="stylesheet" href="Public/styles/theme.css">
+    <link rel="stylesheet" href="Public/styles/rules.css">
+    <script src="Public/scripts/rules.js" defer></script>
+</head>
+<body>
+
+<?php include 'Public/views/partials/navbar.php'; ?>
+
+<div class="rules-page-wrapper">
+    <main class="rules-main">
+
+        <header class="rules-header">
+            <h1>Yahtzee Game Rules</h1>
+            <p class="subtitle">Master the dice. Learn how to play, understand scoring categories, and strategic nuances
+                to win big.</p>
+        </header>
+
+        <div class="rules-layout">
+
+            <aside class="rules-sidebar">
+                <div class="toc-card">
+                    <h3>Contents</h3>
+                    <nav>
+                        <a href="#objective" class="toc-link active">
+                            <span class="material-symbols-outlined">flag</span> Objective
+                        </a>
+                        <a href="#gameplay" class="toc-link">
+                            <span class="material-symbols-outlined">casino</span> Gameplay Loop
+                        </a>
+                        <a href="#upper-section" class="toc-link">
+                            <span class="material-symbols-outlined">arrow_upward</span> Upper Section
+                        </a>
+                        <a href="#lower-section" class="toc-link">
+                            <span class="material-symbols-outlined">arrow_downward</span> Lower Section
+                        </a>
+                        <a href="#bonuses" class="toc-link">
+                            <span class="material-symbols-outlined">stars</span> Bonuses
+                        </a>
+                    </nav>
+                </div>
+            </aside>
+
+            <div class="rules-content">
+
+                <section id="objective" class="rules-section">
+                    <h2 class="section-title">
+                        <span class="icon-circle"><span class="material-symbols-outlined">flag</span></span>
+                        The Objective
+                    </h2>
+                    <p>The object of Yahtzee is to obtain the highest score from throwing 5 dice. The game consists of
+                        13 rounds. In each round, you roll the dice and then score the roll in one of 13 categories.</p>
+                </section>
+
+                <section id="gameplay" class="rules-section">
+                    <h2 class="section-title">
+                        <span class="icon-circle"><span class="material-symbols-outlined">casino</span></span>
+                        Gameplay Loop
+                    </h2>
+                    <div class="gameplay-card">
+                        <p class="mb-4">In each round, a player gets three rolls of the dice.</p>
+                        <div class="steps-grid">
+                            <div class="step-item">
+                                <div class="step-icon"><span class="material-symbols-outlined">rotate_right</span></div>
+                                <h4>1. First Roll</h4>
+                                <p>Roll all 5 dice to start your turn.</p>
+                            </div>
+                            <div class="step-item">
+                                <div class="step-icon"><span class="material-symbols-outlined">back_hand</span></div>
+                                <h4>2. Hold & Reroll</h4>
+                                <p>Set aside "keepers". Reroll the rest.</p>
+                            </div>
+                            <div class="step-item">
+                                <div class="step-icon"><span class="material-symbols-outlined">edit_note</span></div>
+                                <h4>3. Score It</h4>
+                                <p>Fill a box on the scorecard.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="upper-section" class="rules-section">
+                    <h2 class="section-title">
+                        <span class="icon-circle"><span class="material-symbols-outlined">arrow_upward</span></span>
+                        Upper Section
+                    </h2>
+
+                    <div class="dice-grid">
+                        <div class="dice-card">
+                            <span class="material-symbols-outlined dice-icon">looks_one</span>
+                            <span class="dice-name">Aces</span>
+                            <span class="dice-desc">Sum of 1s</span>
+                        </div>
+                        <div class="dice-card">
+                            <span class="material-symbols-outlined dice-icon">looks_two</span>
+                            <span class="dice-name">Twos</span>
+                            <span class="dice-desc">Sum of 2s</span>
+                        </div>
+                        <div class="dice-card">
+                            <span class="material-symbols-outlined dice-icon">looks_3</span>
+                            <span class="dice-name">Threes</span>
+                            <span class="dice-desc">Sum of 3s</span>
+                        </div>
+                        <div class="dice-card">
+                            <span class="material-symbols-outlined dice-icon">looks_4</span>
+                            <span class="dice-name">Fours</span>
+                            <span class="dice-desc">Sum of 4s</span>
+                        </div>
+                        <div class="dice-card">
+                            <span class="material-symbols-outlined dice-icon">looks_5</span>
+                            <span class="dice-name">Fives</span>
+                            <span class="dice-desc">Sum of 5s</span>
+                        </div>
+                        <div class="dice-card">
+                            <span class="material-symbols-outlined dice-icon">looks_6</span>
+                            <span class="dice-name">Sixes</span>
+                            <span class="dice-desc">Sum of 6s</span>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="lower-section" class="rules-section">
+                    <h2 class="section-title">
+                        <span class="icon-circle"><span class="material-symbols-outlined">arrow_downward</span></span>
+                        Lower Section
+                    </h2>
+
+                    <div class="combo-grid">
+                        <div class="combo-card">
+                            <div class="combo-icon"><span class="material-symbols-outlined">filter_3</span></div>
+                            <div class="combo-info">
+                                <h3>3 of a Kind</h3>
+                                <p>At least three dice the same.</p>
+                                <div class="score-label">Score: Sum of all 5</div>
+                            </div>
+                        </div>
+                        <div class="combo-card">
+                            <div class="combo-icon"><span class="material-symbols-outlined">filter_4</span></div>
+                            <div class="combo-info">
+                                <h3>4 of a Kind</h3>
+                                <p>At least four dice the same.</p>
+                                <div class="score-label">Score: Sum of all 5</div>
+                            </div>
+                        </div>
+                        <div class="combo-card">
+                            <div class="combo-icon"><span class="material-symbols-outlined">house</span></div>
+                            <div class="combo-info">
+                                <h3>Full House</h3>
+                                <p>3 of one number, 2 of another.</p>
+                                <div class="score-label">Score: 25 Points</div>
+                            </div>
+                        </div>
+                        <div class="combo-card">
+                            <div class="combo-icon"><span class="material-symbols-outlined">straight</span></div>
+                            <div class="combo-info">
+                                <h3>Small Straight</h3>
+                                <p>Four sequential dice.</p>
+                                <div class="score-label">Score: 30 Points</div>
+                            </div>
+                        </div>
+                        <div class="combo-card">
+                            <div class="combo-icon"><span class="material-symbols-outlined">straighten</span></div>
+                            <div class="combo-info">
+                                <h3>Large Straight</h3>
+                                <p>Five sequential dice.</p>
+                                <div class="score-label">Score: 40 Points</div>
+                            </div>
+                        </div>
+                        <div class="combo-card">
+                            <div class="combo-icon"><span class="material-symbols-outlined">help_center</span></div>
+                            <div class="combo-info">
+                                <h3>Chance</h3>
+                                <p>Any combination.</p>
+                                <div class="score-label">Score: Sum of all 5</div>
+                            </div>
+                        </div>
+
+                        <div class="combo-card yahtzee-special">
+                            <div class="yahtzee-bg-icon"><span class="material-symbols-outlined">star</span></div>
+                            <div class="combo-icon primary"><span class="material-symbols-outlined">stars</span></div>
+                            <div class="combo-info">
+                                <h3>Yahtzee</h3>
+                                <p>All five dice showing the same face.</p>
+                                <div class="score-label">Score: 50 Points</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section id="bonuses" class="rules-section">
+                    <h2 class="section-title">
+                        <span class="icon-circle">
+                            <span class="material-symbols-outlined">stars</span>
+                        </span>
+                        Yahtzee Bonus
+                    </h2>
+
+                    <div class="bonus-content">
+                        <p>If total is <strong>63+</strong>, you get a <strong>35 point bonus</strong>.</p>
+                    </div>
+                </section>
+                <div class="rules-footer">
+                    <p>Ready to roll?</p>
+                    <a href="/dicegame" class="btn-cta">Start New Game</a>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+</body>
+</html>

@@ -33,6 +33,10 @@ class Routing{
             'controller' => 'App\Controllers\HistoryController',
             'action' => 'index'
         ],
+        'rules' => [
+            'controller' => 'App\Controllers\RulesController',
+            'action' => 'index'
+        ],
     ];
     public static function run(string $path)
     {
