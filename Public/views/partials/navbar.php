@@ -1,0 +1,59 @@
+<link rel="stylesheet" href="Public/styles/navbar.css">
+
+<nav class="main-navbar">
+    <div class="nav-left">
+        <a href="/" class="nav-logo-link">
+            <img src="Public/assets/dice-solid-full.svg" alt="Logo" class="logo-icon">
+            <span class="logo-text">DieHard</span>
+        </a>
+
+        <div class="nav-links">
+            <a href="/" class="nav-link <?= $_SERVER['REQUEST_URI'] === '/' ? 'active' : '' ?>">Home</a>
+            <a href="/dicegame" class="nav-link <?= strpos($_SERVER['REQUEST_URI'], '/dicegame') !== false ? 'active' : '' ?>">Play</a>
+            <a href="/history" class="nav-link <?= strpos($_SERVER['REQUEST_URI'], '/history') !== false ? 'active' : '' ?>">History</a>
+        </div>
+    </div>
+
+    <div class="nav-right">
+        <div class="user-menu-container">
+            <button class="user-avatar-btn" id="avatarBtn">
+                <span class="avatar-initials">
+                    <?= isset($username) ? strtoupper(substr($username, 0, 2)) : 'UY' ?>
+                </span>
+            </button>
+
+            <div class="user-dropdown" id="userDropdown">
+                <div class="dropdown-header">
+                    <span class="dropdown-username"><?= isset($username) ? htmlspecialchars($username) : 'User:' ?></span>
+                    <span class="dropdown-email">Player</span>
+                </div>
+
+                <ul class="dropdown-list">
+                    <li>
+                        <a href="/settings" class="dropdown-item">
+                            <i class="fa-solid fa-gear"></i> Settings
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/profile" class="dropdown-item">
+                            <i class="fa-solid fa-user"></i> My profile
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="dropdown-item" onclick="alert('Zasady: Rzuć kośćmi i wygraj z botem!')">
+                            <i class="fa-solid fa-book-open"></i> Rules
+                        </a>
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                        <a href="/logout" class="dropdown-item text-danger">
+                            <img src="Public/assets/logout.svg" alt="" style="width: 16px; height: 16px;"> Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<script src="Public/scripts/navbar.js"></script>
