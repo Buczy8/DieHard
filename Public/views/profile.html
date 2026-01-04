@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - DieHard</title>
+    <link rel="stylesheet" href="Public/styles/theme.css">
+    <link rel="stylesheet" href="Public/styles/profile.css">
+</head>
+<body>
+
+<?php include 'Public/views/partials/navbar.php'; ?>
+
+<div class="dashboard-container settings-wrapper">
+
+    <div class="settings-header">
+        <h1>Player Settings</h1>
+        <p>Manage your player identity and security settings</p>
+    </div>
+
+    <form action="/update-settings" method="POST" class="settings-grid">
+
+        <div class="settings-sidebar">
+
+            <div class="card profile-card">
+                <div class="profile-avatar-container">
+                    <i class="fa-solid fa-user"></i>
+                </div>
+                <h2 class="profile-name"><?= isset($username) ? htmlspecialchars($username) : 'User:' ?></h2>
+                <span class="profile-title">Yahtzee Master</span>
+
+                <button type="button" class="btn-secondary btn-full-width mt-4">
+                    <span class="icon-upload">↑</span> Change Avatar
+                </button>
+                <p class="upload-hint">Recommended: 400x400px. JPG or PNG.</p>
+            </div>
+
+            <div class="card stats-summary-card">
+                <div class="stats-header">
+                    <span class="stat-icon icon-green">🏆</span>
+                    <h3>Player Stats</h3>
+                </div>
+
+                <div class="mini-stat-row">
+                    <span class="label">High Score</span>
+                    <span class="value">450</span>
+                </div>
+                <div class="mini-stat-row">
+                    <span class="label">Games Played</span>
+                    <span class="value">128</span>
+                </div>
+                <div class="mini-stat-row">
+                    <span class="label">Win Rate</span>
+                    <span class="value">42%</span>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="settings-content">
+
+            <div class="card settings-section">
+                <div class="section-title">
+                    <span class="icon-user">👤</span>
+                    <h3>Personal Details</h3>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="display_name">Display Name</label>
+                        <input type="text" id="display_name" name="display_name" value="<?= isset($username) ? htmlspecialchars($username) : 'User:' ?>">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <div class="input-wrapper locked">
+                            <input type="email" id="email" value="playerone@example.com" disabled>
+                            <span class="lock-icon">🔒</span>
+                        </div>
+                        <small class="form-hint">Contact support to change your email</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card settings-section">
+                <div class="section-title">
+                    <span class="icon-shield">🛡️</span>
+                    <h3>Update Password</h3>
+                </div>
+
+                <div class="form-group">
+                    <label for="current_password">Current Password</label>
+                    <input type="password" id="current_password" name="current_password" placeholder="••••••••">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="new_password">New Password</label>
+                        <input type="password" id="new_password" name="new_password" placeholder="Enter new password">
+                    </div>
+                    <div class="form-group">
+                        <label for="confirm_password">Confirm Password</label>
+                        <input type="password" id="confirm_password" name="confirm_password" placeholder="Re-enter new password">
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings-actions">
+                <button type="button" class="btn-secondary">Cancel</button>
+                <button type="submit" class="btn-primary">Save Changes</button>
+            </div>
+
+        </div>
+    </form>
+</div>
+
+</body>
+</html>
