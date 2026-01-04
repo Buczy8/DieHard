@@ -29,17 +29,12 @@
 
                 <ul class="dropdown-list">
                     <li>
-                        <a href="/settings" class="dropdown-item">
-                            <i class="fa-solid fa-gear"></i> Settings
-                        </a>
-                    </li>
-                    <li>
                         <a href="/profile" class="dropdown-item">
                             <i class="fa-solid fa-user"></i> My profile
                         </a>
                     </li>
                     <li>
-                        <a href="#" class="dropdown-item" onclick="alert('Zasady: Rzuć kośćmi i wygraj z botem!')">
+                        <a href="/rules" class="dropdown-item">
                             <i class="fa-solid fa-book-open"></i> Rules
                         </a>
                     </li>
