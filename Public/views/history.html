@@ -10,20 +10,7 @@
 </head>
 <body>
 
-<nav>
-    <div class="nav-left">
-        <a href="/" class="nav-logo-link">
-            <img src="Public/assets/dice-solid-full.svg" alt="Logo" class="logo-icon">
-            <span class="logo-text">DieHard</span>
-        </a>
-    </div>
-    <div class="nav-right">
-        <div class="user-avatar-small"><?= strtoupper(substr($username, 0, 2)) ?></div>
-        <a href="/logout" class="nav-icon-btn" title="Log out">
-            <img src="Public/assets/logout.svg" alt="Logout">
-        </a>
-    </div>
-</nav>
+<?php include 'Public/views/partials/navbar.php'; ?>
 
 <div class="history-layout">
 

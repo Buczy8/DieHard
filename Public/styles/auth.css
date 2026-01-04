@@ -1,0 +1,101 @@
+/* Public/styles/auth.css */
+
+/* --- NAPRAWA LOGO --- */
+/* To jest prosta nawigacja tylko dla stron logowania/rejestracji */
+nav {
+    background-color: var(--bg-card);
+    border-bottom: 1px solid var(--border-light);
+    padding: 12px 24px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo-icon {
+    width: 24px;   /* Kluczowe: ogranicza wielkość logo */
+    height: 24px;
+    color: var(--accent-color);
+}
+
+.logo-text {
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--text-main);
+}
+
+/* --- UKŁAD LOGOWANIA / REJESTRACJI --- */
+.auth-container, .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+    padding: 20px;
+}
+
+.auth-card, .card {
+    /* Style bazowe dziedziczone z theme.css (.card) */
+    padding: 40px;
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+h1 { font-size: 24px; margin-bottom: 8px; }
+
+.subtitle {
+    color: var(--text-secondary);
+    font-size: 14px;
+    margin-bottom: 24px;
+    line-height: 1.5;
+}
+
+.btn-register { width: 100%; margin-top: 8px; }
+
+/* Stopka formularza */
+.form-footer {
+    margin-top: 24px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border-subtle);
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+.form-footer a { color: var(--primary-color); font-weight: 600; }
+.form-footer a:hover { text-decoration: underline; }
+
+/* Komunikaty błędów */
+.message {
+    padding: 12px; margin-bottom: 20px; border-radius: 8px;
+    font-size: 14px; text-align: left;
+    background-color: var(--color-error-bg);
+    color: var(--color-error-text);
+    border: 1px solid var(--color-error-border);
+}
+.message.success {
+    background-color: var(--color-success-bg);
+    color: var(--color-success-text);
+    border-color: var(--color-success-border);
+}
+
+/* Ikona koła nad formularzem logowania */
+.icon-circle {
+    width: 80px; height: 80px;
+    background-color: var(--color-success-bg);
+    border-radius: 50%;
+    display: flex; justify-content: center; align-items: center;
+    margin: 0 auto 24px auto;
+}
+
+/* Ikony wewnątrz inputów */
+.input-wrapper { position: relative; width: 100%; }
+.input-icon {
+    position: absolute; left: 12px; top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none; display: flex; align-items: center;
+}
+.input-wrapper input { padding-left: 40px; }
+.input-wrapper input:focus + .input-icon svg { stroke: var(--accent-color); }
+
+@media (max-width: 640px) {
+    .card { padding: 20px; box-shadow: none; background: transparent; border: none; }
+}

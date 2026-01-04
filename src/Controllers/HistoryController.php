@@ -10,12 +10,10 @@ use App\Repository\UserRepository;
 class HistoryController extends AppController
 {
     private GamesRepository $gamesRepository;
-    private UserRepository $userRepository;
 
     public function __construct()
     {
         $this->gamesRepository = GamesRepository::getInstance();
-        $this->userRepository = UserRepository::getInstance();
     }
 
     #[RequireLogin]
@@ -37,10 +35,8 @@ class HistoryController extends AppController
             $gamesDTOs[] = GameResponseDTO::fromEntity($gameModel);
         }
 
-        $user = $this->userRepository->getUserById($userId);
 
         $this->render('history', [
-            'username' => $user->username,
             'games' => $gamesDTOs,
             'currentPage' => $page,
             'totalPages' => $totalPages

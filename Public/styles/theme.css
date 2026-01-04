@@ -1,39 +1,147 @@
-/* theme.css */
+/* Public/styles/theme.css */
 :root {
-    /* --- Kolory marki --- */
-    --primary-color: #38e17b;       /* Twój główny zielony przycisku */
-    --primary-hover: #10b981;       /* Ciemniejszy zielony po najechaniu */
-    --accent-color: #34d399;        /* Zielony kolor gwiazdki */
+    /* --- Kolory --- */
+    --primary-color: #38e17b;
+    --primary-hover: #10b981;
+    --accent-color: #34d399;
 
-    /* --- Kolory tekstu --- */
-    --text-main: #111827;           /* Ciemny tekst nagłówków */
-    --text-secondary: #6b7280;      /* Szary tekst pomocniczy */
+    --text-main: #111827;
+    --text-secondary: #6b7280;
     --text-placeholder: #9ca3af;
 
-    /* --- Tła --- */
-    --bg-page: #f8f9fa;             /* Jasne tło strony */
-    --bg-card: #ffffff;             /* Białe tło karty */
-    --bg-input: #f3f4f6;            /* Tło inputów */
+    --bg-page: #f8f9fa;
+    --bg-card: #ffffff;
+    --bg-input: #f3f4f6;
 
-    /* --- Obramowania --- */
     --border-light: #e5e7eb;
     --border-subtle: #f3f4f6;
+
     --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
 
-    /* Dodajemy kolory komunikatów */
-    --color-error-bg: #fee2e2;      /* Bardzo jasny czerwony */
-    --color-error-text: #991b1b;    /* Ciemny czerwony dla tekstu */
-    --color-error-border: #fca5a5;  /* Obramowanie błędu */
+    /* Statusy */
+    --color-error-bg: #fee2e2;
+    --color-error-text: #991b1b;
+    --color-error-border: #fca5a5;
+    --color-success-bg: #d1fae5;
+    --color-success-text: #065f46;
 
-    --color-success-bg: #d1fae5;    /* Jasny miętowy */
-    --color-success-text: #065f46;  /* Ciemna zieleń */
-    --color-success-border: #6ee7b7;
-
-    /* Kolory dla szarego przycisku (secondary) */
+    /* Przyciski secondary */
     --btn-secondary-bg: #e5e7eb;
     --btn-secondary-text: #111827;
     --btn-secondary-hover: #d1d5db;
 
-    /* --- Wzór tła (SVG) --- */
     --bg-pattern-url: url("../assets/background.svg");
+}
+
+/* --- GLOBALNY RESET --- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg-page);
+    background-image: var(--bg-pattern-url);
+    background-repeat: repeat;
+    background-position: center;
+    background-size: 300px 300px;
+    color: var(--text-main);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+a { text-decoration: none; color: inherit; }
+h1, h2, h3, h4, h5, h6 { font-weight: 700; color: var(--text-main); }
+
+/* --- WSPÓLNE KOMPONENTY --- */
+
+/* 1. Karta (Biały kontener) */
+.card, .auth-card, .welcome-card, .stat-card, .games-table-card {
+    background: var(--bg-card);
+    border-radius: 12px;
+    border: 1px solid var(--border-light);
+    box-shadow: var(--shadow-card);
+}
+
+/* 2. Przyciski (Główny i Drugorzędny) */
+.btn-primary, .btn-register, .roll-button, .btn-new-game {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--primary-color);
+    color: #000;
+    padding: 10px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    box-shadow: 0 2px 4px rgba(56, 225, 123, 0.2);
+}
+
+.btn-primary:hover, .btn-register:hover, .roll-button:hover, .btn-new-game:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-1px);
+}
+
+.btn-secondary {
+    background-color: var(--btn-secondary-bg);
+    color: var(--btn-secondary-text);
+    padding: 10px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-secondary:hover { background-color: var(--btn-secondary-hover); }
+
+/* 3. Formularze */
+.form-group { margin-bottom: 16px; text-align: left; }
+
+label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-main);
+    margin-bottom: 6px;
+}
+
+input[type="text"], input[type="email"], input[type="password"] {
+    width: 100%;
+    padding: 10px 12px;
+    background-color: var(--bg-input);
+    border: 1px solid transparent;
+    border-radius: 6px;
+    font-size: 14px;
+    color: var(--text-main);
+    transition: all 0.2s;
+}
+
+input:focus {
+    outline: none;
+    background-color: var(--bg-card);
+    box-shadow: 0 0 0 2px var(--accent-color);
+}
+
+/* 4. Tabele */
+.games-table { width: 100%; border-collapse: collapse; }
+.games-table th {
+    text-align: left; background: #f9fafb; padding: 12px 20px;
+    font-size: 12px; color: var(--text-secondary); text-transform: uppercase;
+    font-weight: 600; border-bottom: 1px solid var(--border-light);
+}
+.games-table td {
+    padding: 16px 20px; border-bottom: 1px solid var(--border-subtle);
+    font-size: 14px; vertical-align: middle;
 }

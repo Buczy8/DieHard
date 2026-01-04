@@ -1,14 +1,13 @@
 /* Public/styles/404.css */
 
-/* --- MODYFIKACJA KARTY --- */
-/* Karta błędu może być nieco szersza niż logowanie, żeby pomieścić 3 kostki */
 .error-card {
     max-width: 480px;
-    padding-top: 40px;
-    padding-bottom: 40px;
+    padding: 40px;
+    text-align: center;
+    /* Reszta stylów z .card w theme.css */
 }
 
-/* --- SEKCJA KOSTEK --- */
+/* Sekcja kostek - specyficzna tylko dla tej strony */
 .dice-row {
     display: flex;
     justify-content: center;
@@ -23,18 +22,13 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 42px; /* Unicode dice icon size */
+    font-size: 42px;
     user-select: none;
     line-height: 1;
     cursor: default;
 }
-.nav-logo-link {
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-/* Biała kostka (dostosowana do theme.css) */
+
+/* Biała kostka */
 .die-white {
     background-color: white;
     color: var(--text-main);
@@ -45,19 +39,15 @@
 /* Zielona kostka */
 .die-green {
     background-color: var(--primary-color);
-    color: #083316; /* Ciemny zielony tekst na jasnym tle */
+    color: #083316;
     border: 2px solid var(--primary-hover);
     box-shadow: 0 8px 12px -3px rgba(56, 225, 123, 0.3);
-    z-index: 2; /* Na wierzchu */
+    z-index: 2;
 }
 
-/* Rotacje */
 .rotate-left { transform: rotate(-12deg); margin-top: 10px; }
 .rotate-right { transform: rotate(12deg); margin-top: 10px; }
 
-
-/* --- TYPOGRAFIA --- */
-/* Nadpisujemy h1 z register.css, bo tam jest mały (22px), a tu chcemy duży numer */
 h1.error-title {
     font-size: 64px;
     font-weight: 800;
@@ -80,57 +70,13 @@ h1.error-title {
     margin-bottom: 32px;
 }
 
-
-/* --- PRZYCISKI --- */
 .action-buttons {
     display: flex;
     gap: 12px;
     justify-content: center;
 }
 
-/* Nadpisujemy .btn-register żeby nie był na 100% szerokości w tej grupie */
-.action-buttons .btn-register {
-    width: auto;
-    padding-left: 24px;
-    padding-right: 24px;
-    margin-top: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none; /* Usuwa podkreślenie linku */
-}
-
-/* Styl dla szarego przycisku */
-.btn-secondary {
-    background-color: var(--btn-secondary-bg);
-    color: var(--btn-secondary-text);
-    padding: 10px 24px;
-    border-radius: 6px;
-    font-weight: 600;
-    font-size: 14px;
-    text-decoration: none;
-    transition: background-color 0.2s;
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.btn-secondary:hover {
-    background-color: var(--btn-secondary-hover);
-}
-
-/* --- MOBILE --- */
 @media (max-width: 640px) {
-    .action-buttons {
-        flex-direction: column;
-        width: 100%;
-    }
-
-    .action-buttons .btn-register,
-    .btn-secondary {
-        width: 100%;
-        padding: 12px;
-    }
+    .action-buttons { flex-direction: column; width: 100%; }
+    .action-buttons .btn-register, .btn-secondary { width: 100%; }
 }
