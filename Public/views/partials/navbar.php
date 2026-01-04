@@ -33,6 +33,13 @@
                             <i class="fa-solid fa-user"></i> My profile
                         </a>
                     </li>
+                    <?php if (isset($user) && $user->role === 'admin'): ?>
+                        <li>
+                            <a href="/admin-users" class="dropdown-item">
+                                <i class="fa-solid fa-user-shield"></i> Manage Users
+                            </a>
+                        </li>
+                    <?php endif; ?>
                     <li>
                         <a href="/rules" class="dropdown-item">
                             <i class="fa-solid fa-book-open"></i> Rules
