@@ -43,15 +43,15 @@
 
                 <div class="mini-stat-row">
                     <span class="label">High Score</span>
-                    <span class="value">450</span>
+                    <span class="value"><?= $stats->highScore ?></span>
                 </div>
                 <div class="mini-stat-row">
                     <span class="label">Games Played</span>
-                    <span class="value">128</span>
+                    <span class="value"><?= $stats->gamesPlayed ?></span>
                 </div>
                 <div class="mini-stat-row">
                     <span class="label">Win Rate</span>
-                    <span class="value">42%</span>
+                    <span class="value"><?= $stats->winRate ?>%</span>
                 </div>
             </div>
 
@@ -74,7 +74,7 @@
                     <div class="form-group">
                         <label for="email">Email Address</label>
                         <div class="input-wrapper locked">
-                            <input type="email" id="email" value="playerone@example.com" disabled>
+                            <input type="email" id="email" value="<?= htmlspecialchars($email) ?>" disabled>
                             <span class="lock-icon">🔒</span>
                         </div>
                         <small class="form-hint">Contact support to change your email</small>
