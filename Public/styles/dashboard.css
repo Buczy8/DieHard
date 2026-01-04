@@ -1,282 +1,54 @@
 /* Public/styles/dashboard.css */
-
-/* --- RESET & GLOBALNE --- */
-body {
-    background-color: var(--bg-page);
-    /* Tło z wzorem z theme.css */
-    background-image: var(--bg-pattern-url);
-    background-repeat: repeat;
-    background-position: center;
-    background-size: 300px 300px;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    color: var(--text-main);
-    margin: 0;
-}
-/* --- KONTENER GŁÓWNY --- */
 .dashboard-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 24px;
-    width: 100%;
+    max-width: 1200px; margin: 0 auto; padding: 24px; width: 100%;
 }
 
-/* --- KARTA POWITALNA (HERO) --- */
 .welcome-card {
-    background: #ffffff;
-    border-radius: 16px;
-    padding: 32px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    padding: 32px; display: flex; justify-content: space-between; align-items: center;
     margin-bottom: 24px;
-    border: 1px solid var(--border-subtle);
 }
+.welcome-actions { display: flex; gap: 12px; }
 
-.welcome-content h1 {
-    font-size: 28px;
-    font-weight: 800;
-    margin: 0 0 8px 0;
-    color: var(--text-main);
-}
-.welcome-content p {
-    color: var(--text-secondary);
-    margin: 0;
-    font-size: 15px;
-}
-
-.welcome-actions {
-    display: flex;
-    gap: 12px;
-}
-
-/* Przyciski */
-.btn-primary {
-    background-color: var(--primary-color);
-    color: #000; /* Czarny na zielonym */
-    padding: 12px 24px;
-    border-radius: 8px;
-    text-decoration: none;
-    font-weight: 700;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    transition: background 0.2s;
-}
-.btn-primary:hover {
-    background-color: var(--primary-hover);
-}
-
-.btn-secondary {
-    background-color: #f3f4f6;
-    color: var(--text-main);
-    padding: 12px 24px;
-    border-radius: 8px;
-    text-decoration: none;
-    font-weight: 600;
-    transition: background 0.2s;
-}
-.btn-secondary:hover {
-    background-color: #e5e7eb;
-}
-
-/* --- GRID STATYSTYK (4 Kafelki) --- */
 .stats-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr); /* 4 równe kolumny */
-    gap: 20px;
-    margin-bottom: 32px;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 32px;
 }
-
-.stat-card {
-    background: #ffffff;
-    padding: 20px;
-    border-radius: 12px;
-    border: 1px solid var(--border-subtle);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-    display: flex;
-    align-items: center;
-    gap: 16px;
-}
+.stat-card { padding: 20px; display: flex; align-items: center; gap: 16px; }
 
 .stat-icon {
-    width: 48px;
-    height: 48px;
-    border-radius: 12px; /* Zaokrąglony kwadrat */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
+    width: 48px; height: 48px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center; font-size: 24px;
 }
-
 /* Kolory ikon */
 .icon-blue { background: #e0f2fe; color: #0284c7; }
 .icon-green { background: #dcfce7; color: #16a34a; }
 .icon-orange { background: #ffedd5; color: #ea580c; }
 .icon-purple { background: #f3e8ff; color: #9333ea; }
 
-.stat-info {
-    display: flex;
-    flex-direction: column;
-}
-.stat-label {
-    font-size: 13px;
-    color: var(--text-secondary);
-    font-weight: 600;
-}
-.stat-value {
-    font-size: 24px;
-    font-weight: 800;
-    color: var(--text-main);
-}
+.stat-info { display: flex; flex-direction: column; }
+.stat-label { font-size: 13px; color: var(--text-secondary); }
+.stat-value { font-size: 24px; font-weight: 800; }
 
-/* --- DOLNA SEKCJA (GRID 2-kolumnowy) --- */
-.dashboard-bottom-grid {
-    display: grid;
-    grid-template-columns: 2fr 1fr; /* Tabela szersza (2/3), znajomi węzsi (1/3) */
-    gap: 24px;
-}
-
-/* Nagłówki sekcji */
 .section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 16px;
+    display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;
 }
-.section-header h2 {
-    font-size: 18px;
-    font-weight: 700;
-    margin: 0;
-}
-.view-all-link {
-    color: var(--primary-color); /* lub ciemniejszy zielony */
-    font-size: 13px;
-    font-weight: 600;
-    text-decoration: none;
-}
-.btn-icon-plus {
-    background: transparent;
-    border: none;
-    color: var(--primary-color);
-    font-size: 20px;
-    cursor: pointer;
-}
+.view-all-link { color: var(--primary-color); font-size: 13px; font-weight: 600; }
 
-/* Karta z Tabelą */
-.games-table-card {
-    background: #ffffff;
-    border-radius: 12px;
-    border: 1px solid var(--border-subtle);
-    overflow: hidden; /* Zaokrągla rogi tabeli */
-}
+.badge { padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 700; }
+.badge-win { background: #d1fae5; color: #065f46; }
+.badge-loss { background: #fee2e2; color: #991b1b; }
+.badge-secondary { background: #f3f4f6; color: #4b5563; }
 
-.games-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.games-table th {
-    text-align: left;
-    background: #f9fafb;
-    padding: 12px 20px;
-    font-size: 12px;
-    color: var(--text-secondary);
-    text-transform: uppercase;
-    font-weight: 600;
-    border-bottom: 1px solid var(--border-light);
-}
-
-.games-table td {
-    padding: 16px 20px;
-    border-bottom: 1px solid var(--border-subtle);
-    font-size: 14px;
-    vertical-align: middle;
-}
-
-.games-table tr:last-child td {
-    border-bottom: none;
-}
-
-/* Style w tabeli */
-.col-date { font-weight: 500; color: var(--text-main); }
-.col-score { font-weight: 700; }
-
-.opponent-info {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-weight: 500;
-}
-
-/* Badges (Win/Loss) */
-.badge {
-    padding: 4px 10px;
-    border-radius: 6px;
-    font-size: 12px;
-    font-weight: 700;
-}
-.badge-win {
-    background: #d1fae5;
-    color: #065f46;
-}
-.badge-loss {
-    background: #fee2e2;
-    color: #991b1b;
-}
-
-/* Avatary */
 .avatar {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 11px;
-    font-weight: 700;
-    color: #fff;
+    width: 32px; height: 32px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; color: #fff; margin-right: 8px;
 }
 .avatar-blue { background: #3b82f6; }
-.avatar-red { background: #ef4444; }
-.avatar-yellow { background: #eab308; }
-.avatar-pink { background: #ec4899; }
+.opponent-info { display: flex; align-items: center; font-weight: 500; }
 
-/* Przycisk Oka */
-.btn-icon {
-    background: transparent;
-    border: none;
-    color: var(--text-secondary);
-    cursor: pointer;
-    font-size: 16px;
-}
-.btn-icon:hover { color: var(--text-main); }
-
-
-/* --- RESPONSYWNOŚĆ --- */
-@media (max-width: 900px) {
-    .stats-grid {
-        grid-template-columns: 1fr 1fr; /* 2 kolumny na tablecie */
-    }
-    .dashboard-bottom-grid {
-        grid-template-columns: 1fr; /* Jedna kolumna na dole */
-    }
-}
-
+@media (max-width: 900px) { .stats-grid { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 600px) {
-    .welcome-card {
-        flex-direction: column;
-        text-align: center;
-        gap: 16px;
-    }
-    .stats-grid {
-        grid-template-columns: 1fr; /* 1 kolumna na telefonie */
-    }
-    .welcome-actions {
-        width: 100%;
-        flex-direction: column;
-    }
-    .btn-primary, .btn-secondary {
-        justify-content: center;
-    }
+    .stats-grid { grid-template-columns: 1fr; }
+    .welcome-card { flex-direction: column; text-align: center; gap: 16px; }
+    .welcome-actions { flex-direction: column; width: 100%; }
 }
