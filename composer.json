@@ -1,4 +1,8 @@
 {
+  "name": "buczy8/diehard",
+  "description": "DieHard Dice Game Application",
+  "type": "project",
+  "license": "proprietary",
   "autoload": {
     "psr-4": {
       "App\\": "src/"
