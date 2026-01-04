@@ -71,12 +71,13 @@ class UserRepository extends Repository
     public function updateUser(User $user): void
     {
         $stmt = $this->database->prepare(
-            "UPDATE users SET username = :username, password = :password WHERE id = :id"
+            "UPDATE users SET username = :username, password = :password,avatar = :avatar  WHERE id = :id"
         );
 
         $stmt->execute([
             ':username' => $user->username,
             ':password' => $user->password,
+            ':avatar' => $user->avatar,
             ':id' => $user->id
         ]);
     }

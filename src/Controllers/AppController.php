@@ -14,7 +14,6 @@ class AppController
             return $this->currentUser;
         }
 
-        // Jeśli jest sesja, pobierz z bazy
         if (isset($_SESSION['user_id'])) {
             $userRepo = UserRepository::getInstance();
             $this->currentUser = $userRepo->getUserById($_SESSION['user_id']);
@@ -38,6 +37,7 @@ class AppController
         $user = $this->getUser();
         if ($user) {
             $variables['username'] ??= $user->username;
+            $variables['avatar'] ??= $user->avatar;
         }
         $output = 'Public/views/404.html';
 

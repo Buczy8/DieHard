@@ -5,7 +5,8 @@
     max-width: 960px; /* Ściskamy całość do środka (było 1200px) */
     margin: 0 auto;   /* Wyśrodkowanie na stronie */
     width: 100%;
-    margin-top: 60px;
+    margin-top: 80px;
+    padding: 0 24px;
 }
 .settings-header {
     margin-bottom: 24px;
@@ -50,6 +51,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: hidden; /* Dodaj to, aby przyciąć obrazek do koła */
+    position: relative;
 }
 
 .profile-avatar-container i {
@@ -222,37 +225,37 @@
 .popup-title {
     font-size: 1.5rem;
     margin-bottom: 0.5rem;
-    color: #fff;
+    color: var(--text-main);
     font-weight: 700;
 }
 
 .popup-message {
-    color: #a0a0b0;
+    color: var(--text-secondary);
     margin-bottom: 1.5rem;
     line-height: 1.5;
 }
 
 /* Style dla sukcesu */
 .popup-box.success {
-    border-top: 4px solid #4ade80;
+    border-top: 4px solid var(--primary-color);
 }
 .popup-box.success .popup-icon {
-    color: #4ade80;
+    color: var(--primary-color);
 }
 .popup-box.success .btn-popup {
-    background: #4ade80;
+    background: var(--primary-color);
     color: #000;
 }
 
 /* Style dla błędu */
 .popup-box.error {
-    border-top: 4px solid #ef4444;
+    border-top: 4px solid var(--color-error-text);
 }
 .popup-box.error .popup-icon {
-    color: #ef4444;
+    color: var(--color-error-text);
 }
 .popup-box.error .btn-popup {
-    background: #ef4444;
+    background: var(--color-error-text);
     color: #fff;
 }
 
@@ -278,6 +281,120 @@
 @keyframes slideUp {
     from { transform: translateY(20px) scale(0.9); opacity: 0; }
     to { transform: translateY(0) scale(1); opacity: 1; }
+}
+/* Avatar Modal Styles */
+.avatar-modal-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.8);
+    backdrop-filter: blur(5px);
+    z-index: 10000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.avatar-modal-box {
+    background: var(--bg-card);
+    width: 500px;
+    border-radius: 12px;
+    border: 1px solid var(--border-light);
+    box-shadow: var(--shadow-card);
+    overflow: hidden;
+    animation: slideUp 0.3s ease-out;
+}
+
+.avatar-modal-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border-light);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--bg-card);
+}
+.avatar-modal-header h3 { margin: 0; color: var(--text-main); }
+.close-modal {
+    background: none; border: none; color: var(--text-secondary); font-size: 1.5rem; cursor: pointer;
+}
+
+.avatar-tabs {
+    display: flex;
+    background: var(--bg-input);
+}
+.tab-btn {
+    flex: 1;
+    padding: 1rem;
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: 0.3s;
+}
+.tab-btn.active {
+    color: var(--primary-hover);
+    border-bottom: 2px solid var(--primary-hover);
+    background: rgba(56, 225, 123, 0.05);
+}
+
+.tab-content {
+    display: none;
+    padding: 2rem;
+    height: 300px; /* Stała wysokość */
+    overflow-y: auto;
+    background: var(--bg-card);
+}
+.tab-content.active { display: block; }
+
+/* Grid dla domyślnych avatarów */
+.avatar-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+.avatar-option {
+    border-radius: 8px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    overflow: hidden;
+    transition: transform 0.2s;
+}
+.avatar-option:hover { transform: scale(1.05); }
+.avatar-option.selected {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 15px rgba(56, 225, 123, 0.3);
+}
+.avatar-option img {
+    width: 100%; height: 100%; object-fit: cover; display: block;
+}
+
+/* Strefa Uploadu */
+.upload-zone {
+    border: 2px dashed var(--border-light);
+    border-radius: 12px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: var(--text-placeholder);
+    cursor: pointer;
+    transition: 0.3s;
+}
+.upload-zone:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-hover);
+    background: rgba(56, 225, 123, 0.02);
+}
+.upload-zone i { font-size: 3rem; margin-bottom: 1rem; }
+
+.avatar-modal-footer {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid var(--border-light);
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    background: var(--bg-input);
 }
 /* --- Responsywność --- */
 @media (max-width: 900px) {
