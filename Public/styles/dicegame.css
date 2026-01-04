@@ -19,38 +19,6 @@ body {
     flex-direction: column;
 }
 
-/* === NOWA SEKCJA: NAWIGACJA (Skopiowana z register.css) === */
-nav {
-    background-color: var(--bg-card);
-    border-bottom: 1px solid var(--border-light);
-    padding: 12px 40px;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    /* Nav nie powinien się kurczyć */
-    flex-shrink: 0;
-    z-index: 20;
-}
-.nav-logo-link {
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-.logo-icon {
-    /* Jeśli to SVG inline lub font, kolor zadziała. Jeśli img, color nie wpłynie na src */
-    color: var(--accent-color);
-    width: 20px;
-    height: 20px;
-}
-
-.logo-text {
-    font-weight: 700;
-    font-size: 16px;
-    color: var(--text-main);
-}
-
 /* === GŁÓWNY WRAPPER GRY === */
 .app-wrapper {
     width: 100%;

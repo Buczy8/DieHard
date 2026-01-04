@@ -7,27 +7,6 @@
     padding: 24px;
 }
 
-/* --- Nawigacja (Elementy specyficzne) --- */
-.nav-logo-link {
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-/* --- Nagłówek Sekcji --- */
-.section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 24px;
-}
-
-/* Klasa pomocnicza do mniejszego przycisku (zastępuje inline style) */
-.btn-sm {
-    padding: 8px 16px;
-    font-size: 14px;
-}
 
 /* --- Tabela Historii --- */
 .games-table-card {
