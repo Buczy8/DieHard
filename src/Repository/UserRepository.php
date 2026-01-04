@@ -67,4 +67,17 @@ class UserRepository extends Repository
             ':role' => $user->role
         ]);
     }
+
+    public function updateUser(User $user): void
+    {
+        $stmt = $this->database->prepare(
+            "UPDATE users SET username = :username, password = :password WHERE id = :id"
+        );
+
+        $stmt->execute([
+            ':username' => $user->username,
+            ':password' => $user->password,
+            ':id' => $user->id
+        ]);
+    }
 }
