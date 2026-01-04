@@ -37,3 +37,6 @@ docker/nginx/certs/*
 
 # Narzędzia lokalne
 mkcert.exe
+
+# pliki użytkownika
+/Public/uploads/

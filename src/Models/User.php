@@ -11,6 +11,7 @@ class User
 
         public ?int $id = null,
         public string  $role = 'user',
+        public ?string $avatar = null,
         public ?DateTimeImmutable $createdAt = null
     )
     {
@@ -24,6 +25,7 @@ class User
             username: $data['username'],
             password: $data['password'],
             role: $data['role'],
+            avatar: $data['avatar'] ?? null,
             createdAt: isset($data['created_at'])
                 ? new DateTimeImmutable($data['created_at'])
                 : null

@@ -1,0 +1,422 @@
+/* Public/styles/settings.css */
+
+/* --- Układ Strony --- */
+.settings-wrapper {
+    max-width: 960px; /* Ściskamy całość do środka (było 1200px) */
+    margin: 0 auto;   /* Wyśrodkowanie na stronie */
+    width: 100%;
+    margin-top: 80px;
+    padding: 0 24px;
+}
+.settings-header {
+    margin-bottom: 24px;
+    text-align: left;
+}
+.settings-header h1 {
+    font-size: 28px;
+    margin-bottom: 8px;
+}
+.settings-header p {
+    color: var(--text-secondary);
+}
+
+.settings-grid {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 24px;
+    align-items: start;
+}
+
+/* --- Lewa Kolumna (Sidebar) --- */
+.settings-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    height: 100%;
+}
+
+/* Profil */
+.profile-card {
+    text-align: center;
+    padding: 32px 24px;
+}
+.profile-avatar-container {
+    width: 120px;      /* Stała szerokość */
+    height: 120px;     /* Stała wysokość */
+    border-radius: 50%; /* Robi koło */
+    background-color: var(--bg-input);
+    border: 4px solid var(--bg-page, #fff);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    margin: 0 auto 16px auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden; /* Dodaj to, aby przyciąć obrazek do koła */
+    position: relative;
+}
+
+.profile-avatar-container i {
+    font-size: 64px;
+    color: var(--text-main)
+}
+
+
+.profile-name {
+    font-size: 20px;
+    margin-bottom: 4px;
+}
+
+.profile-title {
+    color: var(--primary-hover); /* Zielony akcent */
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.upload-hint {
+    font-size: 11px;
+    color: var(--text-placeholder);
+    margin-top: 12px;
+}
+
+.btn-full-width {
+    width: 100%;
+    margin-top: 16px;
+}
+
+/* Statystyki (Zielona karta) */
+.stats-summary-card {
+    background-color: var(--color-success-bg); /* Jasnozielone tło z Twojego theme */
+    border-color: var(--color-success-bg);
+    padding: 24px;
+    flex: 1; /* Wypełnia pozostałą przestrzeń w kolumnie */
+    display: flex;       /* Dzięki temu możemy wyśrodkować zawartość wewnątrz */
+    flex-direction: column;
+    justify-content: center;
+}
+
+.stats-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+.stats-header h3 {
+    font-size: 16px;
+    color: var(--color-success-text);
+}
+
+.mini-stat-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(6, 95, 70, 0.1); /* Delikatna linia */
+    color: var(--color-success-text);
+}
+.mini-stat-row:last-child {
+    border-bottom: none;
+}
+.mini-stat-row .label {
+    font-weight: 500;
+    font-size: 14px;
+}
+.mini-stat-row .value {
+    font-weight: 700;
+    font-size: 16px;
+}
+
+/* --- Prawa Kolumna (Content) --- */
+.settings-content {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.settings-section {
+    padding: 32px;
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border-subtle);
+}
+.section-title h3 {
+    font-size: 18px;
+}
+
+/* Formularze w 2 kolumnach */
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+/* Zablokowany input (Email) */
+.input-wrapper.locked {
+    position: relative;
+}
+.input-wrapper.locked input {
+    background-color: var(--border-subtle); /* Szare tło */
+    color: var(--text-secondary);
+    padding-right: 30px;
+    cursor: not-allowed;
+}
+.lock-icon {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 12px;
+    opacity: 0.5;
+}
+.form-hint {
+    display: block;
+    margin-top: 6px;
+    font-size: 11px;
+    color: var(--text-placeholder);
+}
+
+/* Akcje (Przyciski na dole) */
+.settings-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+    margin-top: 8px;
+}
+/* Popup Overlay - tło */
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px); /* Efekt rozmycia tła */
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* Popup Box - samo okno */
+.popup-box {
+    background: var(--bg-card);
+    border: 1px solid #333;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+    position: relative;
+    animation: slideUp 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28); /* Sprężysta animacja */
+}
+
+/* Ikona w popupie */
+.popup-icon {
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
+}
+
+.popup-title {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-main);
+    font-weight: 700;
+}
+
+.popup-message {
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
+}
+
+/* Style dla sukcesu */
+.popup-box.success {
+    border-top: 4px solid var(--primary-color);
+}
+.popup-box.success .popup-icon {
+    color: var(--primary-color);
+}
+.popup-box.success .btn-popup {
+    background: var(--primary-color);
+    color: #000;
+}
+
+/* Style dla błędu */
+.popup-box.error {
+    border-top: 4px solid var(--color-error-text);
+}
+.popup-box.error .popup-icon {
+    color: var(--color-error-text);
+}
+.popup-box.error .btn-popup {
+    background: var(--color-error-text);
+    color: #fff;
+}
+
+/* Przycisk zamknięcia */
+.btn-popup {
+    border: none;
+    padding: 10px 24px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+.btn-popup:hover {
+    transform: scale(1.05);
+    filter: brightness(1.1);
+}
+
+/* Animacje */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+@keyframes slideUp {
+    from { transform: translateY(20px) scale(0.9); opacity: 0; }
+    to { transform: translateY(0) scale(1); opacity: 1; }
+}
+/* Avatar Modal Styles */
+.avatar-modal-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.8);
+    backdrop-filter: blur(5px);
+    z-index: 10000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.avatar-modal-box {
+    background: var(--bg-card);
+    width: 500px;
+    border-radius: 12px;
+    border: 1px solid var(--border-light);
+    box-shadow: var(--shadow-card);
+    overflow: hidden;
+    animation: slideUp 0.3s ease-out;
+}
+
+.avatar-modal-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border-light);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--bg-card);
+}
+.avatar-modal-header h3 { margin: 0; color: var(--text-main); }
+.close-modal {
+    background: none; border: none; color: var(--text-secondary); font-size: 1.5rem; cursor: pointer;
+}
+
+.avatar-tabs {
+    display: flex;
+    background: var(--bg-input);
+}
+.tab-btn {
+    flex: 1;
+    padding: 1rem;
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: 0.3s;
+}
+.tab-btn.active {
+    color: var(--primary-hover);
+    border-bottom: 2px solid var(--primary-hover);
+    background: rgba(56, 225, 123, 0.05);
+}
+
+.tab-content {
+    display: none;
+    padding: 2rem;
+    height: 300px; /* Stała wysokość */
+    overflow-y: auto;
+    background: var(--bg-card);
+}
+.tab-content.active { display: block; }
+
+/* Grid dla domyślnych avatarów */
+.avatar-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+.avatar-option {
+    border-radius: 8px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    overflow: hidden;
+    transition: transform 0.2s;
+}
+.avatar-option:hover { transform: scale(1.05); }
+.avatar-option.selected {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 15px rgba(56, 225, 123, 0.3);
+}
+.avatar-option img {
+    width: 100%; height: 100%; object-fit: cover; display: block;
+}
+
+/* Strefa Uploadu */
+.upload-zone {
+    border: 2px dashed var(--border-light);
+    border-radius: 12px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: var(--text-placeholder);
+    cursor: pointer;
+    transition: 0.3s;
+}
+.upload-zone:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-hover);
+    background: rgba(56, 225, 123, 0.02);
+}
+.upload-zone i { font-size: 3rem; margin-bottom: 1rem; }
+
+.avatar-modal-footer {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid var(--border-light);
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    background: var(--bg-input);
+}
+/* --- Responsywność --- */
+@media (max-width: 900px) {
+    .settings-grid {
+        grid-template-columns: 1fr;
+    }
+    .settings-wrapper {
+        max-width: 600px;
+    }
+}
+
+@media (max-width: 600px) {
+    .settings-sidebar {
+        flex-direction: column;
+    }
+    .form-row {
+        grid-template-columns: 1fr; /* Inputy jeden pod drugim na telefonie */
+    }
+    .settings-actions {
+        flex-direction: column-reverse; /* Save na górze, Cancel na dole */
+    }
+    .btn-primary, .btn-secondary {
+        width: 100%;
+    }
+}

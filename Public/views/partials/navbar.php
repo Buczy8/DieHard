@@ -18,7 +18,11 @@
     <div class="nav-right">
         <div class="user-menu-container">
             <button class="user-avatar-btn" id="avatarBtn">
-                <i class="fa-solid fa-user"></i>
+                <?php if (!empty($avatar)): ?>
+                    <img src="<?= htmlspecialchars($avatar) ?>" alt="Avatar" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+                <?php else: ?>
+                    <i class="fa-solid fa-user"></i>
+                <?php endif; ?>
             </button>
 
             <div class="user-dropdown" id="userDropdown">
