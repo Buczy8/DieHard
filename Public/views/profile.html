@@ -17,9 +17,13 @@
         <h1>Player Settings</h1>
         <p>Manage your player identity and security settings</p>
     </div>
-
+    <?php if (!empty($message)): ?>
+    <div class="message <?php echo (isset($type) && $type === 'success') ? 'success' : ''; ?>">
+        <?php echo htmlspecialchars($message); ?>
+    </div>
+    <?php endif; ?>
     <form action="/update-settings" method="POST" class="settings-grid">
-
+        <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf'] ?? '' ?>">
         <div class="settings-sidebar">
 
             <div class="card profile-card">
