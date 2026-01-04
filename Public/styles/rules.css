@@ -261,20 +261,6 @@ h1, h2, h3, h4 {
     color: var(--rules-text-muted);
 }
 
-.info-box {
-    background-color: rgba(54, 226, 123, 0.1);
-    border: 1px solid rgba(54, 226, 123, 0.2);
-    border-radius: 8px;
-    padding: 1rem;
-    display: flex;
-    gap: 1rem;
-    align-items: flex-start;
-}
-
-.info-icon {
-    color: #2ab562;
-}
-
 /* --- Combo Grid (Lower Section) --- */
 .combo-grid {
     display: grid;
