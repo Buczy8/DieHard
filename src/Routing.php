@@ -37,6 +37,10 @@ class Routing{
             'controller' => 'App\Controllers\RulesController',
             'action' => 'index'
         ],
+        'profile' => [
+            'controller' => 'App\Controllers\UserProfileController',
+            'action' => 'index'
+        ],
     ];
     public static function run(string $path)
     {
