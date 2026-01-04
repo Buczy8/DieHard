@@ -10,13 +10,11 @@ use App\Repository\GamesRepository;
 class DashboardController extends AppController {
 
     private $statsRepository;
-    private $userRepository;
     private $gamesRepository;
 
     public function __construct()
     {
         $this->statsRepository = UserStatisticsRepository::getInstance();
-        $this->userRepository = UserRepository::getInstance();
         $this->gamesRepository = GamesRepository::getInstance();
     }
 
@@ -24,7 +22,8 @@ class DashboardController extends AppController {
     public function index()
     {
         $userId = $_SESSION['user_id'] ?? null;
-        $user = $this->userRepository->getUserById($userId);
+
+        $user = $this->getUser();
 
         if (!$user) {
             header('Location: /logout');
@@ -44,7 +43,6 @@ class DashboardController extends AppController {
         }
 
         $this->render('dashboard', [
-            'username' => $user->username,
             'stats' => $statsDTO,
             'recentGames' => $recentGamesDTOs,
         ]);

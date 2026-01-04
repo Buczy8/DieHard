@@ -1,5 +1,6 @@
 <link rel="stylesheet" href="Public/styles/navbar.css">
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
 <nav class="main-navbar">
     <div class="nav-left">
         <a href="/" class="nav-logo-link">
@@ -17,9 +18,7 @@
     <div class="nav-right">
         <div class="user-menu-container">
             <button class="user-avatar-btn" id="avatarBtn">
-                <span class="avatar-initials">
-                    <?= isset($username) ? strtoupper(substr($username, 0, 2)) : 'UY' ?>
-                </span>
+                <i class="fa-solid fa-user"></i>
             </button>
 
             <div class="user-dropdown" id="userDropdown">
