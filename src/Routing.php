@@ -53,6 +53,10 @@ class Routing{
             'controller' => 'App\Controllers\AdminController',
             'action' => 'getAllUsersAPI'
         ],
+        'admin/stats' => [
+            'controller' => 'App\Controllers\AdminController',
+            'action' => 'getStatsAPI'
+        ],
         'admin/delete-user' => [
             'controller' => 'App\Controllers\AdminController',
             'action' => 'deleteUserAPI'
