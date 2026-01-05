@@ -31,56 +31,19 @@
                 <th>Score</th>
             </tr>
             </thead>
-            <tbody>
-            <?php if (empty($games)): ?>
-            <tr>
-                <td colspan="4" class="empty-state">
-                    No games played yet.
-                    <a href="/dicegame" class="text-link">Start playing!</a>
-                </td>
-            </tr>
-            <?php else: ?>
-            <?php foreach ($games as $game): ?>
-            <tr>
-                <td class="col-date"><?= $game->playedAtFormatted ?></td>
-                <td class="col-opponent">
-                    <div class="opponent-info">
-                        <span class="avatar avatar-blue"><?= $game->opponentInitials ?></span>
-                        <span><?= htmlspecialchars($game->opponentName) ?></span>
-                    </div>
-                </td>
-                <td><span class="badge <?= $game->resultBadgeClass ?>"><?= $game->resultLabel ?></span></td>
-                <td class="col-score"><?= $game->score ?></td>
-            </tr>
-            <?php endforeach; ?>
-            <?php endif; ?>
+            <tbody id="history-table-body">
+                <tr><td colspan="4" style="text-align:center; padding: 20px; color: var(--text-secondary);">Loading history...</td></tr>
             </tbody>
         </table>
     </div>
 
-    <?php if ($totalPages > 1): ?>
-    <div class="pagination-container">
-        <?php if ($currentPage > 1): ?>
-        <a href="/history?page=<?= $currentPage - 1 ?>" class="page-link">←</a>
-        <?php else: ?>
-        <span class="page-link disabled">←</span>
-        <?php endif; ?>
-
-        <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-        <a href="/history?page=<?= $i ?>" class="page-link <?= ($i == $currentPage) ? 'active' : '' ?>">
-            <?= $i ?>
-        </a>
-        <?php endfor; ?>
-
-        <?php if ($currentPage < $totalPages): ?>
-        <a href="/history?page=<?= $currentPage + 1 ?>" class="page-link">→</a>
-        <?php else: ?>
-        <span class="page-link disabled">→</span>
-        <?php endif; ?>
+    <div class="pagination-container" id="pagination-container">
+        <!-- Pagination will be rendered here by JS -->
     </div>
-    <?php endif; ?>
 
 </div>
+
+<script src="Public/scripts/history.js"></script>
 
 </body>
 </html>

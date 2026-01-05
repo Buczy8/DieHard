@@ -37,6 +37,10 @@ class Routing{
             'controller' => 'App\Controllers\HistoryController',
             'action' => 'index'
         ],
+        'api/history' => [
+            'controller' => 'App\Controllers\HistoryController',
+            'action' => 'getHistoryDataAPI'
+        ],
         'rules' => [
             'controller' => 'App\Controllers\RulesController',
             'action' => 'index'
