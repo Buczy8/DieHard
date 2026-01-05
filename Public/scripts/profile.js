@@ -1,130 +1,218 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // --- 1. Obsługa Popupów (Komunikatów) ---
-    window.closePopup = function() {
-        const popup = document.getElementById('messagePopup');
-        if (popup) {
-            popup.style.opacity = '0';
-            setTimeout(() => {
-                if (popup.parentNode) {
-                    popup.parentNode.removeChild(popup);
-                }
-            }, 300);
-        }
-    };
-
-    // Dodajemy listener TYLKO jeśli popup istnieje w DOM
-    const messagePopup = document.getElementById('messagePopup');
-    if (messagePopup) {
-        messagePopup.addEventListener('click', function(e) {
-            if (e.target === this) {
-                closePopup();
-            }
-        });
-    }
-
-    // --- 2. Zmienne globalne dla Avatara ---
-    let currentSelection = { type: null, value: null };
-
-    // --- 3. Funkcje Modala ---
-    window.toggleAvatarModal = function(show) {
-        const modal = document.getElementById('avatarModal');
-        if (modal) {
-            modal.style.display = show ? 'flex' : 'none';
-            if (show) {
-                switchTab('defaults');
-            }
-        }
-    };
-
-    // Podpięcie przycisku "Change Avatar" z zabezpieczeniem
-    const changeAvatarBtn = document.querySelector('.btn-secondary.btn-full-width');
-    if (changeAvatarBtn) {
-        changeAvatarBtn.addEventListener('click', () => {
-            toggleAvatarModal(true);
-        });
-    }
-
-    // --- 4. Przełączanie zakładek ---
-    window.switchTab = function(tabName) {
-        // Ukryj wszystkie treści
-        document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-        document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-
-        // Pokaż wybraną treść
-        const targetContent = document.getElementById(`tab-${tabName}`);
-        if (targetContent) {
-            targetContent.classList.add('active');
-        }
-
-        // Aktywuj odpowiedni przycisk
-        const buttons = document.querySelectorAll('.tab-btn');
-        if (buttons.length > 0) {
-            if (tabName === 'defaults') {
-                buttons[0].classList.add('active');
-            } else {
-                buttons[1].classList.add('active'); // Zakładamy, że upload jest drugi
-            }
-        }
-    };
-
-    // --- 5. Wybór domyślnego avatara ---
-    window.selectDefault = function(filename, element) {
-        // Usuń zaznaczenie z innych
-        document.querySelectorAll('.avatar-option').forEach(el => el.classList.remove('selected'));
-        // Zaznacz kliknięty
-        element.classList.add('selected');
-
-        // Zapisz wybór
-        currentSelection = { type: 'default', value: filename };
-
-        // Resetujemy input pliku, jeśli wcześniej coś wybrano
-        const fileInput = document.getElementById('avatar_upload_input');
-        if(fileInput) fileInput.value = '';
-    };
-
-    // --- 6. Podgląd Uploadu ---
-    window.previewUploadedFile = function(input) {
-        if (input.files && input.files[0]) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const uploadZone = document.querySelector('.upload-zone');
-                if (uploadZone) {
-                    uploadZone.style.backgroundImage = `url(${e.target.result})`;
-                    uploadZone.style.backgroundSize = 'cover';
-                    uploadZone.style.backgroundPosition = 'center';
-                    uploadZone.innerHTML = ''; // Usuń tekst i ikonę wewnątrz strefy
-                }
-                currentSelection = { type: 'upload', value: e.target.result };
-            };
-            reader.readAsDataURL(input.files[0]);
-        }
-    };
-
-    // --- 7. Zatwierdzenie (Confirm) ---
-    window.confirmAvatarSelection = function() {
-        const mainAvatarPreview = document.querySelector('.profile-avatar-container');
-        const defaultInput = document.getElementById('input_default_avatar');
-        const fileInput = document.getElementById('avatar_upload_input');
-
-        if (currentSelection.type === 'default') {
-            if (defaultInput) defaultInput.value = currentSelection.value;
-            if (fileInput) fileInput.value = ''; // Czyścimy input pliku
-
-            // Aktualizacja wizualna na głównej stronie
-            if (mainAvatarPreview) {
-                // Używamy assets/avatars/ zgodnie z twoim HTMLem
-                mainAvatarPreview.innerHTML = `<img src="Public/assets/avatars/${currentSelection.value}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">`;
-            }
-
-        } else if (currentSelection.type === 'upload') {
-            if (defaultInput) defaultInput.value = ''; // Czyścimy domyślny
-
-            // Aktualizacja wizualna (base64)
-            if (mainAvatarPreview) {
-                mainAvatarPreview.innerHTML = `<img src="${currentSelection.value}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">`;
-            }
-        }
-
-        toggleAvatarModal(false);
-    };
+    fetchProfileData();
+    setupAvatarModal();
+    setupFormSubmission();
 });
+
+// --- 1. Pobieranie danych profilu ---
+function fetchProfileData() {
+    fetch('/api/profile')
+        .then(response => {
+            if (!response.ok) throw new Error('Failed to load profile');
+            return response.json();
+        })
+        .then(data => {
+            if (data.error) {
+                showPopup('Error', data.error, 'error');
+                return;
+            }
+            populateProfile(data);
+        })
+        .catch(err => {
+            console.error(err);
+            showPopup('Error', 'Could not load profile data.', 'error');
+        });
+}
+
+function populateProfile(data) {
+    // CSRF Token
+    document.getElementById('csrf_token').value = data.csrf;
+
+    // User Info
+    document.getElementById('profile-username').textContent = data.username;
+    document.getElementById('display_name').value = data.username;
+    document.getElementById('email').value = data.email;
+
+    // Avatar
+    updateAvatarPreview(data.avatar);
+
+    // Stats
+    if (data.stats) {
+        document.getElementById('stat-highscore').textContent = data.stats.highScore;
+        document.getElementById('stat-games-played').textContent = data.stats.gamesPlayed;
+        document.getElementById('stat-win-rate').textContent = data.stats.winRate + '%';
+    }
+}
+
+function updateAvatarPreview(avatarUrl) {
+    const container = document.getElementById('profile-avatar-container');
+    if (avatarUrl) {
+        container.innerHTML = `<img src="${avatarUrl}" alt="User Avatar" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">`;
+    } else {
+        container.innerHTML = `<i class="fa-solid fa-user"></i>`;
+    }
+}
+
+// --- 2. Obsługa Formularza (AJAX) ---
+function setupFormSubmission() {
+    const form = document.getElementById('settingsForm');
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        const formData = new FormData(form);
+
+        fetch('/update-settings', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            showPopup(
+                data.type === 'success' ? 'Success!' : 'Error!',
+                data.message,
+                data.type
+            );
+
+            if (data.type === 'success' && data.user) {
+                // Aktualizuj widok bez przeładowania
+                document.getElementById('profile-username').textContent = data.user.username;
+                updateAvatarPreview(data.user.avatar);
+                
+                // Wyczyść pola hasła
+                document.getElementById('current_password').value = '';
+                document.getElementById('new_password').value = '';
+                document.getElementById('confirm_password').value = '';
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            showPopup('Error', 'An unexpected error occurred.', 'error');
+        });
+    });
+}
+
+// --- 3. Obsługa Modala Avatara ---
+let currentSelection = { type: null, value: null };
+
+function setupAvatarModal() {
+    const changeBtn = document.getElementById('changeAvatarBtn');
+    if (changeBtn) {
+        changeBtn.addEventListener('click', () => toggleAvatarModal(true));
+    }
+
+    // Obsługa inputu pliku w modalu
+    const fileInput = document.getElementById('avatar_upload_input');
+    if (fileInput) {
+        fileInput.addEventListener('change', function() {
+            previewUploadedFile(this);
+        });
+    }
+}
+
+window.toggleAvatarModal = function(show) {
+    const modal = document.getElementById('avatarModal');
+    if (modal) {
+        modal.style.display = show ? 'flex' : 'none';
+        if (show) switchTab('defaults');
+    }
+};
+
+window.switchTab = function(tabName) {
+    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+
+    const targetContent = document.getElementById(`tab-${tabName}`);
+    if (targetContent) targetContent.classList.add('active');
+
+    const buttons = document.querySelectorAll('.tab-btn');
+    if (buttons.length > 0) {
+        if (tabName === 'defaults') buttons[0].classList.add('active');
+        else buttons[1].classList.add('active');
+    }
+};
+
+window.selectDefault = function(filename, element) {
+    document.querySelectorAll('.avatar-option').forEach(el => el.classList.remove('selected'));
+    element.classList.add('selected');
+    currentSelection = { type: 'default', value: filename };
+    
+    // Reset file input
+    const fileInput = document.getElementById('avatar_upload_input');
+    if(fileInput) fileInput.value = '';
+};
+
+window.previewUploadedFile = function(input) {
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const uploadZone = document.querySelector('.upload-zone');
+            if (uploadZone) {
+                uploadZone.style.backgroundImage = `url(${e.target.result})`;
+                uploadZone.style.backgroundSize = 'cover';
+                uploadZone.style.backgroundPosition = 'center';
+                uploadZone.innerHTML = ''; 
+            }
+            currentSelection = { type: 'upload', value: e.target.result };
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+};
+
+window.confirmAvatarSelection = function() {
+    const defaultInput = document.getElementById('input_default_avatar');
+    const fileInput = document.getElementById('avatar_upload_input');
+
+    if (currentSelection.type === 'default') {
+        if (defaultInput) defaultInput.value = currentSelection.value;
+        if (fileInput) fileInput.value = ''; 
+        
+        // Podgląd tymczasowy (zostanie nadpisany po zapisie)
+        updateAvatarPreview(`Public/assets/avatars/${currentSelection.value}`);
+
+    } else if (currentSelection.type === 'upload') {
+        if (defaultInput) defaultInput.value = '';
+        // File input już ma plik
+        updateAvatarPreview(currentSelection.value);
+    }
+
+    toggleAvatarModal(false);
+};
+
+// --- 4. Obsługa Popupów ---
+window.showPopup = function(title, message, type) {
+    const popup = document.getElementById('messagePopup');
+    const box = document.getElementById('popupBox');
+    const icon = document.getElementById('popupIcon');
+    const titleEl = document.getElementById('popupTitle');
+    const msgEl = document.getElementById('popupMessage');
+
+    if (!popup) return;
+
+    // Reset klas
+    box.className = 'popup-box';
+    icon.className = 'fa-solid';
+
+    if (type === 'success') {
+        box.classList.add('success');
+        icon.classList.add('fa-circle-check');
+    } else {
+        box.classList.add('error');
+        icon.classList.add('fa-circle-xmark');
+    }
+
+    titleEl.textContent = title;
+    msgEl.textContent = message;
+
+    popup.style.display = 'flex';
+    popup.style.opacity = '1';
+};
+
+window.closePopup = function() {
+    const popup = document.getElementById('messagePopup');
+    if (popup) {
+        popup.style.opacity = '0';
+        setTimeout(() => {
+            popup.style.display = 'none';
+        }, 300);
+    }
+};

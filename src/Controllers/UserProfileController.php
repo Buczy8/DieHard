@@ -19,45 +19,67 @@ class UserProfileController extends AppController
         $this->statsRepository = UserStatisticsRepository::getInstance();
         $this->userRepository = UserRepository::getInstance();
     }
+
     #[RequireLogin]
     public function index()
     {
+        // Renderujemy tylko pusty widok, dane pobierze JS
+        $this->render('profile');
+    }
+
+    #[RequireLogin]
+    #[AllowedMethods(['GET'])]
+    public function getProfileDataAPI()
+    {
+        header('Content-Type: application/json');
+        
+        $user = $this->getUser();
+        if (!$user) {
+            http_response_code(401);
+            echo json_encode(['error' => 'Unauthorized']);
+            return;
+        }
+
         if (empty($_SESSION['csrf'])) {
             $_SESSION['csrf'] = bin2hex(random_bytes(32));
         }
 
-        $user = $this->getUser();
+        try {
+            $statsModel = $this->statsRepository->getStatsByUserEmail($user->email);
+            $statsDTO = UserStatisticsResponseDTO::fromEntity($statsModel);
 
-        if (!$user) {
-            header('Location: /logout');
-            exit;
+            echo json_encode([
+                'email' => $user->email,
+                'username' => $user->username,
+                'avatar' => $user->avatar,
+                'stats' => $statsDTO,
+                'csrf' => $_SESSION['csrf']
+            ]);
+
+        } catch (\Exception $e) {
+            http_response_code(500);
+            echo json_encode(['error' => 'Internal Server Error: ' . $e->getMessage()]);
         }
-
-        $statsModel = $this->statsRepository->getStatsByUserEmail($user->email);
-        $statsDTO = UserStatisticsResponseDTO::fromEntity($statsModel);
-
-        $this->render('profile', [
-            'stats' => $statsDTO,
-            'email' => $user->email,
-            'avatar' => $user->avatar,
-            'csrf' => $_SESSION['csrf'] ?? ''
-        ]);
     }
 
     #[RequireLogin]
     #[AllowedMethods(['POST'])]
     public function updateSettings()
     {
+        header('Content-Type: application/json');
+
         $sessionToken = $_SESSION['csrf'] ?? '';
         if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $sessionToken) {
             http_response_code(400);
-            return $this->renderProfileWithResponse("Session expired. Please refresh.");
+            echo json_encode(['message' => 'Session expired. Please refresh.', 'type' => 'error']);
+            return;
         }
 
         $user = $this->getUser();
         if (!$user) {
-            header('Location: /logout');
-            exit;
+            http_response_code(401);
+            echo json_encode(['message' => 'Unauthorized', 'type' => 'error']);
+            return;
         }
 
         $newUsername = trim($_POST['display_name'] ?? '');
@@ -68,59 +90,53 @@ class UserProfileController extends AppController
         $avatarFile = $_FILES['avatar_file'] ?? null;
 
         $changesMade = false;
+        $message = "No changes were made.";
+        $type = "error";
 
-        // --- BEZPIECZNY UPLOAD ---
+        // 1. Avatar Upload
         if ($avatarFile && $avatarFile['error'] === UPLOAD_ERR_OK) {
+            $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/svg+xml'];
             $maxSize = 2 * 1024 * 1024; // 2MB
 
+            if (!in_array($avatarFile['type'], $allowedTypes)) {
+                echo json_encode(['message' => 'Invalid file type. Only JPG, PNG, GIF, SVG.', 'type' => 'error']);
+                return;
+            }
+
             if ($avatarFile['size'] > $maxSize) {
-                return $this->renderProfileWithResponse("File is too large. Max 2MB.");
+                echo json_encode(['message' => 'File is too large. Max 2MB.', 'type' => 'error']);
+                return;
             }
 
-            // 1. Sprawdzamy faktyczny typ pliku (MIME z zawartości, nie z nagłówka)
-            $finfo = new \finfo(FILEINFO_MIME_TYPE);
-            $mimeType = $finfo->file($avatarFile['tmp_name']);
-
-            // 2. Mapa dozwolonych typów -> rozszerzenie
-            // UWAGA: Usunąłem SVG ze względów bezpieczeństwa (ryzyko XSS)
-            $allowedMimeTypes = [
-                'image/jpeg' => 'jpg',
-                'image/png'  => 'png',
-                'image/gif'  => 'gif',
-                'image/webp' => 'webp'
-            ];
-
-            if (!array_key_exists($mimeType, $allowedMimeTypes)) {
-                return $this->renderProfileWithResponse("Invalid file type. Only JPG, PNG, GIF, WEBP.");
-            }
-
-            // 3. Bezpieczne tworzenie katalogu (0755 zamiast 0777)
             $targetDir = __DIR__ . '/../../Public/uploads/avatars/';
+
             if (!is_dir($targetDir)) {
-                // Jeśli to Docker i folder nie istnieje, PHP (www-data) musi mieć prawo zapisu do rodzica (/Public/uploads)
-                if (!mkdir($targetDir, 0755, true)) {
+                if (!mkdir($targetDir, 0777, true)) {
                     error_log("Failed to create directory: " . $targetDir);
-                    return $this->renderProfileWithResponse("Server error: Cannot create upload directory.");
+                    echo json_encode(['message' => 'Server error: Upload directory cannot be created.', 'type' => 'error']);
+                    return;
                 }
             }
+            @chmod($targetDir, 0777);
 
-            // 4. Generowanie bezpiecznej nazwy z PEWNYM rozszerzeniem
-            // Używamy rozszerzenia z naszej mapy, a nie tego co wysłał user
-            $extension = $allowedMimeTypes[$mimeType];
-            $newFileName = 'avatar_' . $user->id . '_' . bin2hex(random_bytes(8)) . '.' . $extension;
+            if (!is_writable($targetDir)) {
+                echo json_encode(['message' => 'Server error: Upload directory is not writable.', 'type' => 'error']);
+                return;
+            }
 
-            // 5. Zapis
+            $extension = pathinfo($avatarFile['name'], PATHINFO_EXTENSION);
+            $newFileName = 'avatar_' . $user->id . '_' . uniqid() . '.' . $extension;
+
             if (move_uploaded_file($avatarFile['tmp_name'], $targetDir . $newFileName)) {
                 $user->avatar = self::UPLOAD_URL_PATH . $newFileName;
                 $changesMade = true;
             } else {
-                return $this->renderProfileWithResponse("Failed to upload file. Check folder permissions.");
+                echo json_encode(['message' => 'Failed to upload file due to server error.', 'type' => 'error']);
+                return;
             }
         }
-        // --- KONIEC UPLOADU ---
-
+        // 2. Default Avatar
         elseif (!empty($defaultAvatar)) {
-            // Tutaj SVG jest OK, bo to pliki serwerowe, którym ufamy
             $allowedDefaults = ['avatar1.svg', 'avatar2.svg', 'avatar3.svg', 'avatar4.svg'];
 
             if (in_array($defaultAvatar, $allowedDefaults)) {
@@ -133,34 +149,46 @@ class UserProfileController extends AppController
             }
         }
 
-        // ... Reszta logiki (Username, Password) bez zmian ...
+        // 3. Username
         if (!empty($newUsername) && $newUsername !== $user->username) {
             $existingUser = $this->userRepository->getUserByUserName($newUsername);
+
             if ($existingUser) {
                 http_response_code(400);
-                return $this->renderProfileWithResponse("This username already exists");
+                echo json_encode(['message' => 'This username already exists', 'type' => 'error']);
+                return;
             }
+
             $user->username = $newUsername;
             $changesMade = true;
         }
 
+        // 4. Password
         if (!empty($newPassword)) {
             if (empty($currentPassword)) {
                 http_response_code(400);
-                return $this->renderProfileWithResponse("To change password, please provide your current password.");
+                echo json_encode(['message' => 'To change password, please provide your current password.', 'type' => 'error']);
+                return;
             }
+
             if (!password_verify($currentPassword, $user->password)) {
                 http_response_code(400);
-                return $this->renderProfileWithResponse("Current password is incorrect.");
+                echo json_encode(['message' => 'Current password is incorrect.', 'type' => 'error']);
+                return;
             }
+
             if (strlen($newPassword) < 8) {
                 http_response_code(400);
-                return $this->renderProfileWithResponse("Password is too weak (min 8 chars).");
+                echo json_encode(['message' => 'Password is too weak (min 8 chars).', 'type' => 'error']);
+                return;
             }
+
             if ($newPassword !== $confirmPassword) {
                 http_response_code(400);
-                return $this->renderProfileWithResponse("Passwords do not match.");
+                echo json_encode(['message' => 'Passwords do not match.', 'type' => 'error']);
+                return;
             }
+
             $user->password = password_hash($newPassword, PASSWORD_DEFAULT);
             $changesMade = true;
         }
@@ -169,35 +197,22 @@ class UserProfileController extends AppController
             try {
                 $this->userRepository->updateUser($user);
                 $updatedUser = $this->userRepository->getUserById($user->id);
-                return $this->renderProfileWithResponse("Settings updated successfully!", "success", $updatedUser);
+                
+                echo json_encode([
+                    'message' => 'Settings updated successfully!', 
+                    'type' => 'success',
+                    'user' => [
+                        'username' => $updatedUser->username,
+                        'avatar' => $updatedUser->avatar
+                    ]
+                ]);
             } catch (\Exception $e) {
                 error_log("Update Settings Error: " . $e->getMessage());
                 http_response_code(500);
-                return $this->renderProfileWithResponse("An error occurred while updating settings.");
+                echo json_encode(['message' => 'An error occurred while updating settings.', 'type' => 'error']);
             }
+        } else {
+            echo json_encode(['message' => 'No changes were made.', 'type' => 'error']);
         }
-
-        return $this->renderProfileWithResponse("No changes were made.");
-    }
-
-    private function renderProfileWithResponse(string $message = '', string $type = 'error', $userOverride = null)
-    {
-        if (empty($_SESSION['csrf'])) {
-            $_SESSION['csrf'] = bin2hex(random_bytes(32));
-        }
-
-        $user = $userOverride ?? $this->getUser();
-
-        $statsModel = $this->statsRepository->getStatsByUserEmail($user->email);
-        $statsDTO = UserStatisticsResponseDTO::fromEntity($statsModel);
-
-        $this->render('profile', [
-            'stats' => $statsDTO,
-            'email' => $user->email,
-            'avatar' => $user->avatar,
-            'message' => $message,
-            'type' => $type,
-            'csrf' => $_SESSION['csrf']
-        ]);
     }
 }

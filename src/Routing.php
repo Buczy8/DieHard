@@ -49,6 +49,10 @@ class Routing{
             'controller' => 'App\Controllers\UserProfileController',
             'action' => 'index'
         ],
+        'api/profile' => [
+            'controller' => 'App\Controllers\UserProfileController',
+            'action' => 'getProfileDataAPI'
+        ],
         'update-settings' => [
             'controller' => 'App\Controllers\UserProfileController',
             'action' => 'updateSettings'
