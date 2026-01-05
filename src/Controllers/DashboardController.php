@@ -1,9 +1,9 @@
 <?php
 namespace App\Controllers;
 use App\Annotation\RequireLogin;
+use App\Annotation\AllowedMethods;
 use App\DTO\GameResponseDTO;
 use App\DTO\UserStatisticsResponseDTO;
-use App\Repository\UserRepository;
 use App\Repository\UserStatisticsRepository;
 use App\Repository\GamesRepository;
 
@@ -21,30 +21,44 @@ class DashboardController extends AppController {
     #[RequireLogin]
     public function index()
     {
-        $userId = $_SESSION['user_id'] ?? null;
+        // Renderujemy tylko widok, dane pobierze JS
+        $this->render('dashboard');
+    }
 
+    #[RequireLogin]
+    #[AllowedMethods(['GET'])]
+    public function getDashboardDataAPI()
+    {
+        header('Content-Type: application/json');
+        
         $user = $this->getUser();
-
         if (!$user) {
-            header('Location: /logout');
-            exit;
+            http_response_code(401);
+            echo json_encode(['error' => 'Unauthorized']);
+            return;
         }
 
-        $statsModel = $this->statsRepository->getStatsByUserEmail($user->email);
+        try {
+            // Statystyki
+            $statsModel = $this->statsRepository->getStatsByUserEmail($user->email);
+            $statsDTO = UserStatisticsResponseDTO::fromEntity($statsModel);
 
-        $statsDTO = UserStatisticsResponseDTO::fromEntity($statsModel);
+            // Ostatnie gry
+            $gamesModels = $this->gamesRepository->getGamesByUserId($user->id, 4);
+            $recentGamesDTOs = [];
+            foreach ($gamesModels as $gameModel) {
+                $recentGamesDTOs[] = GameResponseDTO::fromEntity($gameModel);
+            }
 
-        $gamesModels = $this->gamesRepository->getGamesByUserId($userId, 4);
+            echo json_encode([
+                'stats' => $statsDTO,
+                'recentGames' => $recentGamesDTOs,
+                'username' => $user->username
+            ]);
 
-        $recentGamesDTOs = [];
-
-        foreach ($gamesModels as $gameModel) {
-            $recentGamesDTOs[] = GameResponseDTO::fromEntity($gameModel);
+        } catch (\Exception $e) {
+            http_response_code(500);
+            echo json_encode(['error' => 'Internal Server Error: ' . $e->getMessage()]);
         }
-
-        $this->render('dashboard', [
-            'stats' => $statsDTO,
-            'recentGames' => $recentGamesDTOs,
-        ]);
     }
 }

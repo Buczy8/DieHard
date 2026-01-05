@@ -29,6 +29,10 @@ class Routing{
             'controller' => 'App\Controllers\DashboardController',
             'action' => 'index'
         ],
+        'api/dashboard' => [
+            'controller' => 'App\Controllers\DashboardController',
+            'action' => 'getDashboardDataAPI'
+        ],
         'history' => [
             'controller' => 'App\Controllers\HistoryController',
             'action' => 'index'
