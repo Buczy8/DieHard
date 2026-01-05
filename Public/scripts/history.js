@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Pobierz parametr page z URL, jeśli istnieje (dla zachowania stanu przy odświeżaniu)
     const urlParams = new URLSearchParams(window.location.search);
     const initialPage = parseInt(urlParams.get('page')) || 1;
     
@@ -21,7 +20,6 @@ function fetchHistory(page) {
             renderHistoryTable(data.games);
             renderPagination(data.pagination);
             
-            // Aktualizuj URL bez przeładowania strony
             const newUrl = `${window.location.pathname}?page=${page}`;
             window.history.pushState({path: newUrl}, '', newUrl);
         })
@@ -68,12 +66,12 @@ function renderPagination(pagination) {
     const container = document.getElementById('pagination-container');
     container.innerHTML = '';
 
-    if (pagination.totalPages <= 1) return;
-
     const currentPage = pagination.currentPage;
     const totalPages = pagination.totalPages;
 
-    // Prev Button
+    if (totalPages <= 1) return;
+
+    // --- Przycisk "Poprzednia" ---
     const prevLink = document.createElement(currentPage > 1 ? 'a' : 'span');
     prevLink.className = `page-link ${currentPage <= 1 ? 'disabled' : ''}`;
     prevLink.innerHTML = '←';
@@ -86,20 +84,35 @@ function renderPagination(pagination) {
     }
     container.appendChild(prevLink);
 
-    // Page Numbers
+    // --- Numery stron ---
     for (let i = 1; i <= totalPages; i++) {
-        const pageLink = document.createElement('a');
-        pageLink.className = `page-link ${i === currentPage ? 'active' : ''}`;
-        pageLink.innerHTML = i;
-        pageLink.href = '#';
-        pageLink.onclick = (e) => {
-            e.preventDefault();
-            fetchHistory(i);
-        };
-        container.appendChild(pageLink);
+        // Pokazuj zawsze pierwszą, ostatnią, bieżącą i jej sąsiadów
+        if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) {
+            const pageLink = document.createElement('a');
+            pageLink.className = `page-link ${i === currentPage ? 'active' : ''}`;
+            pageLink.innerText = i;
+            pageLink.href = '#';
+            pageLink.onclick = (e) => {
+                e.preventDefault();
+                fetchHistory(i);
+            };
+            container.appendChild(pageLink);
+        } 
+        // Dodaj wielokropek, jeśli jest przerwa
+        else if (
+            (i === currentPage - 2 && i > 1) ||
+            (i === currentPage + 2 && i < totalPages)
+        ) {
+            if (container.lastChild && container.lastChild.className.includes('dots')) continue;
+            
+            const span = document.createElement('span');
+            span.className = 'page-link dots';
+            span.innerText = '...';
+            container.appendChild(span);
+        }
     }
 
-    // Next Button
+    // --- Przycisk "Następna" ---
     const nextLink = document.createElement(currentPage < totalPages ? 'a' : 'span');
     nextLink.className = `page-link ${currentPage >= totalPages ? 'disabled' : ''}`;
     nextLink.innerHTML = '→';
