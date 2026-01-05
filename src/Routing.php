@@ -25,6 +25,10 @@ class Routing{
             'controller' => 'App\Controllers\SecurityController',
             'action' => 'logout'
         ],
+        'api/user-info' => [
+            'controller' => 'App\Controllers\SecurityController',
+            'action' => 'getUserInfoAPI'
+        ],
         '' => [
             'controller' => 'App\Controllers\DashboardController',
             'action' => 'index'

@@ -18,16 +18,13 @@
     <div class="nav-right">
         <div class="user-menu-container">
             <button class="user-avatar-btn" id="avatarBtn">
-                <?php if (!empty($avatar)): ?>
-                    <img src="<?= htmlspecialchars($avatar) ?>" alt="Avatar" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
-                <?php else: ?>
-                    <i class="fa-solid fa-user"></i>
-                <?php endif; ?>
+                <!-- Avatar will be loaded by JS -->
+                <i class="fa-solid fa-user"></i>
             </button>
 
             <div class="user-dropdown" id="userDropdown">
                 <div class="dropdown-header">
-                    <span class="dropdown-username"><?= isset($username) ? htmlspecialchars($username) : 'User:' ?></span>
+                    <span class="dropdown-username" id="nav-username">Loading...</span>
                     <span class="dropdown-email">Player</span>
                 </div>
 
@@ -37,13 +34,11 @@
                             <i class="fa-solid fa-user"></i> My profile
                         </a>
                     </li>
-                    <?php if (isset($user) && $user->role === 'admin'): ?>
-                        <li>
-                            <a href="/admin" class="dropdown-item">
-                                <i class="fa-solid fa-user-shield"></i> Manage Users
-                            </a>
-                        </li>
-                    <?php endif; ?>
+                    <li id="nav-admin-link" style="display: none;">
+                        <a href="/admin" class="dropdown-item">
+                            <i class="fa-solid fa-user-shield"></i> Manage Users
+                        </a>
+                    </li>
                     <li>
                         <a href="/rules" class="dropdown-item">
                             <i class="fa-solid fa-book-open"></i> Rules
