@@ -26,26 +26,14 @@ class UserStatisticsRepository extends Repository
 
         return UserStatistics::fromArray($data);
     }
-    public function updateStats(int $userId, int $score, bool $isWin): void
+
+    public function getLeaderboard(int $limit = 5): array
     {
-        $winIncrement = $isWin ? 1 : 0;
+        // Pobieramy dane z widoku v_user_leaderboard
+        $stmt = $this->database->prepare("SELECT * FROM v_user_leaderboard LIMIT :limit");
+        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+        $stmt->execute();
 
-        $sql = "
-            INSERT INTO user_statistics (user_id, games_played, games_won, high_score, created_at, updated_at)
-            VALUES (:user_id, 1, :win_inc, :score, NOW(), NOW())
-            ON CONFLICT (user_id) DO UPDATE SET
-                games_played = user_statistics.games_played + 1,
-                games_won = user_statistics.games_won + EXCLUDED.games_won,
-                high_score = GREATEST(user_statistics.high_score, EXCLUDED.high_score),
-                updated_at = NOW()
-        ";
-
-        $stmt = $this->database->prepare($sql);
-
-        $stmt->execute([
-            ':user_id' => $userId,
-            ':win_inc' => $winIncrement,
-            ':score' => $score
-        ]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }

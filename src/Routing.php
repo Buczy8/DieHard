@@ -25,13 +25,25 @@ class Routing{
             'controller' => 'App\Controllers\SecurityController',
             'action' => 'logout'
         ],
+        'api/user-info' => [
+            'controller' => 'App\Controllers\SecurityController',
+            'action' => 'getUserInfoAPI'
+        ],
         '' => [
             'controller' => 'App\Controllers\DashboardController',
             'action' => 'index'
         ],
+        'api/dashboard' => [
+            'controller' => 'App\Controllers\DashboardController',
+            'action' => 'getDashboardDataAPI'
+        ],
         'history' => [
             'controller' => 'App\Controllers\HistoryController',
             'action' => 'index'
+        ],
+        'api/history' => [
+            'controller' => 'App\Controllers\HistoryController',
+            'action' => 'getHistoryDataAPI'
         ],
         'rules' => [
             'controller' => 'App\Controllers\RulesController',
@@ -41,9 +53,29 @@ class Routing{
             'controller' => 'App\Controllers\UserProfileController',
             'action' => 'index'
         ],
+        'api/profile' => [
+            'controller' => 'App\Controllers\UserProfileController',
+            'action' => 'getProfileDataAPI'
+        ],
         'update-settings' => [
             'controller' => 'App\Controllers\UserProfileController',
             'action' => 'updateSettings'
+        ],
+        'admin' => [
+            'controller' => 'App\Controllers\AdminController',
+            'action' => 'adminPanel'
+        ],
+        'admin/users' => [
+            'controller' => 'App\Controllers\AdminController',
+            'action' => 'getAllUsersAPI'
+        ],
+        'admin/stats' => [
+            'controller' => 'App\Controllers\AdminController',
+            'action' => 'getStatsAPI'
+        ],
+        'admin/delete-user' => [
+            'controller' => 'App\Controllers\AdminController',
+            'action' => 'deleteUserAPI'
         ],
     ];
     public static function run(string $path)

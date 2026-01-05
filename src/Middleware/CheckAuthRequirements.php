@@ -3,6 +3,7 @@
 namespace App\Middleware;
 
 use App\Annotation\RequireLogin;
+use App\Annotation\RequireAdmin;
 use ReflectionMethod;
 
 class CheckAuthRequirements
@@ -11,22 +12,27 @@ class CheckAuthRequirements
     {
         $reflection = new ReflectionMethod($controller, $methodName);
 
-        // Pobieramy atrybuty typu RequireLogin
-        $attributes = $reflection->getAttributes(RequireLogin::class);
+        // 1. Sprawdzenie RequireLogin
+        $loginAttributes = $reflection->getAttributes(RequireLogin::class);
+        if (!empty($loginAttributes)) {
+            if (empty($_SESSION['user_id'])) {
+                throw new \Exception("User not logged in", 401);
+            }
+        }
 
-        // Jeśli znaleziono atrybut RequireLogin
-        if (!empty($attributes)) {
-
-            // Sprawdzamy czy użytkownik JEST zalogowany
-            // (Tutaj wstaw swój warunek, np. sprawdzenie sesji)
-            $isLoggedIn = !empty($_SESSION['user_id']);
-
-            if (!$isLoggedIn) {
-                // Rzucamy wyjątek 401 (Unauthorized) zamiast die()
-                // To pozwoli Ci przekierować użytkownika na login w index.php
-                throw new \Exception("Użytkownik nie jest zalogowany", 401);
+        // 2. Sprawdzenie RequireAdmin
+        $adminAttributes = $reflection->getAttributes(RequireAdmin::class);
+        if (!empty($adminAttributes)) {
+            // Admin wymaga logowania
+            if (empty($_SESSION['user_id'])) {
+                throw new \Exception("User not logged in", 401);
+            }
+            
+            // Sprawdzenie roli
+            $role = $_SESSION['user_role'] ?? '';
+            if ($role !== 'admin') {
+                throw new \Exception("Access denied: Admins only", 403);
             }
         }
     }
 }
-

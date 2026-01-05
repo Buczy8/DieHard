@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - DieHard</title>
     <link rel="stylesheet" href="Public/styles/theme.css">
-    <link rel="stylesheet" href="Public/styles/dashboard.css"> </head>
+    <link rel="stylesheet" href="Public/styles/dashboard.css">
+</head>
 <body>
 
 <?php include 'Public/views/partials/navbar.php'; ?>
@@ -14,7 +15,7 @@
 
     <div class="welcome-card">
         <div class="welcome-content">
-            <h1>Welcome back <?= htmlspecialchars($username) ?>!</h1>
+            <h1>Welcome back <span id="welcome-username">...</span>!</h1>
             <p>You're on a roll. Ready to play some more?</p>
         </div>
         <div class="welcome-actions">
@@ -30,7 +31,7 @@
             <div class="stat-icon icon-blue">🏆</div>
             <div class="stat-info">
                 <span class="stat-label">High Score</span>
-                <span class="stat-value"><?= $stats->highScore ?></span>
+                <span class="stat-value" id="stat-highscore">...</span>
             </div>
         </div>
 
@@ -38,7 +39,7 @@
             <div class="stat-icon icon-green">🎲</div>
             <div class="stat-info">
                 <span class="stat-label">Games Played</span>
-                <span class="stat-value"><?= $stats->gamesPlayed ?></span>
+                <span class="stat-value" id="stat-games-played">...</span>
             </div>
         </div>
 
@@ -46,7 +47,7 @@
             <div class="stat-icon icon-orange">★</div>
             <div class="stat-info">
                 <span class="stat-label">Win Rate</span>
-                <span class="stat-value"><?= $stats->winRate ?>%</span>
+                <span class="stat-value" id="stat-win-rate">...</span>
             </div>
         </div>
 
@@ -54,13 +55,14 @@
             <div class="stat-icon icon-purple">✌️</div>
             <div class="stat-info">
                 <span class="stat-label">Games won</span>
-                <span class="stat-value"><?= $stats->gamesWon ?></span>
+                <span class="stat-value" id="stat-games-won">...</span>
             </div>
         </div>
     </div>
 
     <div class="dashboard-bottom-grid">
 
+        <!-- Recent Games -->
         <div class="recent-games-section">
             <div class="section-header">
                 <h2>Recent Games</h2>
@@ -77,68 +79,39 @@
                         <th>Score</th>
                     </tr>
                     </thead>
-                    <tbody>
-                    <?php foreach ($recentGames as $game): ?>
-                    <tr>
-                        <td class="col-date"><?= $game->playedAtFormatted ?></td>
-                        <td class="col-opponent">
-                            <div class="opponent-info">
-                                <span class="avatar avatar-blue"><?= $game->opponentInitials ?></span>
-                                <span><?= htmlspecialchars($game->opponentName) ?></span>
-                            </div>
-                        </td>
-                        <td><span class="badge <?= $game->resultBadgeClass ?>"><?= $game->resultLabel ?></span></td>
-                        <td class="col-score"><?= $game->score ?></td>
-                    </tr>
-                    <?php endforeach; ?>
+                    <tbody id="recent-games-body">
+                        <tr><td colspan="4" style="text-align:center; padding: 20px; color: var(--text-secondary);">Loading...</td></tr>
                     </tbody>
                 </table>
             </div>
         </div>
 
-<!--        <div class="friends-section">-->
-<!--            <div class="section-header">-->
-<!--                <h2>Friends</h2>-->
-<!--                <button class="btn-icon-plus">+</button>-->
-<!--            </div>-->
+        <!-- Leaderboard -->
+        <div class="leaderboard-section">
+            <div class="section-header">
+                <h2>Top Players</h2>
+            </div>
 
-<!--            <div class="friends-card">-->
-<!--                <div class="friend-item">-->
-<!--                    <div class="friend-avatar-wrapper">-->
-<!--                        <span class="avatar avatar-blue">P2</span>-->
-<!--                        <span class="status-dot online"></span>-->
-<!--                    </div>-->
-<!--                    <div class="friend-info">-->
-<!--                        <span class="friend-name">Player 2</span>-->
-<!--                        <span class="friend-status">Playing vs Bot</span>-->
-<!--                    </div>-->
-<!--                </div>-->
+            <div class="games-table-card">
+                <table class="games-table leaderboard-table">
+                    <thead>
+                    <tr>
+                        <th style="width: 50px;">#</th>
+                        <th>Player</th>
+                        <th style="text-align: right;">High Score</th>
+                    </tr>
+                    </thead>
+                    <tbody id="leaderboard-body">
+                        <tr><td colspan="3" style="text-align:center; padding: 20px; color: var(--text-secondary);">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-<!--                <div class="friend-item">-->
-<!--                    <div class="friend-avatar-wrapper">-->
-<!--                        <span class="avatar avatar-yellow">SJ</span>-->
-<!--                        <span class="status-dot offline"></span>-->
-<!--                    </div>-->
-<!--                    <div class="friend-info">-->
-<!--                        <span class="friend-name">Sarah J.</span>-->
-<!--                        <span class="friend-status">Offline • 2h ago</span>-->
-<!--                    </div>-->
-<!--                </div>-->
+    </div>
+</div>
 
-<!--                <div class="friend-item">-->
-<!--                    <div class="friend-avatar-wrapper">-->
-<!--                        <span class="avatar avatar-pink">MK</span>-->
-<!--                        <span class="status-dot online"></span>-->
-<!--                    </div>-->
-<!--                    <div class="friend-info">-->
-<!--                        <span class="friend-name">Mike K.</span>-->
-<!--                        <span class="friend-status">Online</span>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-
-    </div> </div>
+<script src="Public/scripts/dashboard.js"></script>
 
 </body>
 </html>

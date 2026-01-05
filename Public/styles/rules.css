@@ -12,21 +12,24 @@
 html {
     scroll-behavior: smooth;
 }
-/* Dostosowanie fontów */
-body {
-    font-family: 'Noto Sans', sans-serif;
-    background-color: var(--bg-page, #fff); /* Fallback do zmiennej z theme.css */
-    color: var(--text-main, #333);
-}
 
-h1, h2, h3, h4 {
-    font-family: 'Space Grotesk', sans-serif;
-}
-
+/* Zamiast zmieniać body globalnie, zmieniamy tylko wrapper strony z zasadami */
 .rules-page-wrapper {
+    font-family: 'Noto Sans', sans-serif;
+    color: var(--text-main, #333);
+
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    margin-top: 80px; /* Margines na navbar */
+}
+
+/* Nagłówki tylko wewnątrz strony z zasadami */
+.rules-page-wrapper h1,
+.rules-page-wrapper h2,
+.rules-page-wrapper h3,
+.rules-page-wrapper h4 {
+    font-family: 'Space Grotesk', sans-serif;
 }
 
 .rules-main {

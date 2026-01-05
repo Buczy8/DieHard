@@ -1,0 +1,240 @@
+/* --- Zmienne lokalne dla panelu admina (kolory badge'y) --- */
+:root {
+    --badge-purple-bg: #e0e7ff;
+    --badge-purple-text: #4338ca;
+
+    --badge-blue-bg: #dbeafe;
+    --badge-blue-text: #1e40af;
+
+    --badge-neutral-bg: #f3f4f6;
+    --badge-neutral-text: #4b5563;
+}
+
+.dashboard-container {
+    max-width: 1200px;
+    width: 100%;
+    margin: 32px auto;
+    padding: 0 24px;
+    flex: 1; /* Aby stopka była na dole jeśli jej używasz */
+}
+
+/* --- Sekcja Statystyk --- */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+    margin-bottom: 32px;
+}
+
+.stat-card-custom {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.stat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.stat-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+
+.stat-value {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+.stat-badge {
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+.badge-success { background-color: var(--color-success-bg); color: var(--color-success-text); }
+.badge-neutral { background-color: var(--bg-input); color: var(--text-secondary); }
+
+/* --- Toolbar --- */
+.toolbar-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.search-input-group {
+    position: relative;
+    flex: 1;
+    min-width: 300px;
+}
+
+.search-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-secondary);
+}
+
+.search-input-group input {
+    padding-left: 40px; /* Miejsce na ikonę */
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-light);
+}
+
+.filters-group {
+    display: flex;
+    gap: 12px;
+}
+
+.select-wrapper {
+    display: flex;
+    align-items: center;
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    padding: 0 12px;
+    height: 42px; /* Wysokość zgodna z inputami */
+}
+
+.select-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-right: 8px;
+}
+
+.custom-select {
+    border: none;
+    background: transparent;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-main);
+    cursor: pointer;
+    outline: none;
+}
+
+.btn-sort {
+    height: 42px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    gap: 8px;
+}
+
+/* --- Tabela --- */
+.table-card {
+    overflow: hidden; /* Zaokrąglenie rogów tabeli */
+    padding: 0; /* Reset paddingu karty dla tabeli full-width */
+}
+
+.admin-table td {
+    padding: 16px 24px;
+}
+
+.user-cell {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.user-avatar-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.user-nick {
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--text-main);
+}
+
+.user-email {
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+/* Badges w tabeli */
+.role-badge, .status-badge {
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Kolory ról */
+.role-admin { background-color: var(--badge-purple-bg); color: var(--badge-purple-text); }
+.role-player { background-color: var(--badge-blue-bg); color: var(--badge-blue-text); }
+
+/* Kolory statusów */
+.status-active { background-color: var(--color-success-bg); color: var(--color-success-text); }
+.status-banned { background-color: var(--color-error-bg); color: var(--color-error-text); }
+.status-offline { background-color: var(--badge-neutral-bg); color: var(--badge-neutral-text); }
+
+.status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: currentColor; /* Dziedziczy kolor tekstu badge'a */
+}
+
+/* --- Paginacja --- */
+.pagination-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 24px;
+    border-top: 1px solid var(--border-light);
+    background-color: var(--bg-card);
+}
+
+.pagination-info {
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+.pagination-buttons {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.page-btn {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-light);
+}
+
+.page-btn.active {
+    background-color: var(--primary-color);
+    color: #fff; /* lub czarny, zależnie od preferencji dla primary */
+    border-color: var(--primary-color);
+}
+
+.dots {
+    color: var(--text-secondary);
+    font-size: 14px;
+}

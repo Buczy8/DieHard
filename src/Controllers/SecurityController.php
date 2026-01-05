@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Annotation\AllowedMethods;
 use App\Annotation\RequiresHttps;
+use App\Annotation\RequireLogin;
 use App\DTO\CreateUserDTO;
 use App\Models\User;
 use App\Repository\UserRepository;
@@ -18,11 +19,30 @@ class SecurityController extends AppController
         $this->userRepository = UserRepository::getInstance();
     }
 
+    #[RequireLogin]
+    #[AllowedMethods(['GET'])]
+    public function getUserInfoAPI()
+    {
+        header('Content-Type: application/json');
+        $user = $this->getUser();
+
+        if (!$user) {
+            http_response_code(401);
+            echo json_encode(['error' => 'Not logged in']);
+            return;
+        }
+
+        echo json_encode([
+            'username' => $user->username,
+            'avatar' => $user->avatar,
+            'role' => $user->role
+        ]);
+    }
+
     #[RequiresHttps]
     #[AllowedMethods(['POST', 'GET'])]
     public function login()
     {
-
         if ($this->isGet()) {
             if (empty($_SESSION['csrf'])) {
                 $_SESSION['csrf'] = bin2hex(random_bytes(32));
@@ -31,9 +51,7 @@ class SecurityController extends AppController
         }
 
         if ($this->isPost()) {
-
             $failures = $_SESSION['login_failures'] ?? 0;
-
             if ($failures > 5) {
                 sleep(2);
             }
@@ -73,6 +91,7 @@ class SecurityController extends AppController
             session_regenerate_id(true);
             $_SESSION['user_id'] = $user->id;
             $_SESSION['user_email'] = $user->email;
+            $_SESSION['user_role'] = $user->role;
 
             unset($_SESSION['csrf']);
 
@@ -86,7 +105,6 @@ class SecurityController extends AppController
     #[AllowedMethods(['POST', 'GET'])]
     public function register()
     {
-
         if ($this->isGet()) {
             if (empty($_SESSION['csrf'])) {
                 $_SESSION['csrf'] = bin2hex(random_bytes(32));
@@ -182,5 +200,4 @@ class SecurityController extends AppController
         header("Location: {$url}/login");
         exit();
     }
-
 }

@@ -111,19 +111,14 @@ class DiceGameController extends AppController
         $computerScore = $state['computerTotals']['grand'];
 
         $result = 'draw';
-        $isWin = false;
 
         if ($playerScore > $computerScore) {
             $result = 'win';
-            $isWin = true;
         } elseif ($playerScore < $computerScore) {
             $result = 'loss';
         }
 
-        // 1. Zapisujemy historię gry
+        // 1. Zapisujemy historię gry (Trigger w bazie zaktualizuje statystyki)
         $this->gamesRepository->saveGame($userId, $playerScore, $result, 'Bot');
-
-        // 2. Aktualizujemy statystyki globalne gracza
-        $this->statsRepository->updateStats($userId, $playerScore, $isWin);
     }
 }
