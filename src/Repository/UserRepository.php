@@ -81,4 +81,20 @@ class UserRepository extends Repository
             ':id' => $user->id
         ]);
     }
+
+    public function getAllUsers(): array {
+        $stmt = $this->database->prepare('
+        SELECT id, email, username, role FROM users ORDER BY id ASC
+    ');
+        $stmt->execute();
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    public function deleteUser(int $id): void {
+        $stmt = $this->database->prepare('
+        DELETE FROM users WHERE id = :id
+    ');
+        $stmt->bindParam(':id', $id, \PDO::PARAM_INT);
+        $stmt->execute();
+    }
 }

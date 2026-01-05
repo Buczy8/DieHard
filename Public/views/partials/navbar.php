@@ -39,7 +39,7 @@
                     </li>
                     <?php if (isset($user) && $user->role === 'admin'): ?>
                         <li>
-                            <a href="/admin-users" class="dropdown-item">
+                            <a href="/admin" class="dropdown-item">
                                 <i class="fa-solid fa-user-shield"></i> Manage Users
                             </a>
                         </li>

@@ -45,6 +45,18 @@ class Routing{
             'controller' => 'App\Controllers\UserProfileController',
             'action' => 'updateSettings'
         ],
+        'admin' => [
+            'controller' => 'App\Controllers\AdminController',
+            'action' => 'adminPanel'
+        ],
+        'admin/users' => [
+            'controller' => 'App\Controllers\AdminController',
+            'action' => 'getAllUsersAPI'
+        ],
+        'admin/delete-user' => [
+            'controller' => 'App\Controllers\AdminController',
+            'action' => 'deleteUserAPI'
+        ],
     ];
     public static function run(string $path)
     {
