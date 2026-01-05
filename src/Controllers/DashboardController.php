@@ -39,7 +39,7 @@ class DashboardController extends AppController {
         }
 
         try {
-            // Statystyki
+            // Statystyki użytkownika
             $statsModel = $this->statsRepository->getStatsByUserEmail($user->email);
             $statsDTO = UserStatisticsResponseDTO::fromEntity($statsModel);
 
@@ -50,9 +50,13 @@ class DashboardController extends AppController {
                 $recentGamesDTOs[] = GameResponseDTO::fromEntity($gameModel);
             }
 
+            // Leaderboard (Top 5)
+            $leaderboard = $this->statsRepository->getLeaderboard(5);
+
             echo json_encode([
                 'stats' => $statsDTO,
                 'recentGames' => $recentGamesDTOs,
+                'leaderboard' => $leaderboard,
                 'username' => $user->username
             ]);
 

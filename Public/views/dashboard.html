@@ -62,6 +62,7 @@
 
     <div class="dashboard-bottom-grid">
 
+        <!-- Recent Games -->
         <div class="recent-games-section">
             <div class="section-header">
                 <h2>Recent Games</h2>
@@ -79,12 +80,34 @@
                     </tr>
                     </thead>
                     <tbody id="recent-games-body">
-                        <!-- Rows will be populated by JS -->
                         <tr><td colspan="4" style="text-align:center; padding: 20px; color: var(--text-secondary);">Loading...</td></tr>
                     </tbody>
                 </table>
             </div>
         </div>
+
+        <!-- Leaderboard -->
+        <div class="leaderboard-section">
+            <div class="section-header">
+                <h2>Top Players</h2>
+            </div>
+
+            <div class="games-table-card">
+                <table class="games-table leaderboard-table">
+                    <thead>
+                    <tr>
+                        <th style="width: 50px;">#</th>
+                        <th>Player</th>
+                        <th style="text-align: right;">High Score</th>
+                    </tr>
+                    </thead>
+                    <tbody id="leaderboard-body">
+                        <tr><td colspan="3" style="text-align:center; padding: 20px; color: var(--text-secondary);">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
     </div>
 </div>
 

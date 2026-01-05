@@ -26,4 +26,14 @@ class UserStatisticsRepository extends Repository
 
         return UserStatistics::fromArray($data);
     }
+
+    public function getLeaderboard(int $limit = 5): array
+    {
+        // Pobieramy dane z widoku v_user_leaderboard
+        $stmt = $this->database->prepare("SELECT * FROM v_user_leaderboard LIMIT :limit");
+        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

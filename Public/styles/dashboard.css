@@ -1,6 +1,7 @@
 /* Public/styles/dashboard.css */
 .dashboard-container {
     max-width: 1200px; margin: 0 auto; padding: 24px; width: 100%;
+    margin-top: 80px; /* Odsunięcie od navbara */
 }
 
 .welcome-card {
@@ -28,6 +29,26 @@
 .stat-label { font-size: 13px; color: var(--text-secondary); }
 .stat-value { font-size: 24px; font-weight: 800; }
 
+/* --- Dolna sekcja (Tabele) --- */
+.dashboard-bottom-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr; /* Recent Games szersze, Leaderboard węższy */
+    gap: 24px;
+    align-items: stretch; /* Rozciągnij do tej samej wysokości */
+}
+
+.recent-games-section, .leaderboard-section {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.games-table-card {
+    flex: 1; /* Wypełnij całą dostępną wysokość */
+    display: flex;
+    flex-direction: column;
+}
+
 .section-header {
     display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;
 }
@@ -46,7 +67,15 @@
 .avatar-blue { background: #3b82f6; }
 .opponent-info { display: flex; align-items: center; font-weight: 500; }
 
-@media (max-width: 900px) { .stats-grid { grid-template-columns: 1fr 1fr; } }
+/* Styl dla tabeli leaderboard */
+.leaderboard-table th, .leaderboard-table td {
+    padding: 12px 16px; /* Nieco mniejszy padding */
+}
+
+@media (max-width: 900px) {
+    .stats-grid { grid-template-columns: 1fr 1fr; }
+    .dashboard-bottom-grid { grid-template-columns: 1fr; } /* Na tablecie jedna pod drugą */
+}
 @media (max-width: 600px) {
     .stats-grid { grid-template-columns: 1fr; }
     .welcome-card { flex-direction: column; text-align: center; gap: 16px; }
