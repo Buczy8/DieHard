@@ -37,5 +37,8 @@ document.addEventListener("DOMContentLoaded", function() {
         `;
 
     // 5. Wstawiamy do HTML
-    document.getElementById('dice-icon').innerHTML = svgCode;
+    const diceIcon = document.getElementById('dice-icon');
+    if (diceIcon) {
+        diceIcon.innerHTML = svgCode;
+    }
 });

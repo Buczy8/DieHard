@@ -66,7 +66,7 @@ function fetchStats() {
 
 function fetchUsers(page = 1) {
     const tbody = document.getElementById('usersTableBody');
-    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding: 20px; color: var(--text-secondary);">Loading users...</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="4" class="loading-cell">Loading users...</td></tr>';
 
     // Budowanie URL z parametrami
     const params = new URLSearchParams({
@@ -101,7 +101,7 @@ function fetchUsers(page = 1) {
         })
         .catch(error => {
             console.error('Error fetching users:', error);
-            tbody.innerHTML = `<tr><td colspan="4" style="color: var(--color-error-text); text-align:center; padding: 20px;">Error loading users: ${error.message}</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="4" class="error-cell">Error loading users: ${error.message}</td></tr>`;
         });
 }
 
@@ -110,7 +110,7 @@ function renderTable(users) {
     tbody.innerHTML = '';
 
     if (!Array.isArray(users) || users.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding: 20px;">No users found</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="4" class="no-users-cell">No users found</td></tr>';
         return;
     }
 
@@ -140,11 +140,11 @@ function renderTable(users) {
             </td>
             <td style="text-align: right;">
                 ${user.role !== 'admin' ?
-            `<button class="btn-secondary" onclick="deleteUser(${user.id})" title="Delete User" style="color: var(--color-error-text); border-color: var(--color-error-border); background: var(--color-error-bg);">
+            `<button class="btn-secondary btn-delete-user" onclick="deleteUser(${user.id})" title="Delete User">
                         <i class="fa-solid fa-trash"></i>
                     </button>`
             :
-            `<span style="font-size: 12px; color: var(--text-secondary); display:inline-flex; align-items:center; gap:4px;">
+            `<span class="protected-badge">
                         <i class="fa-solid fa-shield-halved"></i> Protected
                     </span>`
         }

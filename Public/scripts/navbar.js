@@ -39,9 +39,10 @@ function fetchUserInfo() {
             const avatarBtn = document.getElementById('avatarBtn');
             if (avatarBtn) {
                 if (data.avatar) {
-                    avatarBtn.innerHTML = `<img src="${data.avatar}" alt="Avatar" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">`;
+                    avatarBtn.innerHTML = `<img src="${data.avatar}" alt="Avatar" class="user-avatar-img">`;
                 } else {
-                    avatarBtn.innerHTML = `<i class="fa-solid fa-user"></i>`;
+                    const avatarSrc = `https://ui-avatars.com/api/?name=${data.username}&background=random`;
+                    avatarBtn.innerHTML = `<img src="${avatarSrc}" alt="Avatar" class="user-avatar-img">`;
                 }
             }
 
@@ -53,3 +54,6 @@ function fetchUserInfo() {
         })
         .catch(err => console.error('Failed to load user info', err));
 }
+
+// Expose function globally so other scripts (like profile.js) can trigger updates
+window.updateNavbarUserInfo = fetchUserInfo;

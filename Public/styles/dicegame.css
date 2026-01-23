@@ -115,10 +115,16 @@ html, body {
     text-decoration-color: var(--primary-color);
 }
 
+/* Domyślny styl dla użytych wyników (Gracz) */
 .score-item.used .score-value {
     color: var(--primary-color);
     font-weight: 700;
     font-size: 1.1rem;
+}
+
+/* Styl dla użytych wyników (Komputer) - nadpisanie */
+.players-column .score-item.used .score-value {
+    color: #ccc;
 }
 
 .score-item:not(:last-child) {
@@ -253,6 +259,11 @@ html, body {
     transform: scale(1.05);
     background-color: var(--primary-hover);
 }
+
+.game-over-title {
+    color: #ff4d4d !important;
+}
+
 /* Responsywność */
 @media screen and (max-width: 1024px) {
     .game-container { grid-template-columns: 240px 1fr 240px; gap: 1rem; padding: 1rem; }

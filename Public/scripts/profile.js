@@ -82,6 +82,11 @@ function setupFormSubmission() {
                 document.getElementById('current_password').value = '';
                 document.getElementById('new_password').value = '';
                 document.getElementById('confirm_password').value = '';
+
+                // Aktualizuj navbar jeśli funkcja jest dostępna
+                if (window.updateNavbarUserInfo) {
+                    window.updateNavbarUserInfo();
+                }
             }
         })
         .catch(err => {
@@ -106,6 +111,31 @@ function setupAvatarModal() {
         fileInput.addEventListener('change', function() {
             previewUploadedFile(this);
         });
+    }
+
+    // Drag and Drop handling
+    const uploadZone = document.querySelector('.upload-zone');
+    if (uploadZone) {
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            uploadZone.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        uploadZone.addEventListener('drop', handleDrop, false);
+
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+
+            if (files && files[0] && fileInput) {
+                fileInput.files = files;
+                previewUploadedFile(fileInput);
+            }
+        }
     }
 }
 

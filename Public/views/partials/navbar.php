@@ -47,7 +47,7 @@
                     <li class="divider"></li>
                     <li>
                         <a href="/logout" class="dropdown-item text-danger">
-                            <img src="Public/assets/logout.svg" alt="" style="width: 16px; height: 16px;"> Logout
+                            <i class="fa-solid fa-right-from-bracket"></i> Logout
                         </a>
                     </li>
                 </ul>
