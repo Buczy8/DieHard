@@ -116,12 +116,10 @@ export const updateUI = (gameState, isBoardLockedGlobal) => {
                     compElement.textContent = score;
                     compElement.classList.remove('potential');
                     parentItem.classList.add('used');
-                    parentItem.style.color = '#ccc';
                 } else {
                     compElement.textContent = '';
                     compElement.classList.remove('potential');
                     parentItem.classList.remove('used');
-                    parentItem.style.color = '';
                 }
             }
         }
@@ -205,7 +203,7 @@ const handleGameOverUI = (pTotals, cTotals, els) => {
 
     if (els.turnTitle) {
         els.turnTitle.textContent = "Game Over";
-        els.turnTitle.style.color = '#ff4d4d';
+        els.turnTitle.classList.add('game-over-title');
     }
 
     // Sprawdzamy, czy panel już jest, żeby nie dodawać go 10 razy
@@ -256,7 +254,7 @@ const handleGameOverUI = (pTotals, cTotals, els) => {
         if (els.newGameBtn) els.newGameBtn.style.display = 'inline-block';
         if (els.turnTitle) {
             els.turnTitle.textContent = "Your Turn";
-            els.turnTitle.style.color = '';
+            els.turnTitle.classList.remove('game-over-title');
         }
 
         // Wysyłamy sygnał do main.js: "Hej, zrestartuj grę!"

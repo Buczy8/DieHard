@@ -135,41 +135,76 @@
 
 /* --- Tabela --- */
 .table-card {
-    overflow: hidden; /* Zaokrąglenie rogów tabeli */
-    padding: 0; /* Reset paddingu karty dla tabeli full-width */
+    overflow: hidden;
+    padding: 0;
+    background: var(--bg-card); /* Ensure background is set */
+    border-radius: 12px;       /* Added explicit radius for the card */
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse; /* Essential for clean borders */
 }
 
 .admin-table td {
     padding: 16px 24px;
+    vertical-align: middle; /* Aligns avatar and text vertically */
+    border-bottom: 1px solid var(--border-light);
 }
 
 .user-cell {
     display: flex;
     align-items: center;
     gap: 16px;
+    max-width: 300px; /* Prevents column from getting too wide */
 }
 
-.user-avatar-img {
+/* FIX: Target img, svg, AND div placeholders specifically */
+.user-cell img,
+.user-cell svg,
+.user-avatar-img,
+.user-avatar-placeholder {
     width: 40px;
     height: 40px;
+    min-width: 40px;  /* Critical: prevents flexbox from squishing it */
+    min-height: 40px;
     border-radius: 50%;
     object-fit: cover;
+    flex-shrink: 0;   /* Critical: prevents flexbox from shrinking it */
+}
+
+/* FIX: specific style for the "AD" text avatar if it's a div */
+.user-avatar-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--primary-color, #3b82f6); /* Fallback blue */
+    color: white;
+    font-weight: 600;
+    font-size: 16px;
 }
 
 .user-info {
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    gap: 2px; /* Small gap between Nickname and Email */
+    overflow: hidden; /* Prevents text spillover */
 }
 
 .user-nick {
     font-weight: 600;
     font-size: 14px;
     color: var(--text-main);
+    line-height: 1.2;
 }
 
 .user-email {
     font-size: 12px;
     color: var(--text-secondary);
+    white-space: nowrap;      /* Keeps email on one line */
+    overflow: hidden;
+    text-overflow: ellipsis;  /* Adds '...' if email is too long */
 }
 
 /* Badges w tabeli */
@@ -237,4 +272,37 @@
 .dots {
     color: var(--text-secondary);
     font-size: 14px;
+}
+
+/* --- Loading & Error --- */
+.loading-cell {
+    text-align: center;
+    padding: 20px;
+    color: var(--text-secondary);
+}
+
+.error-cell {
+    color: var(--color-error-text);
+    text-align: center;
+    padding: 20px;
+}
+
+.no-users-cell {
+    text-align: center;
+    padding: 20px;
+}
+
+/* --- Delete Button --- */
+.btn-delete-user {
+    color: var(--color-error-text);
+    border-color: var(--color-error-border);
+    background: var(--color-error-bg);
+}
+
+.protected-badge {
+    font-size: 12px;
+    color: var(--text-secondary);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
 }

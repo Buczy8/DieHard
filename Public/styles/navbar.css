@@ -38,6 +38,13 @@
 }
 .user-avatar-btn:hover, .user-avatar-btn.active { border-color: var(--primary-color); }
 
+.user-avatar-img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
 /* Dropdown */
 .user-dropdown {
     position: absolute; top: 55px; right: 24px; width: 200px;

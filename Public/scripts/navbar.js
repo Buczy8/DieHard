@@ -39,7 +39,7 @@ function fetchUserInfo() {
             const avatarBtn = document.getElementById('avatarBtn');
             if (avatarBtn) {
                 if (data.avatar) {
-                    avatarBtn.innerHTML = `<img src="${data.avatar}" alt="Avatar" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">`;
+                    avatarBtn.innerHTML = `<img src="${data.avatar}" alt="Avatar" class="user-avatar-img">`;
                 } else {
                     avatarBtn.innerHTML = `<i class="fa-solid fa-user"></i>`;
                 }

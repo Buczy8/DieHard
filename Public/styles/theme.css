@@ -146,3 +146,8 @@ input:focus {
     padding: 16px 20px; border-bottom: 1px solid var(--border-subtle);
     font-size: 14px; vertical-align: middle;
 }
+
+/* 5. Ikony */
+.fa-solid {
+    display: inline-block;
+}

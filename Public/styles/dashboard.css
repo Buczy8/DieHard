@@ -72,6 +72,35 @@
     padding: 12px 16px; /* Nieco mniejszy padding */
 }
 
+/* --- Tabela Gier (Wspólna dla Dashboard i History) --- */
+.games-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.games-table th, .games-table td {
+    padding: 16px 24px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.games-table th {
+    background-color: var(--bg-input);
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.games-table tr:last-child td {
+    border-bottom: none;
+}
+
+.col-date { color: var(--text-secondary); font-size: 14px; }
+.col-opponent { font-weight: 500; color: var(--text-main); }
+.col-score { font-weight: 700; font-family: monospace; font-size: 15px; color: var(--text-main); }
+
 @media (max-width: 900px) {
     .stats-grid { grid-template-columns: 1fr 1fr; }
     .dashboard-bottom-grid { grid-template-columns: 1fr; } /* Na tablecie jedna pod drugą */
