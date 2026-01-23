@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // 1. Tura Komputera
                 isBoardLocked = true;
                 // Wywołujemy animację z UI
-                //await UI.playComputerAnimation(result.steps);
+                await UI.playComputerAnimation(result.steps);
 
                 // 2. Pobieramy stan po zakończeniu ruchów komputera
                 const newState = await sendAction('get_state');
