@@ -81,7 +81,7 @@ function updateDashboard(data) {
                 <td style="font-weight: bold; font-size: 1.1em;">${rankDisplay}</td>
                 <td>
                     <div class="opponent-info">
-                        <img src="${avatarSrc}" alt="${player.username}" style="width: 24px; height: 24px; border-radius: 50%; object-fit: cover;">
+                        <img src="${avatarSrc}" alt="${player.username}" style="width: 24px; height: 24px; border-radius: 50%; object-fit: cover; margin-right: 10px;">
                         <span>${escapeHtml(player.username)}</span>
                     </div>
                 </td>
