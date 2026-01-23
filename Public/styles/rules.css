@@ -2,26 +2,26 @@
 
 /* --- Ustawienia ogólne --- */
 :root {
-    --rules-primary: #36e27b;
-    --rules-bg-light: #f6f8f7;
-    --rules-text-dark: #111714;
-    --rules-text-muted: #648772;
-    --rules-border: #e5eadd;
-    --rules-card-bg: #ffffff;
+    --rules-primary: var(--primary-color);
+    --rules-bg-light: var(--bg-page);
+    --rules-text-dark: var(--text-main);
+    --rules-text-muted: var(--text-secondary);
+    --rules-border: var(--border-light);
+    --rules-card-bg: var(--bg-card);
 }
+
 html {
     scroll-behavior: smooth;
 }
 
-/* Zamiast zmieniać body globalnie, zmieniamy tylko wrapper strony z zasadami */
 .rules-page-wrapper {
     font-family: 'Noto Sans', sans-serif;
-    color: var(--text-main, #333);
+    color: var(--text-main);
 
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    margin-top: 80px; /* Margines na navbar */
+    margin-top: 80px;
 }
 
 /* Nagłówki tylko wewnątrz strony z zasadami */
@@ -30,6 +30,7 @@ html {
 .rules-page-wrapper h3,
 .rules-page-wrapper h4 {
     font-family: 'Space Grotesk', sans-serif;
+    color: var(--rules-text-dark);
 }
 
 .rules-main {
@@ -88,7 +89,7 @@ html {
 
 .toc-card {
     position: sticky;
-    top: 100px; /* Zostawia miejsce na navbar */
+    top: 100px;
     background: var(--rules-card-bg);
     border: 1px solid var(--rules-border);
     border-radius: 12px;
@@ -118,7 +119,7 @@ html {
 }
 
 .toc-link:hover {
-    background-color: #f0f4f2;
+    background-color: var(--bg-input);
     color: var(--rules-text-dark);
 }
 
@@ -140,7 +141,11 @@ html {
 }
 
 .rules-section {
-    scroll-margin-top: 120px; /* Aby navbar nie zasłaniał po kliknięciu w link */
+    scroll-margin-top: 120px;
+}
+
+.rules-section p {
+    color: var(--rules-text-muted);
 }
 
 .section-title {
@@ -150,6 +155,7 @@ html {
     display: flex;
     align-items: center;
     gap: 0.75rem;
+    color: var(--rules-text-dark);
 }
 
 .icon-circle {
@@ -192,7 +198,7 @@ html {
 
 .step-icon {
     height: 160px;
-    background-color: #eafbf0;
+    background-color: rgba(54, 226, 123, 0.1);
     border-radius: 8px;
     display: flex;
     align-items: center;
@@ -202,12 +208,13 @@ html {
 
 .step-icon span {
     font-size: 4rem;
-    color: rgba(54, 226, 123, 0.6);
+    color: var(--rules-primary);
 }
 
 .step-item h4 {
     font-weight: 700;
     font-size: 1.125rem;
+    color: var(--rules-text-dark);
 }
 
 .step-item p {
@@ -252,11 +259,13 @@ html {
 .dice-icon {
     font-size: 2.5rem;
     margin-bottom: 0.5rem;
+    color: var(--rules-text-dark);
 }
 
 .dice-name {
     font-weight: 700;
     font-size: 0.875rem;
+    color: var(--rules-text-dark);
 }
 
 .dice-desc {
@@ -288,12 +297,13 @@ html {
 }
 
 .combo-icon {
-    background: #f0f4f2;
+    background: var(--bg-input);
     padding: 0.5rem;
     border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
+    color: var(--rules-text-dark);
 }
 
 .combo-icon.primary {
@@ -304,6 +314,7 @@ html {
 .combo-info h3 {
     font-weight: 700;
     font-size: 1.125rem;
+    color: var(--rules-text-dark);
 }
 
 .combo-info p {
@@ -342,17 +353,17 @@ html {
     color: var(--rules-primary);
 }
 .bonus-content p {
-    font-size: 1.15rem; /* Nieco większy tekst dla bonusu */
+    font-size: 1.15rem;
     line-height: 1.8;
     color: var(--rules-text-dark);
-    background-color: rgba(54, 226, 123, 0.05); /* Delikatne zielone tło */
+    background-color: rgba(54, 226, 123, 0.05);
     padding: 1.5rem;
-    border-left: 4px solid var(--rules-primary); /* Zielony pasek z lewej */
+    border-left: 4px solid var(--rules-primary);
     border-radius: 0 8px 8px 0;
 }
 
 .bonus-content strong {
-    color: #0d5f2a; /* Ciemniejsza zieleń dla pogrubień */
+    color: var(--rules-text-dark);
     font-weight: 800;
 }
 /* --- Footer --- */
@@ -368,6 +379,7 @@ html {
 .rules-footer p {
     font-size: 1.25rem;
     font-weight: 700;
+    color: var(--rules-text-dark);
 }
 
 .btn-cta {

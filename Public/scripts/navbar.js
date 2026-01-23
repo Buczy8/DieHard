@@ -1,4 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // --- Theme Initialization ---
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+    }
+
     const avatarBtn = document.getElementById('avatarBtn');
     const dropdown = document.getElementById('userDropdown');
 

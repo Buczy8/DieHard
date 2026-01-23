@@ -1,7 +1,7 @@
 /* Public/styles/dashboard.css */
 .dashboard-container {
     max-width: 1200px; margin: 0 auto; padding: 24px; width: 100%;
-    margin-top: 80px; /* Odsunięcie od navbara */
+    margin-top: 80px;
 }
 
 .welcome-card {
@@ -32,9 +32,9 @@
 /* --- Dolna sekcja (Tabele) --- */
 .dashboard-bottom-grid {
     display: grid;
-    grid-template-columns: 2fr 1fr; /* Recent Games szersze, Leaderboard węższy */
+    grid-template-columns: 2fr 1fr;
     gap: 24px;
-    align-items: stretch; /* Rozciągnij do tej samej wysokości */
+    align-items: stretch;
 }
 
 .recent-games-section, .leaderboard-section {
@@ -44,7 +44,7 @@
 }
 
 .games-table-card {
-    flex: 1; /* Wypełnij całą dostępną wysokość */
+    flex: 1;
     display: flex;
     flex-direction: column;
 }
@@ -69,7 +69,7 @@
 
 /* Styl dla tabeli leaderboard */
 .leaderboard-table th, .leaderboard-table td {
-    padding: 12px 16px; /* Nieco mniejszy padding */
+    padding: 12px 16px;
 }
 
 /* --- Tabela Gier (Wspólna dla Dashboard i History) --- */
@@ -103,7 +103,7 @@
 
 @media (max-width: 900px) {
     .stats-grid { grid-template-columns: 1fr 1fr; }
-    .dashboard-bottom-grid { grid-template-columns: 1fr; } /* Na tablecie jedna pod drugą */
+    .dashboard-bottom-grid { grid-template-columns: 1fr; }
 }
 @media (max-width: 600px) {
     .stats-grid { grid-template-columns: 1fr; }

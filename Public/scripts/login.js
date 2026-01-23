@@ -1,4 +1,10 @@
 document.addEventListener("DOMContentLoaded", function() {
+    // --- Theme Initialization ---
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+    }
+
     // 1. Losujemy liczbę od 1 do 6
     const roll = Math.floor(Math.random() * 6) + 1;
 

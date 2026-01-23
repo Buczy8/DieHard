@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchProfileData();
     setupAvatarModal();
     setupFormSubmission();
+    setupThemeToggle();
 });
 
 // --- 1. Pobieranie danych profilu ---
@@ -35,13 +36,6 @@ function populateProfile(data) {
 
     // Avatar
     updateAvatarPreview(data.avatar);
-
-    // Stats
-    if (data.stats) {
-        document.getElementById('stat-highscore').textContent = data.stats.highScore;
-        document.getElementById('stat-games-played').textContent = data.stats.gamesPlayed;
-        document.getElementById('stat-win-rate').textContent = data.stats.winRate + '%';
-    }
 }
 
 function updateAvatarPreview(avatarUrl) {
@@ -246,3 +240,27 @@ window.closePopup = function() {
         }, 300);
     }
 };
+
+// --- 5. Obsługa Motywu (Dark Mode) ---
+function setupThemeToggle() {
+    const themeCheckbox = document.getElementById('themeToggleCheckbox');
+    if (!themeCheckbox) return;
+
+    const currentTheme = localStorage.getItem('theme');
+    if (currentTheme === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        themeCheckbox.checked = true;
+    } else {
+        themeCheckbox.checked = false;
+    }
+
+    themeCheckbox.addEventListener('change', () => {
+        if (themeCheckbox.checked) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            localStorage.setItem('theme', 'dark');
+        } else {
+            document.documentElement.removeAttribute('data-theme');
+            localStorage.setItem('theme', 'light');
+        }
+    });
+}
