@@ -203,7 +203,9 @@
             </div>
         </aside>
     </main>
-</div> <template id="game-over-template">
+</div>
+
+<template id="game-over-template">
     <div class="game-over-panel">
         <div class="winner-text"></div>
         <div class="score-comparison">
@@ -219,6 +221,27 @@
         <button class="btn-restart">Play Again</button>
     </div>
 </template>
+
+<!-- Modal wyboru poziomu trudności -->
+<div id="difficultyModal" class="modal-overlay" style="display: none;">
+    <div class="modal-box">
+        <button class="btn-close-modal" aria-label="Close">&times;</button>
+        <h2>Select Difficulty</h2>
+        <p>Choose your opponent's skill level:</p>
+        <div class="difficulty-options">
+            <button class="btn-difficulty" data-level="easy">
+                <span class="icon">🌱</span> Easy
+            </button>
+            <button class="btn-difficulty" data-level="medium">
+                <span class="icon">⚖️</span> Medium
+            </button>
+            <button class="btn-difficulty" data-level="hard">
+                <span class="icon">🔥</span> Hard
+            </button>
+        </div>
+    </div>
+</div>
+
 <script type="module" src="/Public/scripts/DiceGame/api.js"></script>
 <script type="module" src="/Public/scripts/DiceGame/main.js"></script>
 <script type="module" src="/Public/scripts/DiceGame/ui.js"></script>

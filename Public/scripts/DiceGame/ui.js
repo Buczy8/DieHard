@@ -1,5 +1,7 @@
 // public/scripts/ui.js
 
+import { sendAction } from './api.js';
+
 const diceClassMap = ['one', 'two', 'three', 'four', 'five', 'six'];
 const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -260,6 +262,21 @@ const handleGameOverUI = (pTotals, cTotals, els) => {
         // Wysyłamy sygnał do main.js: "Hej, zrestartuj grę!"
         document.dispatchEvent(new CustomEvent('game-request-restart'));
     });
+
+    // --- NOWY PRZYCISK: HOME ---
+    const homeBtn = document.createElement('button');
+    homeBtn.textContent = 'Home';
+    homeBtn.classList.add('btn-home');
+    homeBtn.style.marginTop = '10px'; // Mały odstęp
+    homeBtn.style.marginLeft = '10px'; // Odstęp od Play Again
+    homeBtn.addEventListener('click', async () => {
+        await sendAction('restart');
+        window.location.href = '/';
+    });
+
+    // Dodajemy przycisk Home obok Play Again
+    // Najlepiej wrzucić je do wspólnego kontenera, ale tutaj po prostu dodamy do panelu
+    panel.appendChild(homeBtn);
 
     const gameColumn = document.querySelector('.game-column');
     gameColumn.appendChild(panel);
