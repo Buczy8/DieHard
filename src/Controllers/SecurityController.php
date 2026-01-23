@@ -3,7 +3,6 @@
 namespace App\Controllers;
 
 use App\Annotation\AllowedMethods;
-use App\Annotation\RequiresHttps;
 use App\Annotation\RequireLogin;
 use App\DTO\CreateUserDTO;
 use App\Models\User;
@@ -39,7 +38,6 @@ class SecurityController extends AppController
         ]);
     }
 
-    #[RequiresHttps]
     #[AllowedMethods(['POST', 'GET'])]
     public function login()
     {
@@ -95,13 +93,12 @@ class SecurityController extends AppController
 
             unset($_SESSION['csrf']);
 
-            $url = "https://" . $_SERVER['HTTP_HOST'];
+            $url = "http://" . $_SERVER['HTTP_HOST'];
             header("Location: {$url}/");
             exit();
         }
     }
 
-    #[RequiresHttps]
     #[AllowedMethods(['POST', 'GET'])]
     public function register()
     {
@@ -196,7 +193,7 @@ class SecurityController extends AppController
 
         session_destroy();
 
-        $url = "https://" . $_SERVER['HTTP_HOST'];
+        $url = "http://" . $_SERVER['HTTP_HOST'];
         header("Location: {$url}/login");
         exit();
     }
