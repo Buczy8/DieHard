@@ -53,3 +53,6 @@ function fetchUserInfo() {
         })
         .catch(err => console.error('Failed to load user info', err));
 }
+
+// Expose function globally so other scripts (like profile.js) can trigger updates
+window.updateNavbarUserInfo = fetchUserInfo;
