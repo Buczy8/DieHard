@@ -14,6 +14,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const newGameBtn = document.querySelector('.btn-new-game');
     const diceElements = document.querySelectorAll('.die');
     const scoreItems = document.querySelectorAll('.score-item');
+    const difficultyModal = document.getElementById('difficultyModal');
+    const difficultyButtons = document.querySelectorAll('.btn-difficulty');
 
     // === GŁÓWNA FUNKCJA STERUJĄCA ===
     const handleNetworkAction = async (action, data = {}, options = {}) => {
@@ -24,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // 1. Tura Komputera
                 isBoardLocked = true;
                 // Wywołujemy animację z UI
-                await UI.playComputerAnimation(result.steps);
+                //await UI.playComputerAnimation(result.steps);
 
                 // 2. Pobieramy stan po zakończeniu ruchów komputera
                 const newState = await sendAction('get_state');
@@ -131,30 +133,55 @@ document.addEventListener('DOMContentLoaded', () => {
     if (newGameBtn) {
         newGameBtn.addEventListener('click', () => {
             if (isBoardLocked && !isGameOverHandled) return;
+            
+            // Pokaż modal wyboru trudności
+            if (difficultyModal) {
+                difficultyModal.style.display = 'flex';
+            }
+        });
+    }
 
+    // 5. Obsługa wyboru poziomu trudności
+    difficultyButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const level = btn.getAttribute('data-level');
+            
+            // Ukryj modal
+            if (difficultyModal) {
+                difficultyModal.style.display = 'none';
+            }
+
+            // Reset gry z wybranym poziomem
             diceElements.forEach(d => d.classList.remove('held', 'selected'));
             isBoardLocked = false;
             isGameOverHandled = false;
             UI.setBoardLocked(false);
 
-            handleNetworkAction('restart');
+            handleNetworkAction('restart', { difficulty: level });
         });
-    }
-
-    // 5. Odbiór sygnału RESTART z pliku UI.js (z modala Game Over)
-    document.addEventListener('game-request-restart', () => {
-        diceElements.forEach(d => d.classList.remove('held', 'selected'));
-        isBoardLocked = false;
-        isGameOverHandled = false;
-        UI.setBoardLocked(false); // Odblokowujemy w UI
-
-        // Resetujemy przycisk
-        rollButton.textContent = "Start New Turn";
-        rollButton.disabled = false;
-
-        handleNetworkAction('restart');
     });
 
-    // START GRY
-    handleNetworkAction('get_state');
+    // 6. Odbiór sygnału RESTART z pliku UI.js (z modala Game Over)
+    document.addEventListener('game-request-restart', () => {
+        // Pokaż modal wyboru trudności zamiast od razu restartować
+        if (difficultyModal) {
+            difficultyModal.style.display = 'flex';
+        }
+    });
+
+    // START GRY - Sprawdź czy gra już trwa, jeśli nie, pokaż modal
+    sendAction('get_state').then(result => {
+        if (result.success) {
+            currentGameState = result.gameState;
+            // Jeśli to nowa gra (wszystko puste), pokaż modal
+            const isNewGame = Object.values(currentGameState.scorecard).every(v => v === null) && 
+                              Object.values(currentGameState.computerScorecard).every(v => v === null);
+            
+            if (isNewGame && difficultyModal) {
+                difficultyModal.style.display = 'flex';
+            } else {
+                UI.updateUI(currentGameState, isBoardLocked);
+            }
+        }
+    });
 });
