@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const scoreItems = document.querySelectorAll('.score-item');
     const difficultyModal = document.getElementById('difficultyModal');
     const difficultyButtons = document.querySelectorAll('.btn-difficulty');
+    const closeModalBtn = document.querySelector('.btn-close-modal');
 
     // === GŁÓWNA FUNKCJA STERUJĄCA ===
     const handleNetworkAction = async (action, data = {}, options = {}) => {
@@ -161,7 +162,14 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // 6. Odbiór sygnału RESTART z pliku UI.js (z modala Game Over)
+    // 6. Obsługa zamknięcia modala (X) -> Powrót do Home
+    if (closeModalBtn) {
+        closeModalBtn.addEventListener('click', () => {
+            window.location.href = '/';
+        });
+    }
+
+    // 7. Odbiór sygnału RESTART z pliku UI.js (z modala Game Over)
     document.addEventListener('game-request-restart', () => {
         // Pokaż modal wyboru trudności zamiast od razu restartować
         if (difficultyModal) {
