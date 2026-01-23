@@ -25,8 +25,8 @@ if ($environment === 'production') {
 session_set_cookie_params([
     'lifetime' => 0,            // Sesja wygasa po zamknięciu przeglądarki
     'path' => '/',              // Dostępne w całej domenie
-    'domain' => $_SERVER['HTTP_HOST'],
-    'secure' => true,           // Ciasteczko jest wysyłane tylko przez HTTPS
+    //'domain' => $_SERVER['HTTP_HOST'],
+    //'secure' => true,           // Ciasteczko jest wysyłane tylko przez HTTPS
     'httponly' => true,         // chroni przed XSS
     'samesite' => 'Strict'      // Dodatkowa ochrona przed CSRF
 ]);
@@ -69,4 +69,3 @@ try {
     }
     exit;
 }
-?>
