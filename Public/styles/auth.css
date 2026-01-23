@@ -1,7 +1,5 @@
 /* Public/styles/auth.css */
 
-/* --- NAPRAWA LOGO --- */
-/* To jest prosta nawigacja tylko dla stron logowania/rejestracji */
 nav {
     background-color: var(--bg-card);
     border-bottom: 1px solid var(--border-light);
@@ -13,7 +11,7 @@ nav {
 }
 
 .logo-icon {
-    width: 24px;   /* Kluczowe: ogranicza wielkość logo */
+    width: 24px;
     height: 24px;
     color: var(--accent-color);
 }

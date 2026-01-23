@@ -47,7 +47,7 @@ body {
 
 /* Biała kostka */
 .die-white {
-    background-color: white;
+    background-color: var(--bg-card);
     color: var(--text-main);
     border: 2px solid var(--border-light);
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
