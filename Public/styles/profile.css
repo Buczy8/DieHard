@@ -2,8 +2,8 @@
 
 /* --- Układ Strony --- */
 .settings-wrapper {
-    max-width: 960px; /* Ściskamy całość do środka (było 1200px) */
-    margin: 0 auto;   /* Wyśrodkowanie na stronie */
+    max-width: 960px;
+    margin: 0 auto;
     width: 100%;
     margin-top: 80px;
     padding: 0 24px;
@@ -41,9 +41,9 @@
     padding: 32px 24px;
 }
 .profile-avatar-container {
-    width: 120px;      /* Stała szerokość */
-    height: 120px;     /* Stała wysokość */
-    border-radius: 50%; /* Robi koło */
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
     background-color: var(--bg-input);
     border: 4px solid var(--bg-page, #fff);
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
@@ -51,7 +51,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow: hidden; /* Dodaj to, aby przyciąć obrazek do koła */
+    overflow: hidden;
     position: relative;
 }
 
@@ -73,7 +73,7 @@
 }
 
 .profile-title {
-    color: var(--primary-hover); /* Zielony akcent */
+    color: var(--primary-hover);
     font-size: 14px;
     font-weight: 600;
 }
@@ -89,45 +89,82 @@
     margin-top: 16px;
 }
 
-/* Statystyki (Zielona karta) */
-.stats-summary-card {
-    background-color: var(--color-success-bg); /* Jasnozielone tło z Twojego theme */
-    border-color: var(--color-success-bg);
+/* zminana motywu kart */
+.theme-card {
     padding: 24px;
-    flex: 1; /* Wypełnia pozostałą przestrzeń w kolumnie */
-    display: flex;       /* Dzięki temu możemy wyśrodkować zawartość wewnątrz */
-    flex-direction: column;
-    justify-content: center;
-}
-
-.stats-header {
     display: flex;
     align-items: center;
-    gap: 12px;
-    margin-bottom: 20px;
-}
-.stats-header h3 {
-    font-size: 16px;
-    color: var(--color-success-text);
+    justify-content: space-between;
 }
 
-.mini-stat-row {
+.theme-row {
     display: flex;
+    align-items: center;
     justify-content: space-between;
-    padding: 12px 0;
-    border-bottom: 1px solid rgba(6, 95, 70, 0.1); /* Delikatna linia */
-    color: var(--color-success-text);
+    width: 100%;
 }
-.mini-stat-row:last-child {
-    border-bottom: none;
+
+.theme-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    color: var(--text-main);
 }
-.mini-stat-row .label {
-    font-weight: 500;
-    font-size: 14px;
+
+/* Switch Slider */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 26px;
 }
-.mini-stat-row .value {
-    font-weight: 700;
-    font-size: 16px;
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--bg-input);
+    transition: .4s;
+    border: 1px solid var(--border-light);
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: var(--text-secondary);
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+input:checked + .slider:before {
+    transform: translateX(24px);
+    background-color: #fff;
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
 }
 
 /* --- Prawa Kolumna (Content) --- */
@@ -165,7 +202,7 @@
     position: relative;
 }
 .input-wrapper.locked input {
-    background-color: var(--border-subtle); /* Szare tło */
+    background-color: var(--border-subtle);
     color: var(--text-secondary);
     padding-right: 30px;
     cursor: not-allowed;
@@ -200,7 +237,7 @@
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(4px); /* Efekt rozmycia tła */
+    backdrop-filter: blur(4px);
     z-index: 9999;
     display: flex;
     justify-content: center;
@@ -219,7 +256,7 @@
     max-width: 400px;
     width: 90%;
     position: relative;
-    animation: slideUp 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28); /* Sprężysta animacja */
+    animation: slideUp 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
 }
 
 /* Ikona w popupie */
@@ -346,7 +383,7 @@
 .tab-content {
     display: none;
     padding: 2rem;
-    height: 300px; /* Stała wysokość */
+    height: 300px;
     overflow-y: auto;
     background: var(--bg-card);
 }
