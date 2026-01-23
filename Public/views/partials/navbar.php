@@ -1,10 +1,10 @@
-<link rel="stylesheet" href="Public/styles/navbar.css">
+<link rel="stylesheet" href="/Public/styles/navbar.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 </head>
 <nav class="main-navbar">
     <div class="nav-left">
         <a href="/" class="nav-logo-link">
-            <img src="Public/assets/dice-solid-full.svg" alt="Logo" class="logo-icon">
+            <img src="/Public/assets/dice-solid-full.svg" alt="Logo" class="logo-icon">
             <span class="logo-text">DieHard</span>
         </a>
 
@@ -56,4 +56,4 @@
     </div>
 </nav>
 
-<script src="Public/scripts/navbar.js"></script>
+<script src="/Public/scripts/navbar.js"></script>
