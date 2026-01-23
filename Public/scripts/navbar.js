@@ -41,7 +41,8 @@ function fetchUserInfo() {
                 if (data.avatar) {
                     avatarBtn.innerHTML = `<img src="${data.avatar}" alt="Avatar" class="user-avatar-img">`;
                 } else {
-                    avatarBtn.innerHTML = `<i class="fa-solid fa-user"></i>`;
+                    const avatarSrc = `https://ui-avatars.com/api/?name=${data.username}&background=random`;
+                    avatarBtn.innerHTML = `<img src="${avatarSrc}" alt="Avatar" class="user-avatar-img">`;
                 }
             }
 
