@@ -171,6 +171,15 @@ class UserRepository extends Repository
 
     public function deleteUser(int $id): void
     {
+        $user = $this->getUserById($id);
+
+        if ($user && $user->avatar && strpos($user->avatar, '/Public/uploads/avatars/') === 0) {
+            $filePath = __DIR__ . '/../..' . $user->avatar;
+            if (file_exists($filePath)) {
+                unlink($filePath);
+            }
+        }
+
         $stmt = $this->database->prepare('DELETE FROM users WHERE id = :id');
         $stmt->bindParam(':id', $id, \PDO::PARAM_INT);
         $stmt->execute();
