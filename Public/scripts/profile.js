@@ -125,8 +125,12 @@ function setupAvatarModal() {
 window.toggleAvatarModal = function (show) {
     const modal = document.getElementById('avatarModal');
     if (modal) {
-        modal.style.display = show ? 'flex' : 'none';
-        if (show) switchTab('defaults');
+        if (show) {
+            modal.classList.remove('hidden');
+            switchTab('defaults');
+        } else {
+            modal.classList.add('hidden');
+        }
     }
 };
 
@@ -211,7 +215,7 @@ window.showPopup = function (title, message, type) {
     titleEl.textContent = title;
     msgEl.textContent = message;
 
-    popup.style.display = 'flex';
+    popup.classList.remove('hidden');
     popup.style.opacity = '1';
 };
 
@@ -220,7 +224,7 @@ window.closePopup = function () {
     if (popup) {
         popup.style.opacity = '0';
         setTimeout(() => {
-            popup.style.display = 'none';
+            popup.classList.add('hidden');
         }, 300);
     }
 };
