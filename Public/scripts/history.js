@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
     const initialPage = parseInt(urlParams.get('page')) || 1;
-    
+
     fetchHistory(initialPage);
 });
 
@@ -19,7 +19,7 @@ function fetchHistory(page) {
         .then(data => {
             renderHistoryTable(data.games);
             renderPagination(data.pagination);
-            
+
             const newUrl = `${window.location.pathname}?page=${page}`;
             window.history.pushState({path: newUrl}, '', newUrl);
         })
@@ -71,7 +71,6 @@ function renderPagination(pagination) {
 
     if (totalPages <= 1) return;
 
-    // --- Przycisk "Poprzednia" ---
     const prevLink = document.createElement(currentPage > 1 ? 'a' : 'span');
     prevLink.className = `page-link ${currentPage <= 1 ? 'disabled' : ''}`;
     prevLink.innerHTML = '←';
@@ -84,9 +83,7 @@ function renderPagination(pagination) {
     }
     container.appendChild(prevLink);
 
-    // --- Numery stron ---
     for (let i = 1; i <= totalPages; i++) {
-        // Pokazuj zawsze pierwszą, ostatnią, bieżącą i jej sąsiadów
         if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) {
             const pageLink = document.createElement('a');
             pageLink.className = `page-link ${i === currentPage ? 'active' : ''}`;
@@ -97,14 +94,12 @@ function renderPagination(pagination) {
                 fetchHistory(i);
             };
             container.appendChild(pageLink);
-        } 
-        // Dodaj wielokropek, jeśli jest przerwa
-        else if (
+        } else if (
             (i === currentPage - 2 && i > 1) ||
             (i === currentPage + 2 && i < totalPages)
         ) {
             if (container.lastChild && container.lastChild.className.includes('dots')) continue;
-            
+
             const span = document.createElement('span');
             span.className = 'page-link dots';
             span.innerText = '...';
@@ -112,7 +107,6 @@ function renderPagination(pagination) {
         }
     }
 
-    // --- Przycisk "Następna" ---
     const nextLink = document.createElement(currentPage < totalPages ? 'a' : 'span');
     nextLink.className = `page-link ${currentPage >= totalPages ? 'disabled' : ''}`;
     nextLink.innerHTML = '→';

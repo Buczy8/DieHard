@@ -1,6 +1,4 @@
-/* Public/styles/theme.css */
 :root {
-    /* --- Kolory --- */
     --primary-color: #38e17b;
     --primary-hover: #10b981;
     --accent-color: #34d399;
@@ -18,7 +16,6 @@
 
     --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
 
-    /* Statusy */
     --color-error-bg: #fee2e2;
     --color-error-text: #991b1b;
     --color-error-border: #fca5a5;
@@ -26,7 +23,6 @@
     --color-success-text: #065f46;
     --color-success-border: #73c6a7;
 
-    /* Przyciski secondary */
     --btn-secondary-bg: #e5e7eb;
     --btn-secondary-text: #111827;
     --btn-secondary-hover: #d1d5db;
@@ -52,7 +48,6 @@
     --bg-pattern-url: url("../assets/background-dark.svg");
 }
 
-/* --- GLOBALNY RESET --- */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -72,12 +67,17 @@ body {
     flex-direction: column;
 }
 
-a { text-decoration: none; color: inherit; }
-h1, h2, h3, h4, h5, h6 { font-weight: 700; color: var(--text-main); }
+a {
+    text-decoration: none;
+    color: inherit;
+}
 
-/* --- WSPÓLNE KOMPONENTY --- */
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 700;
+    color: var(--text-main);
+}
 
-/* 1. Karta (Biały kontener) */
+
 .card, .auth-card, .welcome-card, .stat-card, .games-table-card {
     background: var(--bg-card);
     border-radius: 12px;
@@ -85,7 +85,6 @@ h1, h2, h3, h4, h5, h6 { font-weight: 700; color: var(--text-main); }
     box-shadow: var(--shadow-card);
 }
 
-/* 2. Przyciski (Główny i Drugorzędny) */
 .btn-primary, .btn-register, .roll-button, .btn-new-game {
     display: inline-flex;
     justify-content: center;
@@ -123,10 +122,14 @@ h1, h2, h3, h4, h5, h6 { font-weight: 700; color: var(--text-main); }
     justify-content: center;
 }
 
-.btn-secondary:hover { background-color: var(--btn-secondary-hover); }
+.btn-secondary:hover {
+    background-color: var(--btn-secondary-hover);
+}
 
-/* 3. Formularze */
-.form-group { margin-bottom: 16px; text-align: left; }
+.form-group {
+    margin-bottom: 16px;
+    text-align: left;
+}
 
 label {
     display: block;
@@ -153,23 +156,33 @@ input:focus {
     box-shadow: 0 0 0 2px var(--accent-color);
 }
 
-/* 4. Tabele */
-.games-table { width: 100%; border-collapse: collapse; }
+.games-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
 .games-table th {
-    text-align: left; background: #f9fafb; padding: 12px 20px;
-    font-size: 12px; color: var(--text-secondary); text-transform: uppercase;
-    font-weight: 600; border-bottom: 1px solid var(--border-light);
+    text-align: left;
+    background: #f9fafb;
+    padding: 12px 20px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    font-weight: 600;
+    border-bottom: 1px solid var(--border-light);
 }
 
 [data-theme="dark"] .games-table th {
     background: #1f2937;
 }
+
 .games-table td {
-    padding: 16px 20px; border-bottom: 1px solid var(--border-subtle);
-    font-size: 14px; vertical-align: middle;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border-subtle);
+    font-size: 14px;
+    vertical-align: middle;
 }
 
-/* 5. Ikony */
 .fa-solid {
     display: inline-block;
 }

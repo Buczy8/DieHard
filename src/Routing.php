@@ -1,9 +1,13 @@
 <?php
+
 namespace App;
+
 use App\Middleware\CheckAuthRequirements;
 use App\Middleware\CheckRequestAllowed;
 use App\Middleware\CheckHttps;
-class Routing{
+
+class Routing
+{
     public static $routes = [
         'dicegame' => [
             'controller' => 'App\Controllers\DiceGameController',
@@ -78,6 +82,7 @@ class Routing{
             'action' => 'deleteUserAPI'
         ],
     ];
+
     public static function run(string $path)
     {
         if (array_key_exists($path, self::$routes)) {

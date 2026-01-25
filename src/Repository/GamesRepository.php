@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use PDO;
 use App\Models\Game;
+
 class GamesRepository extends Repository
 {
     public function saveGame(int $userId, int $score, string $result, string $opponentName = 'Bot'): void

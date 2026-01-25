@@ -15,18 +15,16 @@ function fetchDashboardData() {
         })
         .catch(error => {
             console.error('Error fetching dashboard data:', error);
-            document.getElementById('recent-games-body').innerHTML = 
+            document.getElementById('recent-games-body').innerHTML =
                 '<tr><td colspan="4" style="text-align:center; padding: 20px; color: var(--color-error-text);">Error loading data</td></tr>';
         });
 }
 
 function updateDashboard(data) {
-    // 1. Update Username
     if (data.username) {
         document.getElementById('welcome-username').textContent = data.username;
     }
 
-    // 2. Update Stats
     if (data.stats) {
         document.getElementById('stat-highscore').textContent = data.stats.highScore;
         document.getElementById('stat-games-played').textContent = data.stats.gamesPlayed;
@@ -34,7 +32,6 @@ function updateDashboard(data) {
         document.getElementById('stat-games-won').textContent = data.stats.gamesWon;
     }
 
-    // 3. Update Recent Games Table
     const tbody = document.getElementById('recent-games-body');
     tbody.innerHTML = '';
 
@@ -58,7 +55,6 @@ function updateDashboard(data) {
         });
     }
 
-    // 4. Update Leaderboard
     const leaderboardBody = document.getElementById('leaderboard-body');
     leaderboardBody.innerHTML = '';
 
@@ -67,14 +63,12 @@ function updateDashboard(data) {
     } else {
         data.leaderboard.forEach((player, index) => {
             const tr = document.createElement('tr');
-            
-            // Ikona dla top 3
+
             let rankDisplay = index + 1;
             if (index === 0) rankDisplay = '🥇';
             if (index === 1) rankDisplay = '🥈';
             if (index === 2) rankDisplay = '🥉';
 
-            // Avatar (fallback do ui-avatars)
             const avatarSrc = player.avatar ? player.avatar : `https://ui-avatars.com/api/?name=${player.username}&background=random`;
 
             tr.innerHTML = `

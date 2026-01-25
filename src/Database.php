@@ -5,7 +5,8 @@ namespace App;
 use PDO;
 use PDOException;
 
-class Database {
+class Database
+{
     private $username;
     private $password;
     private $host;
@@ -40,21 +41,26 @@ class Database {
                 "pgsql:host=$this->host;port=$this->port;dbname=$this->database",
                 $this->username,
                 $this->password,
-                ["sslmode"  => "prefer"]
+                ["sslmode" => "prefer"]
             );
 
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             return $conn;
-        }
-        catch(PDOException $e) {
+        } catch (PDOException $e) {
             die("Connection failed: " . $e->getMessage());
         }
     }
+
     public function disconnect()
     {
         $this->conn = null;
     }
 
-    private function __clone() {}
-    public function __wakeup() {}
+    private function __clone()
+    {
+    }
+
+    public function __wakeup()
+    {
+    }
 }

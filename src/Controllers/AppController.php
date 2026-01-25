@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Controllers;
+
 use App\Models\User;
 use App\Repository\UserRepository;
 
@@ -21,6 +22,7 @@ class AppController
 
         return $this->currentUser;
     }
+
     protected function isGet(): bool
     {
         return $_SERVER["REQUEST_METHOD"] === 'GET';

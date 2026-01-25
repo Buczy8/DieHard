@@ -1,42 +1,78 @@
-/* Public/styles/navbar.css */
 .main-navbar {
     background-color: var(--bg-card);
     border-bottom: 1px solid var(--border-light);
     height: 60px;
     padding: 0 24px;
-    display: flex; justify-content: space-between; align-items: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     position: sticky;
     z-index: 1000;
     top: 0;
 }
+
 .nav-left, .nav-right, .nav-links {
-    display: flex; align-items: center; gap: 24px; height: 100%;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    height: 100%;
 }
 
 .nav-logo-link {
-    display: flex; align-items: center; gap: 8px; text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
 }
-.logo-icon { width: 20px; height: 20px; }
-.logo-text { font-weight: 700; font-size: 16px; color: var(--text-main); }
+
+.logo-icon {
+    width: 20px;
+    height: 20px;
+}
+
+.logo-text {
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--text-main);
+}
 
 .nav-link {
-    display: flex; align-items: center;
-    text-decoration: none; color: var(--text-secondary);
-    font-weight: 500; font-size: 14px;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: var(--text-secondary);
+    font-weight: 500;
+    font-size: 14px;
     border-bottom: 2px solid transparent;
-    transition: all 0.2s; height: 100%;
+    transition: all 0.2s;
+    height: 100%;
 }
 
-.nav-link:hover { color: var(--primary-hover); }
-.nav-link.active { color: var(--text-main); border-bottom-color: var(--primary-color); }
+.nav-link:hover {
+    color: var(--primary-hover);
+}
+
+.nav-link.active {
+    color: var(--text-main);
+    border-bottom-color: var(--primary-color);
+}
 
 .user-avatar-btn {
-    width: 36px; height: 36px; border-radius: 50%;
-    background-color: var(--bg-input); border: 2px solid transparent;
-    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: var(--bg-input);
+    border: 2px solid transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     padding: 0;
 }
-.user-avatar-btn:hover, .user-avatar-btn.active { border-color: var(--primary-color); }
+
+.user-avatar-btn:hover, .user-avatar-btn.active {
+    border-color: var(--primary-color);
+}
 
 .user-avatar-img {
     width: 100%;
@@ -45,24 +81,59 @@
     object-fit: cover;
 }
 
-/* Dropdown */
 .user-dropdown {
-    position: absolute; top: 55px; right: 24px; width: 200px;
+    position: absolute;
+    top: 55px;
+    right: 24px;
+    width: 200px;
     background: var(--bg-card);
     border: 1px solid var(--border-light);
-    border-radius: 8px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
-    opacity: 0; visibility: hidden; transform: translateY(-10px);
+    border-radius: 8px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
     transition: all 0.2s;
 }
-.user-dropdown.show { opacity: 1; visibility: visible; transform: translateY(0); }
 
-.dropdown-header { padding: 12px; border-bottom: 1px solid var(--border-light); }
-.dropdown-username { display: block; font-weight: 700; font-size: 14px; color: var(--text-main); }
-.dropdown-email { display: block; font-size: 12px; color: var(--text-secondary); }
+.user-dropdown.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
 
-.dropdown-list { list-style: none; padding: 4px; }
+.dropdown-header {
+    padding: 12px;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.dropdown-username {
+    display: block;
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--text-main);
+}
+
+.dropdown-email {
+    display: block;
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.dropdown-list {
+    list-style: none;
+    padding: 4px;
+}
+
 .dropdown-item {
-    display: block; padding: 8px 12px; font-size: 13px; color: var(--text-secondary);
+    display: block;
+    padding: 8px 12px;
+    font-size: 13px;
+    color: var(--text-secondary);
     border-radius: 4px;
 }
-.dropdown-item:hover { background-color: var(--bg-input); color: var(--text-main); }
+
+.dropdown-item:hover {
+    background-color: var(--bg-input);
+    color: var(--text-main);
+}

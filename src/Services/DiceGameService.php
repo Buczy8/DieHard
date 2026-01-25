@@ -2,13 +2,14 @@
 
 namespace App\Services;
 
-class DiceGameService {
+class DiceGameService
+{
     private array $dice = [0, 0, 0, 0, 0];
     private int $rollsLeft = 3;
     private array $scorecard = [];
     private array $computerScorecard = [];
     private array $possibleScores = [];
-    private string $difficulty = 'medium'; // 'easy', 'medium', 'hard'
+    private string $difficulty = 'medium';
 
     private const CATEGORIES = [
         'score-aces', 'score-twos', 'score-threes', 'score-fours', 'score-fives', 'score-sixes',
@@ -16,7 +17,8 @@ class DiceGameService {
         'score-small-straight', 'score-large-straight', 'score-yahtzee', 'score-chance'
     ];
 
-    public function __construct(array $state = null, string $difficulty = 'medium') {
+    public function __construct(array $state = null, string $difficulty = 'medium')
+    {
         if ($state) {
             $this->hydrateState($state);
         } else {
@@ -24,9 +26,9 @@ class DiceGameService {
         }
     }
 
-    // --- State Management ---
 
-    private function hydrateState(array $state): void {
+    private function hydrateState(array $state): void
+    {
         $this->dice = $state['dice'];
         $this->rollsLeft = $state['rollsLeft'];
         $this->scorecard = $state['scorecard'];
@@ -41,7 +43,8 @@ class DiceGameService {
         $this->calculatePossibleScores();
     }
 
-    private function initializeNewGame(string $difficulty): void {
+    private function initializeNewGame(string $difficulty): void
+    {
         $this->difficulty = $difficulty;
         foreach (self::CATEGORIES as $cat) {
             $this->scorecard[$cat] = null;
@@ -49,7 +52,8 @@ class DiceGameService {
         }
     }
 
-    public function getState(): array {
+    public function getState(): array
+    {
         return [
             'dice' => $this->dice,
             'rollsLeft' => $this->rollsLeft,
@@ -63,14 +67,15 @@ class DiceGameService {
         ];
     }
 
-    // --- Core Game Logic ---
 
-    public function startNewTurn(): void {
+    public function startNewTurn(): void
+    {
         $this->rollsLeft = 3;
         $this->dice = [0, 0, 0, 0, 0];
     }
 
-    public function roll(array $heldIndices): void {
+    public function roll(array $heldIndices): void
+    {
         if ($this->rollsLeft <= 0) return;
 
         $this->rollDiceIndices($heldIndices);
@@ -78,7 +83,8 @@ class DiceGameService {
         $this->calculatePossibleScores();
     }
 
-    private function rollDiceIndices(array $heldIndices): void {
+    private function rollDiceIndices(array $heldIndices): void
+    {
         for ($i = 0; $i < 5; $i++) {
             if (!in_array($i, $heldIndices)) {
                 $this->dice[$i] = rand(1, 6);
@@ -86,7 +92,8 @@ class DiceGameService {
         }
     }
 
-    public function selectCategory(string $categoryId): bool {
+    public function selectCategory(string $categoryId): bool
+    {
         if (!array_key_exists($categoryId, $this->scorecard) || $this->scorecard[$categoryId] !== null) {
             return false;
         }
@@ -94,16 +101,14 @@ class DiceGameService {
         return true;
     }
 
-    // --- Computer Logic (Coordinator) ---
 
-    public function playComputerTurn(): array {
+    public function playComputerTurn(): array
+    {
         $steps = [];
         $this->startNewTurn();
 
-        // Phase 1: Rolling
         $steps = array_merge($steps, $this->executeComputerRollPhase());
 
-        // Phase 2: Selection
         $selectionResult = $this->finalizeComputerTurn();
         $steps[] = $selectionResult;
 
@@ -112,9 +117,9 @@ class DiceGameService {
         return $steps;
     }
 
-    // --- Computer Logic (Rolling Phase) ---
 
-    private function executeComputerRollPhase(): array {
+    private function executeComputerRollPhase(): array
+    {
         $steps = [];
         $heldIndices = [];
 
@@ -140,13 +145,12 @@ class DiceGameService {
         return $steps;
     }
 
-    private function determineComputerHolds(): array {
-        // EASY: Całkowicie losowe trzymanie
+    private function determineComputerHolds(): array
+    {
         if ($this->difficulty === 'easy') {
             return $this->getNoviceHolds();
         }
 
-        // MEDIUM: Standardowa strategia + 30% szans na błąd (losowość)
         if ($this->difficulty === 'medium') {
             if (rand(1, 10) <= 3) {
                 return $this->getNoviceHolds();
@@ -154,13 +158,13 @@ class DiceGameService {
             return $this->getStandardHeldIndices();
         }
 
-        // HARD: Strategia Ekspercka (Pro) - bez błędów, szukanie bonusów i stritów
         $heldIndices = $this->getProHeldIndices();
         sort($heldIndices);
         return array_unique($heldIndices);
     }
 
-    private function getNoviceHolds(): array {
+    private function getNoviceHolds(): array
+    {
         $diceValues = $this->dice;
         $counts = array_count_values($diceValues);
         arsort($counts);
@@ -168,54 +172,46 @@ class DiceGameService {
         $mostFrequentVal = array_key_first($counts);
         $maxCount = reset($counts);
 
-        // 1. Jeśli widzi parę, trójkę itp. - trzyma to. To naturalny odruch.
         if ($maxCount >= 2) {
             return array_keys(array_filter($diceValues, fn($v) => $v == $mostFrequentVal));
         }
 
-        // 2. Jeśli nie ma par, trzyma Szóstki (bo dają dużo punktów).
-        // Nowicjusz rzadko poluje na strita, woli wysokie cyfry.
         $sixes = array_keys(array_filter($diceValues, fn($v) => $v == 6));
         if (!empty($sixes)) {
             return $sixes;
         }
 
-        // 3. Jeśli nic nie pasuje - rzuca wszystkim (nie trzyma nic).
         return [];
     }
 
-    // --- Strategy: Medium (Standard/Greedy) ---
 
-    private function getStandardHeldIndices(): array {
+    private function getStandardHeldIndices(): array
+    {
         $diceValues = $this->dice;
         $counts = array_count_values($diceValues);
         arsort($counts);
         $mostFrequentVal = array_key_first($counts);
         $maxCount = reset($counts);
 
-        // 1. Yahtzee
         if ($maxCount === 5) return [0, 1, 2, 3, 4];
 
-        // 2. 4-of-a-kind
         if ($maxCount >= 4) {
             return array_keys(array_filter($diceValues, fn($v) => $v == $mostFrequentVal));
         }
 
-        // 3. Proste szukanie strita (tylko w oparciu o szablony)
         $straightIndices = $this->checkStandardStraightStrategy();
         if (!empty($straightIndices)) return $straightIndices;
 
-        // 4. Trzymanie par/trójek
         if ($maxCount >= 2 || ($maxCount == 1 && $mostFrequentVal >= 4)) {
             return array_keys(array_filter($diceValues, fn($v) => $v == $mostFrequentVal));
         }
 
-        // 5. Trzymanie najwyższej kości
         $maxVal = max($diceValues);
         return array_keys(array_filter($diceValues, fn($v) => $v == $maxVal));
     }
 
-    private function checkStandardStraightStrategy(): array {
+    private function checkStandardStraightStrategy(): array
+    {
         $needsLg = $this->computerScorecard['score-large-straight'] === null;
         $needsSm = $this->computerScorecard['score-small-straight'] === null;
 
@@ -241,9 +237,9 @@ class DiceGameService {
         return [];
     }
 
-    // --- Strategy: Hard (Pro/Smart) ---
 
-    private function getProHeldIndices(): array {
+    private function getProHeldIndices(): array
+    {
         $diceValues = $this->dice;
         $counts = array_count_values($diceValues);
         arsort($counts);
@@ -253,15 +249,12 @@ class DiceGameService {
         $uniqueDice = array_unique($diceValues);
         sort($uniqueDice);
 
-        // 1. ZAWSZE trzymaj Yahtzee
         if ($maxCount === 5) return [0, 1, 2, 3, 4];
 
-        // 2. Trzymaj 4 takie same
         if ($maxCount >= 4) {
             return array_keys(array_filter($diceValues, fn($v) => $v == $mostFrequentVal));
         }
 
-        // 3. Inteligentne szukanie Strita (wykrywanie sekwencji)
         $needsLg = $this->computerScorecard['score-large-straight'] === null;
         $needsSm = $this->computerScorecard['score-small-straight'] === null;
 
@@ -270,40 +263,36 @@ class DiceGameService {
             $currentRun = [$uniqueDice[0] ?? 0];
 
             for ($i = 0; $i < count($uniqueDice) - 1; $i++) {
-                if ($uniqueDice[$i+1] == $uniqueDice[$i] + 1) {
-                    $currentRun[] = $uniqueDice[$i+1];
+                if ($uniqueDice[$i + 1] == $uniqueDice[$i] + 1) {
+                    $currentRun[] = $uniqueDice[$i + 1];
                 } else {
                     if (count($currentRun) > count($longestRun)) $longestRun = $currentRun;
-                    $currentRun = [$uniqueDice[$i+1]];
+                    $currentRun = [$uniqueDice[$i + 1]];
                 }
             }
             if (count($currentRun) > count($longestRun)) $longestRun = $currentRun;
 
-            // Jeśli mamy prawie Large Straight (4 sekwencyjne), olej parę, idź w strita
             if (count($longestRun) >= 4 && $needsLg) {
                 return $this->getIndicesForValues($longestRun);
             }
 
-            // Jeśli mamy 3 sekwencyjne i potrzebujemy Small, a nie mamy trójki
             if (count($longestRun) >= 3 && $needsSm && $maxCount < 3) {
                 return $this->getIndicesForValues($longestRun);
             }
         }
 
-        // 4. Polowanie na Full House (tylko jeśli potrzebny)
         if ($this->computerScorecard['score-full-house'] === null) {
-            // Mamy dwie pary? Trzymaj obie.
-            if ($maxCount === 2 && count($counts) === 3) { // Układ 2-2-1
+            if ($maxCount === 2 && count($counts) === 3) {
                 $pairs = array_keys(array_filter($counts, fn($c) => $c === 2));
                 return array_keys(array_filter($diceValues, fn($v) => in_array($v, $pairs)));
             }
         }
 
-        // 5. Standard: Budowanie Upper Section (trójek/czwórek)
         return array_keys(array_filter($diceValues, fn($v) => $v == $mostFrequentVal));
     }
 
-    private function getIndicesForValues(array $valuesToKeep): array {
+    private function getIndicesForValues(array $valuesToKeep): array
+    {
         $indices = [];
         $tempDice = $this->dice;
         foreach ($valuesToKeep as $val) {
@@ -316,9 +305,9 @@ class DiceGameService {
         return $indices;
     }
 
-    // --- Computer Logic (Selection Phase) ---
 
-    private function finalizeComputerTurn(): array {
+    private function finalizeComputerTurn(): array
+    {
         $this->calculatePossibleScores();
 
         $bestCategory = $this->decideComputerCategory();
@@ -326,7 +315,6 @@ class DiceGameService {
 
         if ($bestCategory) {
             $points = $this->possibleScores[$bestCategory] ?? 0;
-            // Obsługa "skreślania" (gdy wynik jest null w possibleScores - choć tu zazwyczaj jest 0)
             if ($this->possibleScores[$bestCategory] === null) $points = 0;
 
             $this->computerScorecard[$bestCategory] = $points;
@@ -343,58 +331,52 @@ class DiceGameService {
         ];
     }
 
-    private function decideComputerCategory(): ?string {
+    private function decideComputerCategory(): ?string
+    {
         if ($this->difficulty === 'easy') {
             return $this->findNoviceCategory();
         }
 
         if ($this->difficulty === 'medium') {
-            // Medium jest "zachłanny" - bierze najwięcej punktów
             $cat = $this->findGreedyCategory();
             return $cat ?: $this->findStandardFallbackCategory();
         }
 
-        // HARD
         return $this->findProCategory();
     }
 
-    // --- Selection: Easy ---
-    private function findFirstAvailableCategory(): ?string {
+    private function findFirstAvailableCategory(): ?string
+    {
         foreach ($this->possibleScores as $cat => $points) {
             if (($this->computerScorecard[$cat] ?? null) === null) return $cat;
         }
         return null;
     }
-    private function findNoviceCategory(): ?string {
-        // Nowicjusz szuka po prostu najwyższego wyniku, jaki może wpisać.
-        // Nie kalkuluje "opłacalności" ani bonusów.
+
+    private function findNoviceCategory(): ?string
+    {
 
         $bestCategory = null;
         $maxPoints = -1;
 
         foreach ($this->possibleScores as $cat => $points) {
-            // Pomiń zajęte
             if (($this->computerScorecard[$cat] ?? null) !== null) continue;
 
-            // Nowicjusz weźmie cokolwiek, co daje punkty (nawet małe)
             if ($points > $maxPoints) {
                 $maxPoints = $points;
                 $bestCategory = $cat;
             }
         }
 
-        // Jeśli znalazł coś za punkty (>0), bierze to.
         if ($maxPoints > 0) {
             return $bestCategory;
         }
 
-        // Jeśli same zera (Bust), wpisuje 0 w pierwszą wolną kategorię (nie myśli co skreślać)
         return $this->findFirstAvailableCategory();
     }
 
-    // --- Selection: Medium (Greedy) ---
-    private function findGreedyCategory(): ?string {
-        // Priorytet Yahtzee
+    private function findGreedyCategory(): ?string
+    {
         if (($this->possibleScores['score-yahtzee'] ?? 0) == 50 && $this->computerScorecard['score-yahtzee'] === null) {
             return 'score-yahtzee';
         }
@@ -405,7 +387,6 @@ class DiceGameService {
         foreach ($this->possibleScores as $cat => $points) {
             if (($this->computerScorecard[$cat] ?? null) !== null) continue;
 
-            // Lekka heurystyka dla Chance
             if ($cat === 'score-chance' && $points < 20) continue;
 
             if ($points >= $maxPoints) {
@@ -416,7 +397,8 @@ class DiceGameService {
         return $bestCategory;
     }
 
-    private function findStandardFallbackCategory(): ?string {
+    private function findStandardFallbackCategory(): ?string
+    {
         $scratchOrder = ['score-aces', 'score-twos', 'score-yahtzee', 'score-four-of-a-kind', 'score-large-straight'];
         foreach ($scratchOrder as $cat) {
             if (($this->computerScorecard[$cat] ?? null) === null) return $cat;
@@ -424,15 +406,12 @@ class DiceGameService {
         return $this->findFirstAvailableCategory();
     }
 
-    // --- Selection: Hard (Pro) ---
-    private function findProCategory(): ?string {
-        // 1. MUST HAVE: Yahtzee
+    private function findProCategory(): ?string
+    {
         if (($this->possibleScores['score-yahtzee'] ?? 0) === 50 && $this->computerScorecard['score-yahtzee'] === null) {
             return 'score-yahtzee';
         }
 
-        // 2. Analiza Upper Section (celujemy w Bonus +35)
-        // Sprawdzamy od 6 w dół
         foreach ([6, 5, 4, 3, 2, 1] as $dieVal) {
             $catKey = $this->getCategoryKeyForDie($dieVal);
             if ($this->computerScorecard[$catKey] !== null) continue;
@@ -440,12 +419,9 @@ class DiceGameService {
             $points = $this->possibleScores[$catKey];
             $count = ($points > 0) ? ($points / $dieVal) : 0;
 
-            // Mamy 4 lub więcej -> Bierzemy (nadwyżka do bonusu)
             if ($count >= 4) return $catKey;
 
-            // Mamy 3 -> Dobry wynik
             if ($count == 3) {
-                // Wyjątek: Jeśli mamy Full House a to są Asy/Dwójki, lepiej wziąć Full House (25pkt vs 3/6pkt)
                 if ($dieVal <= 2 && ($this->possibleScores['score-full-house'] ?? 0) === 25 && $this->computerScorecard['score-full-house'] === null) {
                     return 'score-full-house';
                 }
@@ -453,7 +429,6 @@ class DiceGameService {
             }
         }
 
-        // 3. Lower Section - High Value
         if (($this->possibleScores['score-large-straight'] ?? 0) === 40 && $this->computerScorecard['score-large-straight'] === null) {
             return 'score-large-straight';
         }
@@ -464,7 +439,6 @@ class DiceGameService {
             return 'score-full-house';
         }
 
-        // 4. 4-of-a-kind / 3-of-a-kind (tylko jeśli suma wysoka)
         $sum = array_sum($this->dice);
         if ($this->computerScorecard['score-four-of-a-kind'] === null && ($this->possibleScores['score-four-of-a-kind'] ?? 0) > 0) {
             if ($sum >= 20) return 'score-four-of-a-kind';
@@ -473,12 +447,10 @@ class DiceGameService {
             if ($sum >= 24) return 'score-three-of-a-kind';
         }
 
-        // 5. Chance (tylko jeśli suma wysoka)
         if ($this->computerScorecard['score-chance'] === null && $sum >= 22) {
             return 'score-chance';
         }
 
-        // 6. Ratowanie Bonusu (nawet 2 sztuki w Upper Section)
         foreach ([6, 5, 4] as $dieVal) {
             $catKey = $this->getCategoryKeyForDie($dieVal);
             if ($this->computerScorecard[$catKey] === null) {
@@ -486,38 +458,41 @@ class DiceGameService {
             }
         }
 
-        // 7. Inteligentne Skreślanie (Scratching)
         return $this->findSmartScratchCategory();
     }
 
-    private function findSmartScratchCategory(): string {
-        // Skreślaj to co najmniej boli
+    private function findSmartScratchCategory(): string
+    {
         $priorities = [
-            'score-aces',           // Mała strata
-            'score-twos',           // Mała strata
-            'score-yahtzee',        // Trudne do trafienia
-            'score-four-of-a-kind', // Trudne
-            'score-large-straight'  // Trudne
+            'score-aces',
+            'score-twos',
+            'score-yahtzee',
+            'score-four-of-a-kind',
+            'score-large-straight'
         ];
 
         foreach ($priorities as $cat) {
             if (($this->computerScorecard[$cat] ?? null) === null) return $cat;
         }
 
-        // Cokolwiek wolnego
         return $this->findFirstAvailableCategory();
     }
 
-    private function getCategoryKeyForDie(int $val): string {
-        return match($val) {
-            1 => 'score-aces', 2 => 'score-twos', 3 => 'score-threes',
-            4 => 'score-fours', 5 => 'score-fives', 6 => 'score-sixes',
+    private function getCategoryKeyForDie(int $val): string
+    {
+        return match ($val) {
+            1 => 'score-aces',
+            2 => 'score-twos',
+            3 => 'score-threes',
+            4 => 'score-fours',
+            5 => 'score-fives',
+            6 => 'score-sixes',
         };
     }
 
-    // --- Scoring Logic ---
 
-    private function calculatePossibleScores(): void {
+    private function calculatePossibleScores(): void
+    {
         $counts = array_count_values($this->dice);
         $sum = array_sum($this->dice);
 
@@ -528,7 +503,9 @@ class DiceGameService {
         $this->possibleScores['score-fives'] = ($counts[5] ?? 0) * 5;
         $this->possibleScores['score-sixes'] = ($counts[6] ?? 0) * 6;
 
-        $has3 = false; $has4 = false; $has5 = false;
+        $has3 = false;
+        $has4 = false;
+        $has5 = false;
         foreach ($counts as $val) {
             if ($val >= 3) $has3 = true;
             if ($val >= 4) $has4 = true;
@@ -545,7 +522,8 @@ class DiceGameService {
         $this->calculateStraights();
     }
 
-    private function calculateStraights(): void {
+    private function calculateStraights(): void
+    {
         $uniqueDice = array_unique($this->dice);
         sort($uniqueDice);
         $diceStr = implode('', $uniqueDice);
@@ -554,16 +532,17 @@ class DiceGameService {
         $largeStraights = ['12345', '23456'];
 
         $isSmall = false;
-        foreach($smallStraights as $s) if (str_contains($diceStr, $s)) $isSmall = true;
+        foreach ($smallStraights as $s) if (str_contains($diceStr, $s)) $isSmall = true;
 
         $isLarge = false;
-        foreach($largeStraights as $l) if (str_contains($diceStr, $l)) $isLarge = true;
+        foreach ($largeStraights as $l) if (str_contains($diceStr, $l)) $isLarge = true;
 
         $this->possibleScores['score-small-straight'] = $isSmall ? 30 : 0;
         $this->possibleScores['score-large-straight'] = $isLarge ? 40 : 0;
     }
 
-    private function calculateScorecardTotals(array $targetScorecard): array {
+    private function calculateScorecardTotals(array $targetScorecard): array
+    {
         $upperKeys = ['score-aces', 'score-twos', 'score-threes', 'score-fours', 'score-fives', 'score-sixes'];
         $upperTotal = 0;
         $lowerTotal = 0;
@@ -587,7 +566,8 @@ class DiceGameService {
         ];
     }
 
-    private function isGameOver(): bool {
+    private function isGameOver(): bool
+    {
         $pCount = count(array_filter($this->scorecard, fn($v) => $v !== null));
         $cCount = count(array_filter($this->computerScorecard, fn($v) => $v !== null));
         return $pCount === 13 && $cCount === 13;

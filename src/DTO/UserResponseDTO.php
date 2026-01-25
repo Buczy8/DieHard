@@ -12,12 +12,14 @@ readonly class UserResponseDTO
         public string $username,
         public string $role,
         public string $createdAt,
-    ) {}
+    )
+    {
+    }
 
     public static function fromEntity(User $user): self
     {
         return new self(
-            id:(int) $user->id,
+            id: (int)$user->id,
             email: $user->email,
             username: $user->username,
             role: $user->role ?? 'user',

@@ -1,4 +1,3 @@
-/* --- Zmienne lokalne dla panelu admina (kolory badge'y) --- */
 :root {
     --badge-purple-bg: #e0e7ff;
     --badge-purple-text: #4338ca;
@@ -15,10 +14,9 @@
     width: 100%;
     margin: 32px auto;
     padding: 0 24px;
-    flex: 1; /* Aby stopka była na dole jeśli jej używasz */
+    flex: 1;
 }
 
-/* --- Sekcja Statystyk --- */
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -61,10 +59,17 @@
     align-items: center;
     gap: 4px;
 }
-.badge-success { background-color: var(--color-success-bg); color: var(--color-success-text); }
-.badge-neutral { background-color: var(--bg-input); color: var(--text-secondary); }
 
-/* --- Toolbar --- */
+.badge-success {
+    background-color: var(--color-success-bg);
+    color: var(--color-success-text);
+}
+
+.badge-neutral {
+    background-color: var(--bg-input);
+    color: var(--text-secondary);
+}
+
 .toolbar-wrapper {
     display: flex;
     justify-content: space-between;
@@ -89,7 +94,7 @@
 }
 
 .search-input-group input {
-    padding-left: 40px; /* Miejsce na ikonę */
+    padding-left: 40px;
     background-color: var(--bg-card);
     border: 1px solid var(--border-light);
 }
@@ -106,7 +111,7 @@
     border: 1px solid var(--border-light);
     border-radius: 8px;
     padding: 0 12px;
-    height: 42px; /* Wysokość zgodna z inputami */
+    height: 42px;
 }
 
 .select-label {
@@ -133,22 +138,21 @@
     gap: 8px;
 }
 
-/* --- Tabela --- */
 .table-card {
     overflow: hidden;
     padding: 0;
-    background: var(--bg-card); /* Ensure background is set */
-    border-radius: 12px;       /* Added explicit radius for the card */
+    background: var(--bg-card);
+    border-radius: 12px;
 }
 
 .admin-table {
     width: 100%;
-    border-collapse: collapse; /* Essential for clean borders */
+    border-collapse: collapse;
 }
 
 .admin-table td {
     padding: 16px 24px;
-    vertical-align: middle; /* Aligns avatar and text vertically */
+    vertical-align: middle;
     border-bottom: 1px solid var(--border-light);
 }
 
@@ -156,29 +160,27 @@
     display: flex;
     align-items: center;
     gap: 16px;
-    max-width: 300px; /* Prevents column from getting too wide */
+    max-width: 300px;
 }
 
-/* FIX: Target img, svg, AND div placeholders specifically */
 .user-cell img,
 .user-cell svg,
 .user-avatar-img,
 .user-avatar-placeholder {
     width: 40px;
     height: 40px;
-    min-width: 40px;  /* Critical: prevents flexbox from squishing it */
+    min-width: 40px;
     min-height: 40px;
     border-radius: 50%;
     object-fit: cover;
-    flex-shrink: 0;   /* Critical: prevents flexbox from shrinking it */
+    flex-shrink: 0;
 }
 
-/* FIX: specific style for the "AD" text avatar if it's a div */
 .user-avatar-placeholder {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: var(--primary-color, #3b82f6); /* Fallback blue */
+    background-color: var(--primary-color, #3b82f6);
     color: white;
     font-weight: 600;
     font-size: 16px;
@@ -207,7 +209,6 @@
     text-overflow: ellipsis;
 }
 
-/* Badges w tabeli */
 .role-badge, .status-badge {
     padding: 4px 10px;
     border-radius: 6px;
@@ -218,23 +219,38 @@
     gap: 6px;
 }
 
-/* Kolory ról */
-.role-admin { background-color: var(--badge-purple-bg); color: var(--badge-purple-text); }
-.role-player { background-color: var(--badge-blue-bg); color: var(--badge-blue-text); }
+.role-admin {
+    background-color: var(--badge-purple-bg);
+    color: var(--badge-purple-text);
+}
 
-/* Kolory statusów */
-.status-active { background-color: var(--color-success-bg); color: var(--color-success-text); }
-.status-banned { background-color: var(--color-error-bg); color: var(--color-error-text); }
-.status-offline { background-color: var(--badge-neutral-bg); color: var(--badge-neutral-text); }
+.role-player {
+    background-color: var(--badge-blue-bg);
+    color: var(--badge-blue-text);
+}
+
+.status-active {
+    background-color: var(--color-success-bg);
+    color: var(--color-success-text);
+}
+
+.status-banned {
+    background-color: var(--color-error-bg);
+    color: var(--color-error-text);
+}
+
+.status-offline {
+    background-color: var(--badge-neutral-bg);
+    color: var(--badge-neutral-text);
+}
 
 .status-dot {
     width: 6px;
     height: 6px;
     border-radius: 50%;
-    background-color: currentColor; /* Dziedziczy kolor tekstu badge'a */
+    background-color: currentColor;
 }
 
-/* --- Paginacja --- */
 .pagination-footer {
     display: flex;
     justify-content: space-between;
@@ -265,7 +281,7 @@
 
 .page-btn.active {
     background-color: var(--primary-color);
-    color: #fff; /* lub czarny, zależnie od preferencji dla primary */
+    color: #fff;
     border-color: var(--primary-color);
 }
 
@@ -274,7 +290,6 @@
     font-size: 14px;
 }
 
-/* --- Loading & Error --- */
 .loading-cell {
     text-align: center;
     padding: 20px;
@@ -292,7 +307,6 @@
     padding: 20px;
 }
 
-/* --- Delete Button --- */
 .btn-delete-user {
     color: var(--color-error-text);
     border-color: var(--color-error-border);

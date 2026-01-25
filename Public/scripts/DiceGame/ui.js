@@ -1,11 +1,8 @@
-// public/scripts/ui.js
-
-import { sendAction } from './api.js';
+import {sendAction} from './api.js';
 
 const diceClassMap = ['one', 'two', 'three', 'four', 'five', 'six'];
 const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-// Pobieramy elementy DOM raz, ale wewnątrz funkcji, żeby mieć pewność, że istnieją
 const getEls = () => ({
     scoreItems: document.querySelectorAll('.score-item'),
     rollInfoElement: document.querySelector('.roll-info'),
@@ -19,7 +16,6 @@ const getEls = () => ({
     diceContainer: document.querySelector('.dice-container')
 });
 
-// Funkcja pomocnicza do blokowania (używamy klasy CSS)
 export const setBoardLocked = (isLocked) => {
     const els = getEls();
     if (isLocked) {
@@ -50,9 +46,17 @@ const showComputerPotential = (potentials) => {
 export const updateUI = (gameState, isBoardLockedGlobal) => {
     if (!gameState) return;
     const els = getEls();
-    const { dice, rollsLeft, scorecard, computerScorecard, possibleScores, playerTotals, computerTotals, gameOver } = gameState;
+    const {
+        dice,
+        rollsLeft,
+        scorecard,
+        computerScorecard,
+        possibleScores,
+        playerTotals,
+        computerTotals,
+        gameOver
+    } = gameState;
 
-    // Kostki
     els.diceElements.forEach((dieElement, index) => {
         const value = dice[index];
         const icon = dieElement.querySelector('i');
@@ -65,7 +69,6 @@ export const updateUI = (gameState, isBoardLockedGlobal) => {
         }
     });
 
-    // Przyciski
     if (!gameOver) {
         if (rollsLeft === 3 && dice.every(die => die === 0)) {
             if (els.rollButton) els.rollButton.textContent = 'Start New Turn';
@@ -77,7 +80,6 @@ export const updateUI = (gameState, isBoardLockedGlobal) => {
         }
     }
 
-    // Tabela wyników
     els.scoreItems.forEach(item => {
         if (item.classList.contains('total')) return;
         const valueSpan = item.querySelector('.score-value');
@@ -90,7 +92,6 @@ export const updateUI = (gameState, isBoardLockedGlobal) => {
             valueSpan.textContent = scorecard[catId];
         } else {
             item.classList.remove('used');
-            // Logika wyświetlania potencjalnych wyników
             if (!gameOver && rollsLeft < 3 && !isBoardLockedGlobal) {
                 const potential = possibleScores[catId];
                 valueSpan.textContent = potential;
@@ -101,14 +102,12 @@ export const updateUI = (gameState, isBoardLockedGlobal) => {
         }
     });
 
-    // Sumy gracza
     if (playerTotals) {
         if (els.upperTotalElement) els.upperTotalElement.textContent = playerTotals.upper;
         if (els.lowerTotalElement) els.lowerTotalElement.textContent = playerTotals.lower;
         if (els.grandTotalElement) els.grandTotalElement.textContent = playerTotals.grand;
     }
 
-    // Tabela komputera
     if (computerScorecard) {
         for (const [catId, score] of Object.entries(computerScorecard)) {
             const compElement = document.getElementById(`comp-${catId}`);
@@ -127,7 +126,6 @@ export const updateUI = (gameState, isBoardLockedGlobal) => {
         }
     }
 
-    // Sumy komputera
     if (computerTotals) {
         const compUpper = document.getElementById('comp-upper-total');
         const compLower = document.getElementById('comp-lower-total');
@@ -144,7 +142,7 @@ export const updateUI = (gameState, isBoardLockedGlobal) => {
 
 export const playComputerAnimation = async (steps) => {
     const els = getEls();
-    setBoardLocked(true); // UI Lock
+    setBoardLocked(true);
 
     if (els.turnTitle) els.turnTitle.textContent = "Computer's Turn";
     els.rollInfoElement.textContent = "Computer is thinking...";
@@ -153,16 +151,15 @@ export const playComputerAnimation = async (steps) => {
 
     for (const step of steps) {
         if (step.type === 'roll') {
-            // Używamy teraz funkcji animacji zamiast natychmiastowej zmiany
             await playRollAnimation(step.dice);
 
             if (step.potential) showComputerPotential(step.potential);
             els.rollInfoElement.textContent = `Computer Roll ${step.rollNumber}`;
-            await wait(500); // Skracamy pauzę, bo animacja już trwa
+            await wait(500);
 
         } else if (step.type === 'hold') {
             els.diceElements.forEach((die, index) => {
-                // Używamy 'held' do logiki animacji, a 'selected' do wizualnego podświetlenia
+
                 if (step.heldIndices.includes(index)) {
                     die.classList.add('held');
                 } else {
@@ -188,12 +185,10 @@ export const playComputerAnimation = async (steps) => {
         }
     }
 
-    els.diceElements.forEach(d => d.classList.remove('held', 'selected')); // Czyścimy klasy po całej turze
+    els.diceElements.forEach(d => d.classList.remove('held', 'selected'));
     await wait(800);
-    // Tutaj koniec animacji, resztę (odblokowanie) robi main.js
 };
 
-// Funkcja wewnętrzna (nie exportujemy jej bezpośrednio, bo jest używana tylko w updateUI)
 const handleGameOverUI = (pTotals, cTotals, els) => {
     setBoardLocked(true);
     els.diceElements.forEach(d => d.classList.remove('held', 'selected'));
@@ -208,7 +203,6 @@ const handleGameOverUI = (pTotals, cTotals, els) => {
         els.turnTitle.classList.add('game-over-title');
     }
 
-    // Sprawdzamy, czy panel już jest, żeby nie dodawać go 10 razy
     if (document.querySelector('.game-over-panel')) return;
 
     const myScore = pTotals ? pTotals.grand : 0;
@@ -244,12 +238,10 @@ const handleGameOverUI = (pTotals, cTotals, els) => {
     cScoreEl.textContent = compScore;
     if (compScore > myScore) cScoreEl.classList.add('lose-color');
 
-    // OBSŁUGA RESTARTU - Wysyłamy zdarzenie do main.js
     const restartBtn = panel.querySelector('.btn-restart');
     restartBtn.addEventListener('click', () => {
         panel.remove();
 
-        // Przywracamy UI do stanu "startowego"
         if (els.diceContainer) els.diceContainer.style.display = 'flex';
         if (els.rollButton) els.rollButton.style.display = 'inline-block';
         if (els.rollInfoElement) els.rollInfoElement.style.display = 'block';
@@ -259,23 +251,19 @@ const handleGameOverUI = (pTotals, cTotals, els) => {
             els.turnTitle.classList.remove('game-over-title');
         }
 
-        // Wysyłamy sygnał do main.js: "Hej, zrestartuj grę!"
         document.dispatchEvent(new CustomEvent('game-request-restart'));
     });
 
-    // --- NOWY PRZYCISK: HOME ---
     const homeBtn = document.createElement('button');
     homeBtn.textContent = 'Home';
     homeBtn.classList.add('btn-home');
-    homeBtn.style.marginTop = '10px'; // Mały odstęp
-    homeBtn.style.marginLeft = '10px'; // Odstęp od Play Again
+    homeBtn.style.marginTop = '10px';
+    homeBtn.style.marginLeft = '10px';
     homeBtn.addEventListener('click', async () => {
         await sendAction('restart');
         window.location.href = '/';
     });
 
-    // Dodajemy przycisk Home obok Play Again
-    // Najlepiej wrzucić je do wspólnego kontenera, ale tutaj po prostu dodamy do panelu
     panel.appendChild(homeBtn);
 
     const gameColumn = document.querySelector('.game-column');
@@ -286,22 +274,19 @@ export const playRollAnimation = async (newDiceValues) => {
     const els = getEls();
     if (!els || !els.diceElements) return;
 
-    const animationDuration = 700; // Czas musi być zgodny z animacją w CSS
+    const animationDuration = 700;
     const diceToAnimate = [];
 
-    // 1. Dodaj klasę .flipping tylko do kości, które NIE SĄ trzymane
     els.diceElements.forEach((die, index) => {
         if (!die.classList.contains('held')) {
             die.classList.add('flipping');
-            diceToAnimate.push({ die, value: newDiceValues[index] });
+            diceToAnimate.push({die, value: newDiceValues[index]});
         }
     });
 
-    // 2. Poczekaj na zakończenie animacji
     await wait(animationDuration);
 
-    // 3. Po animacji usuń klasę .flipping i ustaw prawidłowe ikony
-    diceToAnimate.forEach(({ die, value }) => {
+    diceToAnimate.forEach(({die, value}) => {
         die.classList.remove('flipping');
         const icon = die.querySelector('i');
         if (icon && value > 0) {

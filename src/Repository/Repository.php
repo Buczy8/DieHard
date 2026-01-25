@@ -8,10 +8,8 @@ use PDO;
 
 abstract class Repository
 {
-    /** @var PDO */
     protected $database;
 
-    /** @var array*/
     private static $instances = [];
 
     protected function __construct()

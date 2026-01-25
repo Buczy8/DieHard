@@ -12,7 +12,7 @@ class DiceGameController extends AppController
 
     public function __construct()
     {
-        // UserStatisticsRepository usunięty, skoro nie był używany bezpośrednio
+
         $this->gamesRepository = GamesRepository::getInstance();
     }
 
@@ -31,34 +31,33 @@ class DiceGameController extends AppController
             $input = $this->getJsonInput();
             $action = $input['action'] ?? '';
 
-            // 1. Inicjalizacja lub odtworzenie gry
+
             $game = $this->initializeGame($action, $input);
 
-            // 2. Wykonanie akcji
+
             $response = $this->handleAction($game, $action, $input);
 
-            // 3. Pobranie stanu po akcji
+
             $state = $game->getState();
 
-            // 4. Obsługa końca gry (zapis do bazy)
+
             $this->handleGameOver($state);
 
-            // 5. Zapisanie stanu do sesji
+
             $this->saveStateToSession($state);
 
-            // 6. Dołączenie stanu do odpowiedzi
+
             $response['gameState'] = $state;
 
             echo json_encode($response);
 
         } catch (\Exception $e) {
-            http_response_code(400); // Bad Request w przypadku błędu
+            http_response_code(400);
             echo json_encode(['success' => false, 'error' => $e->getMessage()]);
         }
         exit;
     }
 
-    // --- Metody pomocnicze (Private) ---
 
     private function ensureSession(): void
     {
@@ -86,19 +85,19 @@ class DiceGameController extends AppController
 
     private function initializeGame(string $action, array $input): DiceGameService
     {
-        // Jeśli restart, czyścimy flagę zapisu i wymuszamy nową grę
+
         if ($action === 'restart') {
             unset($_SESSION['game_saved']);
             $difficulty = $input['difficulty'] ?? 'medium';
             return new DiceGameService(null, $difficulty);
         }
 
-        // Jeśli mamy stan w sesji, odtwarzamy go
+
         if (isset($_SESSION['game_state'])) {
             return new DiceGameService($_SESSION['game_state']);
         }
 
-        // Fallback: Nowa gra (np. pierwsze wejście)
+
         $difficulty = $input['difficulty'] ?? 'medium';
         return new DiceGameService(null, $difficulty);
     }
@@ -116,7 +115,7 @@ class DiceGameController extends AppController
 
             case 'roll':
                 $heldIndices = $input['held'] ?? [];
-                // Walidacja, czy heldIndices to tablica intów (opcjonalne, ale dobre dla bezpieczeństwa)
+
                 $game->roll($heldIndices);
                 $response['success'] = true;
                 break;
@@ -158,8 +157,8 @@ class DiceGameController extends AppController
 
     private function saveStateToSession(array $state): void
     {
-        // Zamiast ręcznie przepisywać pola, zapisujemy to, co zwrócił DiceGameService.
-        // Dzięki temu kontroler nie musi wiedzieć, jak wygląda struktura danych gry.
+
+
         $_SESSION['game_state'] = [
             'dice' => $state['dice'],
             'rollsLeft' => $state['rollsLeft'],
@@ -172,7 +171,7 @@ class DiceGameController extends AppController
     private function saveGameResult(array $state): void
     {
         if (!isset($_SESSION['user_id'])) {
-            // Logujemy błąd lub ignorujemy, jeśli to gra gościa
+
             return;
         }
 
@@ -186,7 +185,7 @@ class DiceGameController extends AppController
             default => 'draw'
         };
 
-        // Zapis z uwzględnieniem poziomu trudności w nazwie bota
+
         $opponentName = 'Bot (' . ucfirst($state['difficulty']) . ')';
 
         $this->gamesRepository->saveGame($userId, $playerScore, $result, $opponentName);

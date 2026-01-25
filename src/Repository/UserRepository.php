@@ -7,7 +7,6 @@ use PDO;
 
 class UserRepository extends Repository
 {
-    // ... (pozostałe metody bez zmian: getUserByEmail, getUserByUserName, getUserById, createUser, updateUser, getAllUsers) ...
     public function getUserByEmail(string $email): ?User
     {
         $stmt = $this->database->prepare("SELECT * FROM users WHERE email = :email");
@@ -61,14 +60,15 @@ class UserRepository extends Repository
         ]);
     }
 
-    public function getAllUsers(): array {
+    public function getAllUsers(): array
+    {
         $stmt = $this->database->prepare('SELECT id, email, username, role, avatar FROM users ORDER BY id ASC');
         $stmt->execute();
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
-    // --- ZMODYFIKOWANA METODA PAGINACJI Z FILTROWANIEM ---
-    public function getUsersPaginated(int $limit, int $offset, string $search = '', string $role = 'all', string $sortOrder = 'DESC'): array {
+    public function getUsersPaginated(int $limit, int $offset, string $search = '', string $role = 'all', string $sortOrder = 'DESC'): array
+    {
         $query = '
             SELECT 
                 u.id, 
@@ -83,40 +83,35 @@ class UserRepository extends Repository
 
         $params = [];
 
-        // Wyszukiwanie (PostgreSQL ILIKE dla case-insensitive)
         if (!empty($search)) {
             $query .= ' AND (u.username ILIKE :search OR u.email ILIKE :search)';
             $params[':search'] = '%' . $search . '%';
         }
 
-        // Filtrowanie po roli
         if ($role !== 'all') {
             $query .= ' AND u.role = :role';
             $params[':role'] = $role;
         }
 
-        // Sortowanie (zabezpieczone przed SQL Injection)
         $order = strtoupper($sortOrder) === 'ASC' ? 'ASC' : 'DESC';
         $query .= " ORDER BY u.id $order";
 
-        // Limit i Offset
         $query .= ' LIMIT :limit OFFSET :offset';
-        
+
         $stmt = $this->database->prepare($query);
-        
-        // Bindowanie parametrów
+
         foreach ($params as $key => $value) {
             $stmt->bindValue($key, $value);
         }
         $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
         $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
-        
+
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // --- NOWA METODA DO LICZENIA PRZEFILTROWANYCH REKORDÓW ---
-    public function countUsersWithFilters(string $search = '', string $role = 'all'): int {
+    public function countUsersWithFilters(string $search = '', string $role = 'all'): int
+    {
         $query = 'SELECT COUNT(*) FROM users u WHERE 1=1';
         $params = [];
 
@@ -134,24 +129,27 @@ class UserRepository extends Repository
         foreach ($params as $key => $value) {
             $stmt->bindValue($key, $value);
         }
-        
+
         $stmt->execute();
         return (int)$stmt->fetchColumn();
     }
 
-    public function countAllUsers(): int {
+    public function countAllUsers(): int
+    {
         $stmt = $this->database->prepare('SELECT COUNT(*) FROM users');
         $stmt->execute();
         return (int)$stmt->fetchColumn();
     }
 
-    public function countAdmins(): int {
+    public function countAdmins(): int
+    {
         $stmt = $this->database->prepare("SELECT COUNT(*) FROM users WHERE role = 'admin'");
         $stmt->execute();
         return (int)$stmt->fetchColumn();
     }
 
-    public function countActivePlayers(): int {
+    public function countActivePlayers(): int
+    {
         $year = date('Y');
         $stmt = $this->database->prepare("
             SELECT COUNT(DISTINCT user_id) 
@@ -163,7 +161,8 @@ class UserRepository extends Repository
         return (int)$stmt->fetchColumn();
     }
 
-    public function deleteUser(int $id): void {
+    public function deleteUser(int $id): void
+    {
         $stmt = $this->database->prepare('DELETE FROM users WHERE id = :id');
         $stmt->bindParam(':id', $id, \PDO::PARAM_INT);
         $stmt->execute();
