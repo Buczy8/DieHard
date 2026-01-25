@@ -49,9 +49,13 @@ try {
         echo "<p>Niedozwolona metoda żądania. " . htmlspecialchars($e->getMessage()) . "</p>";
         exit;
     }
-    if ($errorCode === 401 || $errorCode === 403) {
+    if ($errorCode === 403) {
         http_response_code(404);
         include 'Public/views/404.html';
+        exit;
+    }
+    if ($errorCode === 401) {
+        header("Location: /login");
         exit;
     }
 
