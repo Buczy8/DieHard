@@ -106,4 +106,42 @@ class AdminController extends AppController
         http_response_code(200);
         echo json_encode(['message' => 'User deleted']);
     }
+
+    #[RequireAdmin]
+    #[AllowedMethods(['POST'])]
+    public function changeUserRoleAPI(): void
+    {
+        $data = json_decode(file_get_contents('php://input'), true);
+        $id = $data['id'] ?? null;
+        $newRole = $data['role'] ?? null;
+
+        if (!$id || !$newRole) {
+            http_response_code(400);
+            echo json_encode(['message' => 'Missing parameters']);
+            return;
+        }
+
+        if ($id == $_SESSION['user_id']) {
+            http_response_code(400);
+            echo json_encode(['message' => 'Cannot change your own role']);
+            return;
+        }
+
+        $targetUser = $this->userRepository->getUserById($id);
+        if (!$targetUser) {
+            http_response_code(404);
+            echo json_encode(['message' => 'User not found']);
+            return;
+        }
+
+        if ($targetUser->role === 'admin') {
+            http_response_code(403);
+            echo json_encode(['message' => 'Cannot change role of another admin']);
+            return;
+        }
+
+        $this->userRepository->updateUserRole($id, $newRole);
+        http_response_code(200);
+        echo json_encode(['message' => 'User role updated']);
+    }
 }
