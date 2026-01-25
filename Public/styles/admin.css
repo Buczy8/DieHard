@@ -518,3 +518,75 @@
 .btn-danger:hover {
     background-color: #fee2e2;
 }
+
+/* Responsive Table Styles */
+@media screen and (max-width: 768px) {
+    .admin-table thead {
+        display: none;
+    }
+
+    .admin-table, .admin-table tbody, .admin-table tr, .admin-table td {
+        display: block;
+        width: 100%;
+    }
+
+    .admin-table tr {
+        margin-bottom: 16px;
+        border-bottom: 1px solid var(--border-light);
+        padding-bottom: 16px;
+    }
+
+    .admin-table td {
+        text-align: right;
+        padding-left: 50%;
+        position: relative;
+        border-bottom: none;
+        padding: 8px 16px;
+    }
+
+    .admin-table td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 16px;
+        width: 45%;
+        padding-right: 10px;
+        white-space: nowrap;
+        text-align: left;
+        font-weight: 600;
+        color: var(--text-secondary);
+    }
+
+    .user-cell {
+        justify-content: flex-end;
+        max-width: none;
+    }
+
+    .user-info {
+        text-align: right;
+    }
+
+    .actions-cell {
+        text-align: right;
+    }
+
+    .action-group {
+        justify-content: flex-end;
+    }
+
+    .toolbar-wrapper {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .search-input-group {
+        min-width: 100%;
+    }
+
+    .filters-group {
+        flex-direction: column;
+    }
+
+    .filters-group .custom-dropdown, .btn-sort {
+        width: 100%;
+    }
+}
