@@ -60,6 +60,14 @@ class UserRepository extends Repository
         ]);
     }
 
+    public function updateUserRole(int $id, string $role): void
+    {
+        $stmt = $this->database->prepare("UPDATE users SET role = :role WHERE id = :id");
+        $stmt->bindParam(':role', $role, PDO::PARAM_STR);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+    }
+
     public function getAllUsers(): array
     {
         $stmt = $this->database->prepare('SELECT id, email, username, role, avatar FROM users ORDER BY id ASC');

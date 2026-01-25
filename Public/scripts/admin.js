@@ -5,12 +5,76 @@ let totalItems = 0;
 let currentSearch = '';
 let currentRole = 'all';
 let currentSort = 'DESC';
+let modalCallback = null;
 
 document.addEventListener('DOMContentLoaded', () => {
     fetchUsers(currentPage);
     fetchStats();
     setupFilters();
+    setupModal();
+
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.custom-dropdown')) {
+            document.querySelectorAll('.custom-dropdown').forEach(el => el.classList.remove('active'));
+        }
+    });
 });
+
+function setupModal() {
+    const modal = document.getElementById('confirmationModal');
+    const btnCancel = document.getElementById('btnCancelModal');
+    const btnConfirm = document.getElementById('btnConfirmModal');
+
+    btnCancel.addEventListener('click', closeModal);
+    
+    btnConfirm.addEventListener('click', () => {
+        if (modalCallback) modalCallback();
+        closeModal();
+    });
+
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+}
+
+function showModal(title, message, type, callback) {
+    const modal = document.getElementById('confirmationModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalMessage = document.getElementById('modalMessage');
+    const modalIconWrapper = document.getElementById('modalIconWrapper');
+    const modalIcon = document.getElementById('modalIcon');
+    const btnConfirm = document.getElementById('btnConfirmModal');
+
+    modalTitle.innerText = title;
+    modalMessage.innerText = message;
+    modalCallback = callback;
+
+    modalIconWrapper.className = 'modal-icon-wrapper';
+    btnConfirm.className = 'btn-primary modal-btn';
+    
+    if (type === 'delete') {
+        modalIconWrapper.classList.add('danger');
+        modalIconWrapper.style.backgroundColor = '#fee2e2';
+        modalIconWrapper.style.color = '#dc2626';
+        modalIcon.className = 'fa-solid fa-trash-can';
+        btnConfirm.classList.add('btn-danger');
+        btnConfirm.innerText = 'Delete';
+    } else {
+        modalIconWrapper.classList.add('warning');
+        modalIconWrapper.style.backgroundColor = '#fef3c7';
+        modalIconWrapper.style.color = '#d97706';
+        modalIcon.className = 'fa-solid fa-triangle-exclamation';
+        btnConfirm.innerText = 'Confirm';
+    }
+
+    modal.classList.add('active');
+}
+
+function closeModal() {
+    const modal = document.getElementById('confirmationModal');
+    modal.classList.remove('active');
+    modalCallback = null;
+}
 
 function setupFilters() {
 
@@ -25,13 +89,6 @@ function setupFilters() {
         }, 300);
     });
 
-    const roleFilter = document.getElementById('roleFilter');
-    roleFilter.addEventListener('change', (e) => {
-        currentRole = e.target.value;
-        currentPage = 1;
-        fetchUsers(currentPage);
-    });
-
     const sortBtn = document.querySelector('.btn-sort');
     sortBtn.addEventListener('click', () => {
         if (currentSort === 'DESC') {
@@ -43,6 +100,39 @@ function setupFilters() {
         }
         fetchUsers(currentPage);
     });
+}
+
+function toggleFilterDropdown() {
+    document.querySelectorAll('.custom-dropdown').forEach(el => {
+        if (el.id !== 'roleFilterDropdown') {
+            el.classList.remove('active');
+        }
+    });
+    const dropdown = document.getElementById('roleFilterDropdown');
+    dropdown.classList.toggle('active');
+}
+
+function selectFilterRole(role) {
+    currentRole = role;
+    currentPage = 1;
+    
+    const dropdown = document.getElementById('roleFilterDropdown');
+    dropdown.classList.remove('active');
+    
+    const label = document.getElementById('roleFilterLabel');
+    if (role === 'all') label.innerText = 'All Roles';
+    else if (role === 'admin') label.innerText = 'Admin';
+    else if (role === 'user') label.innerText = 'Player';
+    
+    const options = dropdown.querySelectorAll('.dropdown-option');
+    options.forEach(opt => {
+        opt.classList.remove('selected');
+        if (role === 'all' && opt.innerText.includes('All Roles')) opt.classList.add('selected');
+        if (role === 'admin' && opt.innerText.includes('Admin')) opt.classList.add('selected');
+        if (role === 'user' && opt.innerText.includes('Player')) opt.classList.add('selected');
+    });
+
+    fetchUsers(currentPage);
 }
 
 function fetchStats() {
@@ -133,11 +223,27 @@ function renderTable(users) {
             <td style="font-weight: 500; color: var(--text-main);">
                 ${gamesPlayed}
             </td>
-            <td style="text-align: right;">
+            <td class="actions-cell">
                 ${user.role !== 'admin' ?
-            `<button class="btn-secondary btn-delete-user" onclick="deleteUser(${user.id})" title="Delete User">
-                        <i class="fa-solid fa-trash"></i>
-                    </button>`
+            `<div class="action-group">
+                        <div class="custom-dropdown" id="dropdown-${user.id}">
+                            <div class="dropdown-selected" onclick="toggleDropdown(${user.id})">
+                                <span>${user.role === 'admin' ? 'Admin' : 'Player'}</span>
+                                <i class="fa-solid fa-chevron-down"></i>
+                            </div>
+                            <div class="dropdown-options">
+                                <div class="dropdown-option ${user.role === 'user' ? 'selected' : ''}" onclick="selectRole(${user.id}, 'user')">
+                                    <i class="fa-solid fa-user"></i> Player
+                                </div>
+                                <div class="dropdown-option ${user.role === 'admin' ? 'selected' : ''}" onclick="selectRole(${user.id}, 'admin')">
+                                    <i class="fa-solid fa-shield-halved"></i> Admin
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn-secondary btn-delete-user" onclick="deleteUser(${user.id})" title="Delete User">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>`
             :
             `<span class="protected-badge">
                         <i class="fa-solid fa-shield-halved"></i> Protected
@@ -147,6 +253,24 @@ function renderTable(users) {
         `;
         tbody.appendChild(tr);
     });
+}
+
+function toggleDropdown(userId) {
+    document.querySelectorAll('.custom-dropdown').forEach(el => {
+        if (el.id !== `dropdown-${userId}`) {
+            el.classList.remove('active');
+        }
+    });
+    
+    const dropdown = document.getElementById(`dropdown-${userId}`);
+    dropdown.classList.toggle('active');
+}
+
+function selectRole(userId, newRole) {
+    const dropdown = document.getElementById(`dropdown-${userId}`);
+    dropdown.classList.remove('active');
+    
+    updateUserRole(userId, newRole);
 }
 
 function updatePaginationInfo(start, end, total) {
@@ -210,24 +334,59 @@ function renderPaginationControls(totalPages) {
 }
 
 function deleteUser(id) {
-    if(!confirm('Are you sure you want to ban/delete this user?')) return;
-
-    fetch('/admin/delete-user', {
-        method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ id: id })
-    }).then(response => {
-        if(response.ok) {
-            fetchUsers(currentPage);
-        } else {
-            alert('Error deleting user');
+    showModal(
+        'Delete User',
+        'Are you sure you want to delete this user? This action cannot be undone.',
+        'delete',
+        () => {
+            fetch('/admin/delete-user', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ id: id })
+            }).then(response => {
+                if(response.ok) {
+                    fetchUsers(currentPage);
+                } else {
+                    alert('Error deleting user');
+                }
+            }).catch(err => {
+                console.error(err);
+                alert('Network error when deleting user');
+            });
         }
-    }).catch(err => {
-        console.error(err);
-        alert('Network error when deleting user');
-    });
+    );
+}
+
+function updateUserRole(id, newRole) {
+    showModal(
+        'Change Role',
+        `Are you sure you want to change this user's role to ${newRole}?`,
+        'warning',
+        () => {
+            fetch('/admin/change-role', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ id: id, role: newRole })
+            }).then(response => {
+                if(response.ok) {
+                    fetchUsers(currentPage);
+                } else {
+                    return response.json().then(data => {
+                        alert(data.message || 'Error changing role');
+                        fetchUsers(currentPage);
+                    });
+                }
+            }).catch(err => {
+                console.error(err);
+                alert('Network error when changing role');
+                fetchUsers(currentPage);
+            });
+        }
+    );
 }
 
 function getRoleClass(role) {
