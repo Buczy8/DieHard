@@ -2,9 +2,11 @@
 
 namespace App;
 
+use AllowDynamicProperties;
 use PDO;
 use PDOException;
 
+#[AllowDynamicProperties]
 class Database
 {
     private $username;
@@ -51,7 +53,7 @@ class Database
         }
     }
 
-    public function disconnect()
+    public function disconnect(): void
     {
         $this->conn = null;
     }
