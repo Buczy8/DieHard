@@ -42,22 +42,18 @@ class SecurityController extends AppController
     public function login()
     {
         if ($this->isGet()) {
-            if (empty($_SESSION['csrf'])) {
-                $_SESSION['csrf'] = bin2hex(random_bytes(32));
-            }
+            $this->ensureCsrfToken();
             return $this->render("login");
         }
 
         if ($this->isPost()) {
-            $failures = $_SESSION['login_failures'] ?? 0;
-            if ($failures > 5) {
-                sleep(2);
-            }
+            $this->handleLoginThrottling();
 
-            if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf']) {
+            if (!$this->validateCsrfToken()) {
                 http_response_code(400);
                 return $this->render("login", ["message" => "Session expired or invalid request."]);
             }
+
             $loginDto = LoginDTO::fromRequest($_POST);
 
             $validationError = LoginDTO::validate($loginDto);
@@ -69,20 +65,14 @@ class SecurityController extends AppController
             $user = $this->userRepository->getUserByEmail($loginDto->email);
 
             if (!$user || !password_verify($loginDto->password, $user->password)) {
-                $_SESSION['login_failures'] = $failures + 1;
+                $this->incrementLoginFailures();
                 http_response_code(400);
                 error_log("Failed login for {$loginDto->email} from IP " . $_SERVER['REMOTE_ADDR']);
                 return $this->render("login", ["message" => "Invalid email or password"]);
             }
 
-            unset($_SESSION['login_failures']);
-
-            session_regenerate_id(true);
-            $_SESSION['user_id'] = $user->id;
-            $_SESSION['user_email'] = $user->email;
-            $_SESSION['user_role'] = $user->role;
-
-            unset($_SESSION['csrf']);
+            $this->resetLoginFailures();
+            $this->startUserSession($user);
 
             $url = "http://" . $_SERVER['HTTP_HOST'];
             header("Location: {$url}/");
@@ -94,17 +84,16 @@ class SecurityController extends AppController
     public function register()
     {
         if ($this->isGet()) {
-            if (empty($_SESSION['csrf'])) {
-                $_SESSION['csrf'] = bin2hex(random_bytes(32));
-            }
+            $this->ensureCsrfToken();
             return $this->render("register");
         }
 
         if ($this->isPost()) {
-            if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf']) {
+            if (!$this->validateCsrfToken()) {
                 http_response_code(400);
                 return $this->render("register", ["message" => "Session expired."]);
             }
+
             $formData = [
                 'email' => $_POST["email"] ?? '',
                 'password' => $_POST["password"] ?? '',
@@ -120,29 +109,18 @@ class SecurityController extends AppController
             }
 
             $userDTO = CreateUserDTO::fromRequest($formData);
-            $existingUser = $this->userRepository->getUserByEmail($userDTO->email);
-
-            if ($existingUser) {
+            
+            if ($this->userRepository->getUserByEmail($userDTO->email)) {
                 http_response_code(400);
                 return $this->render("register", ["message" => "This account already exists"]);
             }
 
-            $existingUsername = $this->userRepository->getUserByUserName($userDTO->username);
-            if ($existingUsername) {
+            if ($this->userRepository->getUserByUserName($userDTO->username)) {
                 http_response_code(400);
                 return $this->render("register", ["message" => "This username already exists"]);
             }
 
-            $hashedPassword = password_hash($userDTO->password, PASSWORD_DEFAULT);
-
-            $user = new User(
-                email: $userDTO->email,
-                username: $userDTO->username,
-                password: $hashedPassword,
-                role: $userDTO->role
-            );
-
-            $this->userRepository->createUser($user);
+            $this->createUser($userDTO);
 
             return $this->render("login", ["message" => "You have registered successfully! Log in", "type" => "success"]);
         }
@@ -174,5 +152,58 @@ class SecurityController extends AppController
         $url = "http://" . $_SERVER['HTTP_HOST'];
         header("Location: {$url}/login");
         exit();
+    }
+
+    private function ensureCsrfToken(): void
+    {
+        if (empty($_SESSION['csrf'])) {
+            $_SESSION['csrf'] = bin2hex(random_bytes(32));
+        }
+    }
+
+    private function validateCsrfToken(): bool
+    {
+        return isset($_POST['csrf_token']) && $_POST['csrf_token'] === $_SESSION['csrf'];
+    }
+
+    private function handleLoginThrottling(): void
+    {
+        $failures = $_SESSION['login_failures'] ?? 0;
+        if ($failures > 5) {
+            sleep(2);
+        }
+    }
+
+    private function incrementLoginFailures(): void
+    {
+        $_SESSION['login_failures'] = ($_SESSION['login_failures'] ?? 0) + 1;
+    }
+
+    private function resetLoginFailures(): void
+    {
+        unset($_SESSION['login_failures']);
+    }
+
+    private function startUserSession(User $user): void
+    {
+        session_regenerate_id(true);
+        $_SESSION['user_id'] = $user->id;
+        $_SESSION['user_email'] = $user->email;
+        $_SESSION['user_role'] = $user->role;
+        unset($_SESSION['csrf']);
+    }
+
+    private function createUser(CreateUserDTO $userDTO): void
+    {
+        $hashedPassword = password_hash($userDTO->password, PASSWORD_DEFAULT);
+
+        $user = new User(
+            email: $userDTO->email,
+            username: $userDTO->username,
+            password: $hashedPassword,
+            role: $userDTO->role
+        );
+
+        $this->userRepository->createUser($user);
     }
 }
