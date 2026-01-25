@@ -137,3 +137,7 @@
     background-color: var(--bg-input);
     color: var(--text-main);
 }
+
+.hidden {
+    display: none !important;
+}

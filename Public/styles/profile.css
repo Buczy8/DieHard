@@ -476,6 +476,10 @@ input:checked + .slider:before {
     background: var(--bg-input);
 }
 
+.hidden {
+    display: none !important;
+}
+
 @media (max-width: 900px) {
     .settings-grid {
         grid-template-columns: 1fr;

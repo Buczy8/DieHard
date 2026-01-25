@@ -200,6 +200,20 @@
     color: var(--text-main);
 }
 
+.loading-cell {
+    text-align: center;
+    padding: 20px;
+    color: var(--text-secondary);
+}
+
+.rank-col {
+    width: 50px;
+}
+
+.score-col {
+    text-align: right;
+}
+
 @media (max-width: 900px) {
     .stats-grid {
         grid-template-columns: 1fr 1fr;

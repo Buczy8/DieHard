@@ -170,3 +170,9 @@
     font-size: 15px;
     color: var(--text-main);
 }
+
+.loading-cell {
+    text-align: center;
+    padding: 20px;
+    color: var(--text-secondary);
+}

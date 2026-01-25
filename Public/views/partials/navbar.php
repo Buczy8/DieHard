@@ -35,7 +35,7 @@
                             <i class="fa-solid fa-user"></i> My profile
                         </a>
                     </li>
-                    <li id="nav-admin-link" style="display: none;">
+                    <li id="nav-admin-link" class="hidden">
                         <a href="/admin" class="dropdown-item">
                             <i class="fa-solid fa-user-shield"></i> Manage Users
                         </a>

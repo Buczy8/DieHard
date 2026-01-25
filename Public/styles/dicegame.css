@@ -418,6 +418,10 @@ html, body {
     color: var(--color-error-text);
 }
 
+.hidden {
+    display: none !important;
+}
+
 @media screen and (max-width: 1024px) {
     .game-container {
         grid-template-columns: 240px 1fr 240px;

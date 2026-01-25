@@ -49,7 +49,7 @@ function fetchUserInfo() {
 
             if (data.role === 'admin') {
                 const adminLink = document.getElementById('nav-admin-link');
-                if (adminLink) adminLink.style.display = 'block';
+                if (adminLink) adminLink.classList.remove('hidden');
             }
         })
         .catch(err => console.error('Failed to load user info', err));

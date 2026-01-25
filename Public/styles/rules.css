@@ -168,6 +168,10 @@ html {
     padding: 1.5rem;
 }
 
+.mb-4 {
+    margin-bottom: 1rem;
+}
+
 .steps-grid {
     display: grid;
     grid-template-columns: 1fr;

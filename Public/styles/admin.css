@@ -320,3 +320,11 @@
     align-items: center;
     gap: 4px;
 }
+
+.user-col {
+    width: 30%;
+}
+
+.actions-col {
+    text-align: right;
+}

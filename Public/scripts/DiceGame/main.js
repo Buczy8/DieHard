@@ -114,7 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (isBoardLocked && !isGameOverHandled) return;
 
             if (difficultyModal) {
-                difficultyModal.style.display = 'flex';
+                difficultyModal.classList.remove('hidden');
             }
         });
     }
@@ -124,7 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const level = btn.getAttribute('data-level');
 
             if (difficultyModal) {
-                difficultyModal.style.display = 'none';
+                difficultyModal.classList.add('hidden');
             }
             diceElements.forEach(d => d.classList.remove('held', 'selected'));
             isBoardLocked = false;
@@ -143,7 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.addEventListener('game-request-restart', () => {
         if (difficultyModal) {
-            difficultyModal.style.display = 'flex';
+            difficultyModal.classList.remove('hidden');
         }
     });
 
@@ -154,7 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 Object.values(currentGameState.computerScorecard).every(v => v === null);
 
             if (isNewGame && difficultyModal) {
-                difficultyModal.style.display = 'flex';
+                difficultyModal.classList.remove('hidden');
             } else {
                 UI.updateUI(currentGameState, isBoardLocked);
             }
