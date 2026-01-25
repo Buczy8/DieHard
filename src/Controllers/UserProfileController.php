@@ -193,7 +193,10 @@ class UserProfileController extends AppController
 
         if ($changesMade) {
             try {
+                $this->userRepository->beginTransaction();
                 $this->userRepository->updateUser($user);
+                $this->userRepository->commit();
+                
                 $updatedUser = $this->userRepository->getUserById($user->id);
 
                 echo json_encode([
@@ -205,6 +208,7 @@ class UserProfileController extends AppController
                     ]
                 ]);
             } catch (\Exception $e) {
+                $this->userRepository->rollback();
                 error_log("Update Settings Error: " . $e->getMessage());
                 http_response_code(500);
                 echo json_encode(['message' => 'An error occurred while updating settings.', 'type' => 'error']);

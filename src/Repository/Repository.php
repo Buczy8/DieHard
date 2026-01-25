@@ -28,6 +28,21 @@ abstract class Repository
         return self::$instances[$subclass];
     }
 
+    public function beginTransaction(): void
+    {
+        $this->database->beginTransaction();
+    }
+
+    public function commit(): void
+    {
+        $this->database->commit();
+    }
+
+    public function rollback(): void
+    {
+        $this->database->rollBack();
+    }
+
     protected function __clone()
     {
     }

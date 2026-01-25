@@ -14,6 +14,7 @@ class Database
     private $host;
     private $database;
     private $port;
+    private $conn;
 
     private static $instance = null;
 
@@ -38,16 +39,20 @@ class Database
 
     public function connect()
     {
+        if ($this->conn !== null) {
+            return $this->conn;
+        }
+
         try {
-            $conn = new PDO(
+            $this->conn = new PDO(
                 "pgsql:host=$this->host;port=$this->port;dbname=$this->database",
                 $this->username,
                 $this->password,
                 ["sslmode" => "prefer"]
             );
 
-            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            return $conn;
+            $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            return $this->conn;
         } catch (PDOException $e) {
             throw new PDOException("Connection failed: " . $e->getMessage());
         }
