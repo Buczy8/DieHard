@@ -22,4 +22,25 @@ readonly class CreateUserDTO
             role: $data['role'] ?? 'user'
         );
     }
+
+    public static function validate(array $data): ?string
+    {
+        if (empty($data['email']) || empty($data['password']) || empty($data['username']) || empty($data['passwordConfirmation'])) {
+            return "Fill all fields.";
+        }
+
+        if (strlen($data['email']) > 100) {
+            return "Email is too long";
+        }
+
+        if (strlen($data['password']) < 8) {
+            return "Password is too weak";
+        }
+
+        if ($data['password'] !== $data['passwordConfirmation']) {
+            return "passwords does not match";
+        }
+
+        return null;
+    }
 }

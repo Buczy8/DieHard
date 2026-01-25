@@ -103,8 +103,6 @@ class HardBotStrategy implements BotStrategyInterface
             return 'score-full-house';
         }
 
-        // We need dice values to calculate sum, but we only have possibleScores here.
-        // However, chance score is exactly the sum.
         $sum = $possibleScores['score-chance'] ?? 0;
         
         if (($computerScorecard['score-four-of-a-kind'] ?? null) === null && ($possibleScores['score-four-of-a-kind'] ?? 0) > 0) {
@@ -145,7 +143,7 @@ class HardBotStrategy implements BotStrategyInterface
         foreach ($possibleScores as $cat => $points) {
             if (($computerScorecard[$cat] ?? null) === null) return $cat;
         }
-        return 'score-chance'; // Fallback
+        return 'score-chance';
     }
 
     private function getCategoryKeyForDie(int $val): string

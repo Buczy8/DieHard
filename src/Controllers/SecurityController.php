@@ -118,27 +118,14 @@ class SecurityController extends AppController
                 'email' => $_POST["email"] ?? '',
                 'password' => $_POST["password"] ?? '',
                 'username' => trim($_POST["user-name"] ?? ''),
+                'passwordConfirmation' => $_POST["passwordConfirmation"] ?? '',
                 'role' => 'user'
             ];
-            $passwordConfirmation = $_POST["passwordConfirmation"] ?? '';
 
-            if (empty($formData['email']) || empty($formData['password']) || empty($formData['username']) || empty($passwordConfirmation)) {
+            $validationError = CreateUserDTO::validate($formData);
+            if ($validationError) {
                 http_response_code(400);
-                return $this->render("register", ["message" => "Fill all fields."]);
-            }
-
-            if (strlen($formData['email']) > 100) {
-                http_response_code(400);
-                return $this->render("register", ["message" => "Email is too long"]);
-            }
-            if (strlen($formData['password']) < 8) {
-                http_response_code(400);
-                return $this->render("register", ["message" => "Password is too weak"]);
-            }
-
-            if ($formData['password'] !== $passwordConfirmation) {
-                http_response_code(400);
-                return $this->render("register", ["message" => "passwords does not match"]);
+                return $this->render("register", ["message" => $validationError]);
             }
 
             $userDTO = CreateUserDTO::fromRequest($formData);
