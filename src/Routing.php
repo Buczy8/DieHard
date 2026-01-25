@@ -81,6 +81,10 @@ class Routing
             'controller' => 'App\Controllers\AdminController',
             'action' => 'deleteUserAPI'
         ],
+        'admin/change-role' => [
+            'controller' => 'App\Controllers\AdminController',
+            'action' => 'changeUserRoleAPI'
+        ],
     ];
 
     public static function run(string $path)
