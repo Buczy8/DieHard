@@ -8,7 +8,7 @@ use ReflectionMethod;
 
 class CheckAuthRequirements
 {
-    public static function Check(object|string $controller, string $methodName): void
+    public static function check(object|string $controller, string $methodName): void
     {
         $reflection = new ReflectionMethod($controller, $methodName);
 
