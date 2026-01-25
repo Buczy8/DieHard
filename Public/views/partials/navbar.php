@@ -10,15 +10,16 @@
 
         <div class="nav-links">
             <a href="/" class="nav-link <?= $_SERVER['REQUEST_URI'] === '/' ? 'active' : '' ?>">Home</a>
-            <a href="/dicegame" class="nav-link <?= strpos($_SERVER['REQUEST_URI'], '/dicegame') !== false ? 'active' : '' ?>">Play</a>
-            <a href="/history" class="nav-link <?= strpos($_SERVER['REQUEST_URI'], '/history') !== false ? 'active' : '' ?>">History</a>
+            <a href="/dicegame"
+               class="nav-link <?= strpos($_SERVER['REQUEST_URI'], '/dicegame') !== false ? 'active' : '' ?>">Play</a>
+            <a href="/history"
+               class="nav-link <?= strpos($_SERVER['REQUEST_URI'], '/history') !== false ? 'active' : '' ?>">History</a>
         </div>
     </div>
 
     <div class="nav-right">
         <div class="user-menu-container">
             <button class="user-avatar-btn" id="avatarBtn">
-                <!-- Avatar will be loaded by JS -->
                 <i class="fa-solid fa-user"></i>
             </button>
 
@@ -34,7 +35,7 @@
                             <i class="fa-solid fa-user"></i> My profile
                         </a>
                     </li>
-                    <li id="nav-admin-link" style="display: none;">
+                    <li id="nav-admin-link" class="hidden">
                         <a href="/admin" class="dropdown-item">
                             <i class="fa-solid fa-user-shield"></i> Manage Users
                         </a>

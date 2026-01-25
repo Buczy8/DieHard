@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dice Game</title>
-    <link rel="stylesheet" href="Public/styles/dicegame.css">
-    <link rel="stylesheet" href="Public/styles/theme.css">
+    <link rel="stylesheet" href="/Public/styles/dicegame.css">
+    <link rel="stylesheet" href="/Public/styles/theme.css">
 </head>
 
 <?php include 'Public/views/partials/navbar.php'; ?>
@@ -124,7 +124,7 @@
             <button class="roll-button">Roll Dice</button>
         </section>
 
-        <aside class="players-column scorecard-column" >
+        <aside class="players-column scorecard-column">
             <h2>Computer's Scorecard</h2>
 
             <div class="score-section">
@@ -222,8 +222,7 @@
     </div>
 </template>
 
-<!-- Modal wyboru poziomu trudności -->
-<div id="difficultyModal" class="modal-overlay" style="display: none;">
+<div id="difficultyModal" class="modal-overlay hidden">
     <div class="modal-box">
         <button class="btn-close-modal" aria-label="Close">&times;</button>
         <h2>Select Difficulty</h2>

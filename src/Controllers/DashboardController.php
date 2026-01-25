@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Controllers;
+
 use App\Annotation\RequireLogin;
 use App\Annotation\AllowedMethods;
 use App\DTO\GameResponseDTO;
@@ -7,7 +9,8 @@ use App\DTO\UserStatisticsResponseDTO;
 use App\Repository\UserStatisticsRepository;
 use App\Repository\GamesRepository;
 
-class DashboardController extends AppController {
+class DashboardController extends AppController
+{
 
     private $statsRepository;
     private $gamesRepository;
@@ -21,7 +24,7 @@ class DashboardController extends AppController {
     #[RequireLogin]
     public function index()
     {
-        // Renderujemy tylko widok, dane pobierze JS
+
         $this->render('dashboard');
     }
 
@@ -30,7 +33,7 @@ class DashboardController extends AppController {
     public function getDashboardDataAPI()
     {
         header('Content-Type: application/json');
-        
+
         $user = $this->getUser();
         if (!$user) {
             http_response_code(401);
@@ -39,18 +42,18 @@ class DashboardController extends AppController {
         }
 
         try {
-            // Statystyki użytkownika
+
             $statsModel = $this->statsRepository->getStatsByUserEmail($user->email);
             $statsDTO = UserStatisticsResponseDTO::fromEntity($statsModel);
 
-            // Ostatnie gry
+
             $gamesModels = $this->gamesRepository->getGamesByUserId($user->id, 4);
             $recentGamesDTOs = [];
             foreach ($gamesModels as $gameModel) {
                 $recentGamesDTOs[] = GameResponseDTO::fromEntity($gameModel);
             }
 
-            // Leaderboard (Top 5)
+
             $leaderboard = $this->statsRepository->getLeaderboard(5);
 
             echo json_encode([

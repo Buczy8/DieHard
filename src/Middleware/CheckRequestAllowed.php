@@ -5,7 +5,9 @@ namespace App\Middleware;
 use App\Annotation\AllowedMethods;
 use ReflectionMethod;
 use Exception;
-class  CheckRequestAllowed{
+
+class  CheckRequestAllowed
+{
     public static function check(object $controller, string $methodName): void
     {
         $reflection = new ReflectionMethod($controller, $methodName);
@@ -18,7 +20,6 @@ class  CheckRequestAllowed{
             if (!in_array($_SERVER['REQUEST_METHOD'], $allowed)) {
                 header('Allow: ' . implode(', ', $allowed));
 
-                // Rzucamy wyjątek z kodem 405 (Method Not Allowed)
                 throw new Exception("Method Not Allowed", 405);
             }
         }

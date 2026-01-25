@@ -1,35 +1,83 @@
-/* Public/styles/dashboard.css */
 .dashboard-container {
-    max-width: 1200px; margin: 0 auto; padding: 24px; width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px;
+    width: 100%;
     margin-top: 80px;
 }
 
 .welcome-card {
-    padding: 32px; display: flex; justify-content: space-between; align-items: center;
+    padding: 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 24px;
 }
-.welcome-actions { display: flex; gap: 12px; }
+
+.welcome-actions {
+    display: flex;
+    gap: 12px;
+}
 
 .stats-grid {
-    display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 32px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-bottom: 32px;
 }
-.stat-card { padding: 20px; display: flex; align-items: center; gap: 16px; }
+
+.stat-card {
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
 
 .stat-icon {
-    width: 48px; height: 48px; border-radius: 12px;
-    display: flex; align-items: center; justify-content: center; font-size: 24px;
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
 }
-/* Kolory ikon */
-.icon-blue { background: #e0f2fe; color: #0284c7; }
-.icon-green { background: #dcfce7; color: #16a34a; }
-.icon-orange { background: #ffedd5; color: #ea580c; }
-.icon-purple { background: #f3e8ff; color: #9333ea; }
 
-.stat-info { display: flex; flex-direction: column; }
-.stat-label { font-size: 13px; color: var(--text-secondary); }
-.stat-value { font-size: 24px; font-weight: 800; }
+.icon-blue {
+    background: #e0f2fe;
+    color: #0284c7;
+}
 
-/* --- Dolna sekcja (Tabele) --- */
+.icon-green {
+    background: #dcfce7;
+    color: #16a34a;
+}
+
+.icon-orange {
+    background: #ffedd5;
+    color: #ea580c;
+}
+
+.icon-purple {
+    background: #f3e8ff;
+    color: #9333ea;
+}
+
+.stat-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-label {
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+.stat-value {
+    font-size: 24px;
+    font-weight: 800;
+}
+
 .dashboard-bottom-grid {
     display: grid;
     grid-template-columns: 2fr 1fr;
@@ -50,29 +98,67 @@
 }
 
 .section-header {
-    display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
 }
-.view-all-link { color: var(--primary-color); font-size: 13px; font-weight: 600; }
 
-.badge { padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 700; }
-.badge-win { background: #d1fae5; color: #065f46; }
-.badge-loss { background: #fee2e2; color: #991b1b; }
-.badge-secondary { background: #f3f4f6; color: #4b5563; }
+.view-all-link {
+    color: var(--primary-color);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.badge {
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.badge-win {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.badge-loss {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.badge-secondary {
+    background: #f3f4f6;
+    color: #4b5563;
+}
 
 .avatar {
-    width: 32px; height: 32px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 11px; font-weight: 700; color: #fff; margin-right: 8px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: #fff;
+    margin-right: 8px;
 }
-.avatar-blue { background: #3b82f6; }
-.opponent-info { display: flex; align-items: center; font-weight: 500; }
 
-/* Styl dla tabeli leaderboard */
+.avatar-blue {
+    background: #3b82f6;
+}
+
+.opponent-info {
+    display: flex;
+    align-items: center;
+    font-weight: 500;
+}
+
 .leaderboard-table th, .leaderboard-table td {
     padding: 12px 16px;
 }
 
-/* --- Tabela Gier (Wspólna dla Dashboard i History) --- */
 .games-table {
     width: 100%;
     border-collapse: collapse;
@@ -97,16 +183,60 @@
     border-bottom: none;
 }
 
-.col-date { color: var(--text-secondary); font-size: 14px; }
-.col-opponent { font-weight: 500; color: var(--text-main); }
-.col-score { font-weight: 700; font-family: monospace; font-size: 15px; color: var(--text-main); }
+.col-date {
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+.col-opponent {
+    font-weight: 500;
+    color: var(--text-main);
+}
+
+.col-score {
+    font-weight: 700;
+    font-family: monospace;
+    font-size: 15px;
+    color: var(--text-main);
+}
+
+.loading-cell {
+    text-align: center;
+    padding: 20px;
+    color: var(--text-secondary);
+}
+
+.rank-col {
+    width: 50px;
+}
+
+.score-col {
+    text-align: right;
+}
 
 @media (max-width: 900px) {
-    .stats-grid { grid-template-columns: 1fr 1fr; }
-    .dashboard-bottom-grid { grid-template-columns: 1fr; }
+    .stats-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .dashboard-bottom-grid {
+        grid-template-columns: 1fr;
+    }
 }
+
 @media (max-width: 600px) {
-    .stats-grid { grid-template-columns: 1fr; }
-    .welcome-card { flex-direction: column; text-align: center; gap: 16px; }
-    .welcome-actions { flex-direction: column; width: 100%; }
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .welcome-card {
+        flex-direction: column;
+        text-align: center;
+        gap: 16px;
+    }
+
+    .welcome-actions {
+        flex-direction: column;
+        width: 100%;
+    }
 }

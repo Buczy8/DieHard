@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel - DieHard</title>
-    <link rel="stylesheet" href="Public/styles/theme.css">
-    <link rel="stylesheet" href="Public/styles/admin.css">
+    <link rel="stylesheet" href="/Public/styles/theme.css">
+    <link rel="stylesheet" href="/Public/styles/admin.css">
 </head>
 <body>
 
@@ -42,13 +42,13 @@
     <div class="toolbar-wrapper">
         <div class="search-input-group">
             <i class="fa-solid fa-magnifying-glass search-icon"></i>
-            <input type="text" id="searchInput" placeholder="Search by nickname or email...">
+            <label for="searchInput"></label><input type="text" id="searchInput" placeholder="Search by nickname or email...">
         </div>
 
         <div class="filters-group">
             <div class="select-wrapper">
                 <span class="select-label">Role:</span>
-                <select id="roleFilter" class="custom-select">
+                <label for="roleFilter"></label><select id="roleFilter" class="custom-select">
                     <option value="all">All</option>
                     <option value="admin">admin</option>
                     <option value="user">Player</option>
@@ -65,10 +65,10 @@
         <table class="games-table admin-table">
             <thead>
             <tr>
-                <th style="width: 30%">User</th>
+                <th class="user-col">User</th>
                 <th>Role</th>
                 <th>Games Played</th>
-                <th style="text-align: right">Actions</th>
+                <th class="actions-col">Actions</th>
             </tr>
             </thead>
             <tbody id="usersTableBody">
@@ -91,7 +91,7 @@
 
 </main>
 
-<script src="Public/scripts/admin.js"></script>
+<script src="/Public/scripts/admin.js"></script>
 
 </body>
 </html>

@@ -6,13 +6,15 @@ namespace App\Models;
 class Game
 {
     public function __construct(
-        public int $id,
-        public int $userId,
-        public int $score,
+        public int    $id,
+        public int    $userId,
+        public int    $score,
         public string $opponentName,
         public string $result,
         public string $playedAt
-    ) {}
+    )
+    {
+    }
 
     public static function fromArray(array $data): self
     {

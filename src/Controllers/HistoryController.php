@@ -28,7 +28,7 @@ class HistoryController extends AppController
     public function getHistoryDataAPI()
     {
         header('Content-Type: application/json');
-        
+
         $userId = $_SESSION['user_id'] ?? null;
         if (!$userId) {
             http_response_code(401);

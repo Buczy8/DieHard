@@ -2,10 +2,9 @@ let currentPage = 1;
 const itemsPerPage = 8;
 let totalItems = 0;
 
-// Stan filtrów
 let currentSearch = '';
 let currentRole = 'all';
-let currentSort = 'DESC'; // Domyślnie malejąco (najnowsze)
+let currentSort = 'DESC';
 
 document.addEventListener('DOMContentLoaded', () => {
     fetchUsers(currentPage);
@@ -14,19 +13,18 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function setupFilters() {
-    // Wyszukiwarka z debounce (opóźnieniem)
+
     const searchInput = document.getElementById('searchInput');
     let debounceTimer;
     searchInput.addEventListener('input', (e) => {
         clearTimeout(debounceTimer);
         debounceTimer = setTimeout(() => {
             currentSearch = e.target.value;
-            currentPage = 1; // Reset do pierwszej strony przy nowym wyszukiwaniu
+            currentPage = 1;
             fetchUsers(currentPage);
-        }, 300); // 300ms opóźnienia
+        }, 300);
     });
 
-    // Filtr Roli
     const roleFilter = document.getElementById('roleFilter');
     roleFilter.addEventListener('change', (e) => {
         currentRole = e.target.value;
@@ -34,10 +32,8 @@ function setupFilters() {
         fetchUsers(currentPage);
     });
 
-    // Przycisk Sortowania
     const sortBtn = document.querySelector('.btn-sort');
     sortBtn.addEventListener('click', () => {
-        // Przełączanie sortowania
         if (currentSort === 'DESC') {
             currentSort = 'ASC';
             sortBtn.innerHTML = '<i class="fa-solid fa-arrow-up-short-wide"></i> Sort: Oldest';
@@ -68,7 +64,6 @@ function fetchUsers(page = 1) {
     const tbody = document.getElementById('usersTableBody');
     tbody.innerHTML = '<tr><td colspan="4" class="loading-cell">Loading users...</td></tr>';
 
-    // Budowanie URL z parametrami
     const params = new URLSearchParams({
         page: page,
         limit: itemsPerPage,
@@ -91,10 +86,10 @@ function fetchUsers(page = 1) {
             const pagination = data.pagination;
 
             console.log("Loaded users:", users);
-            
+
             currentPage = pagination.currentPage;
             totalItems = pagination.totalItems;
-            
+
             renderTable(users);
             updatePaginationInfo((currentPage - 1) * itemsPerPage + 1, Math.min(currentPage * itemsPerPage, totalItems), totalItems);
             renderPaginationControls(pagination.totalPages);
@@ -119,7 +114,7 @@ function renderTable(users) {
 
         const avatarSrc = user.avatar ? user.avatar : `https://ui-avatars.com/api/?name=${user.username}&background=random`;
         const gamesPlayed = user.games_played !== undefined ? user.games_played : 0;
-        
+
         const roleClass = getRoleClass(user.role);
 
         tr.innerHTML = `
@@ -169,7 +164,6 @@ function renderPaginationControls(totalPages) {
 
     if (totalPages <= 1) return;
 
-    // Prev Button
     const prevBtn = document.createElement('button');
     prevBtn.className = 'btn-secondary page-btn';
     prevBtn.innerHTML = '<i class="fa-solid fa-chevron-left"></i>';
@@ -181,7 +175,6 @@ function renderPaginationControls(totalPages) {
     };
     container.appendChild(prevBtn);
 
-    // Page Numbers
     for (let i = 1; i <= totalPages; i++) {
         if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) {
             const btn = document.createElement('button');
@@ -196,7 +189,7 @@ function renderPaginationControls(totalPages) {
             (i === currentPage + 2 && i < totalPages)
         ) {
             if (container.lastChild && container.lastChild.className === 'dots') continue;
-            
+
             const span = document.createElement('span');
             span.className = 'dots';
             span.innerText = '...';
@@ -204,7 +197,6 @@ function renderPaginationControls(totalPages) {
         }
     }
 
-    // Next Button
     const nextBtn = document.createElement('button');
     nextBtn.className = 'btn-secondary page-btn';
     nextBtn.innerHTML = '<i class="fa-solid fa-chevron-right"></i>';
@@ -228,7 +220,7 @@ function deleteUser(id) {
         body: JSON.stringify({ id: id })
     }).then(response => {
         if(response.ok) {
-            fetchUsers(currentPage); // Odśwież bieżącą stronę
+            fetchUsers(currentPage);
         } else {
             alert('Error deleting user');
         }

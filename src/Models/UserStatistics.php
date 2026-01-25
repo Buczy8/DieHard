@@ -5,12 +5,14 @@ namespace App\Models;
 class UserStatistics
 {
     public function __construct(
-        public int $gamesPlayed,
-        public int $gamesWon,
-        public int $highScore,
+        public int  $gamesPlayed,
+        public int  $gamesWon,
+        public int  $highScore,
         public ?int $userId = null,
         public ?int $id = null
-    ) {}
+    )
+    {
+    }
 
     public static function fromArray(array $data): self
     {

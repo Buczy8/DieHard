@@ -12,7 +12,6 @@ class CheckAuthRequirements
     {
         $reflection = new ReflectionMethod($controller, $methodName);
 
-        // 1. Sprawdzenie RequireLogin
         $loginAttributes = $reflection->getAttributes(RequireLogin::class);
         if (!empty($loginAttributes)) {
             if (empty($_SESSION['user_id'])) {
@@ -20,15 +19,15 @@ class CheckAuthRequirements
             }
         }
 
-        // 2. Sprawdzenie RequireAdmin
+
         $adminAttributes = $reflection->getAttributes(RequireAdmin::class);
         if (!empty($adminAttributes)) {
-            // Admin wymaga logowania
+
             if (empty($_SESSION['user_id'])) {
                 throw new \Exception("User not logged in", 401);
             }
-            
-            // Sprawdzenie roli
+
+
             $role = $_SESSION['user_role'] ?? '';
             if ($role !== 'admin') {
                 throw new \Exception("Access denied: Admins only", 403);

@@ -23,7 +23,7 @@ class UserProfileController extends AppController
     #[RequireLogin]
     public function index()
     {
-        // Renderujemy tylko pusty widok, dane pobierze JS
+
         $this->render('profile');
     }
 
@@ -32,7 +32,7 @@ class UserProfileController extends AppController
     public function getProfileDataAPI()
     {
         header('Content-Type: application/json');
-        
+
         $user = $this->getUser();
         if (!$user) {
             http_response_code(401);
@@ -93,10 +93,10 @@ class UserProfileController extends AppController
         $message = "No changes were made.";
         $type = "error";
 
-        // 1. Avatar Upload
+
         if ($avatarFile && $avatarFile['error'] === UPLOAD_ERR_OK) {
             $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/svg+xml'];
-            $maxSize = 2 * 1024 * 1024; // 2MB
+            $maxSize = 2 * 1024 * 1024;
 
             if (!in_array($avatarFile['type'], $allowedTypes)) {
                 echo json_encode(['message' => 'Invalid file type. Only JPG, PNG, GIF, SVG.', 'type' => 'error']);
@@ -134,9 +134,7 @@ class UserProfileController extends AppController
                 echo json_encode(['message' => 'Failed to upload file due to server error.', 'type' => 'error']);
                 return;
             }
-        }
-        // 2. Default Avatar
-        elseif (!empty($defaultAvatar)) {
+        } elseif (!empty($defaultAvatar)) {
             $allowedDefaults = ['avatar1.svg', 'avatar2.svg', 'avatar3.svg', 'avatar4.svg'];
 
             if (in_array($defaultAvatar, $allowedDefaults)) {
@@ -149,7 +147,7 @@ class UserProfileController extends AppController
             }
         }
 
-        // 3. Username
+
         if (!empty($newUsername) && $newUsername !== $user->username) {
             $existingUser = $this->userRepository->getUserByUserName($newUsername);
 
@@ -163,7 +161,7 @@ class UserProfileController extends AppController
             $changesMade = true;
         }
 
-        // 4. Password
+
         if (!empty($newPassword)) {
             if (empty($currentPassword)) {
                 http_response_code(400);
@@ -197,9 +195,9 @@ class UserProfileController extends AppController
             try {
                 $this->userRepository->updateUser($user);
                 $updatedUser = $this->userRepository->getUserById($user->id);
-                
+
                 echo json_encode([
-                    'message' => 'Settings updated successfully!', 
+                    'message' => 'Settings updated successfully!',
                     'type' => 'success',
                     'user' => [
                         'username' => $updatedUser->username,

@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', () => {
     setupThemeToggle();
 });
 
-// --- 1. Pobieranie danych profilu ---
 function fetchProfileData() {
     fetch('/api/profile')
         .then(response => {
@@ -26,15 +25,12 @@ function fetchProfileData() {
 }
 
 function populateProfile(data) {
-    // CSRF Token
     document.getElementById('csrf_token').value = data.csrf;
 
-    // User Info
     document.getElementById('profile-username').textContent = data.username;
     document.getElementById('display_name').value = data.username;
     document.getElementById('email').value = data.email;
 
-    // Avatar
     updateAvatarPreview(data.avatar);
 }
 
@@ -47,7 +43,6 @@ function updateAvatarPreview(avatarUrl) {
     }
 }
 
-// --- 2. Obsługa Formularza (AJAX) ---
 function setupFormSubmission() {
     const form = document.getElementById('settingsForm');
     form.addEventListener('submit', (e) => {
@@ -59,39 +54,35 @@ function setupFormSubmission() {
             method: 'POST',
             body: formData
         })
-        .then(response => response.json())
-        .then(data => {
-            showPopup(
-                data.type === 'success' ? 'Success!' : 'Error!',
-                data.message,
-                data.type
-            );
+            .then(response => response.json())
+            .then(data => {
+                showPopup(
+                    data.type === 'success' ? 'Success!' : 'Error!',
+                    data.message,
+                    data.type
+                );
 
-            if (data.type === 'success' && data.user) {
-                // Aktualizuj widok bez przeładowania
-                document.getElementById('profile-username').textContent = data.user.username;
-                updateAvatarPreview(data.user.avatar);
-                
-                // Wyczyść pola hasła
-                document.getElementById('current_password').value = '';
-                document.getElementById('new_password').value = '';
-                document.getElementById('confirm_password').value = '';
+                if (data.type === 'success' && data.user) {
+                    document.getElementById('profile-username').textContent = data.user.username;
+                    updateAvatarPreview(data.user.avatar);
 
-                // Aktualizuj navbar jeśli funkcja jest dostępna
-                if (window.updateNavbarUserInfo) {
-                    window.updateNavbarUserInfo();
+                    document.getElementById('current_password').value = '';
+                    document.getElementById('new_password').value = '';
+                    document.getElementById('confirm_password').value = '';
+
+                    if (window.updateNavbarUserInfo) {
+                        window.updateNavbarUserInfo();
+                    }
                 }
-            }
-        })
-        .catch(err => {
-            console.error(err);
-            showPopup('Error', 'An unexpected error occurred.', 'error');
-        });
+            })
+            .catch(err => {
+                console.error(err);
+                showPopup('Error', 'An unexpected error occurred.', 'error');
+            });
     });
 }
 
-// --- 3. Obsługa Modala Avatara ---
-let currentSelection = { type: null, value: null };
+let currentSelection = {type: null, value: null};
 
 function setupAvatarModal() {
     const changeBtn = document.getElementById('changeAvatarBtn');
@@ -99,15 +90,13 @@ function setupAvatarModal() {
         changeBtn.addEventListener('click', () => toggleAvatarModal(true));
     }
 
-    // Obsługa inputu pliku w modalu
     const fileInput = document.getElementById('avatar_upload_input');
     if (fileInput) {
-        fileInput.addEventListener('change', function() {
+        fileInput.addEventListener('change', function () {
             previewUploadedFile(this);
         });
     }
 
-    // Drag and Drop handling
     const uploadZone = document.querySelector('.upload-zone');
     if (uploadZone) {
         ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
@@ -133,7 +122,7 @@ function setupAvatarModal() {
     }
 }
 
-window.toggleAvatarModal = function(show) {
+window.toggleAvatarModal = function (show) {
     const modal = document.getElementById('avatarModal');
     if (modal) {
         modal.style.display = show ? 'flex' : 'none';
@@ -141,7 +130,7 @@ window.toggleAvatarModal = function(show) {
     }
 };
 
-window.switchTab = function(tabName) {
+window.switchTab = function (tabName) {
     document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
     document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
 
@@ -155,55 +144,51 @@ window.switchTab = function(tabName) {
     }
 };
 
-window.selectDefault = function(filename, element) {
+window.selectDefault = function (filename, element) {
     document.querySelectorAll('.avatar-option').forEach(el => el.classList.remove('selected'));
     element.classList.add('selected');
-    currentSelection = { type: 'default', value: filename };
-    
-    // Reset file input
+    currentSelection = {type: 'default', value: filename};
+
     const fileInput = document.getElementById('avatar_upload_input');
-    if(fileInput) fileInput.value = '';
+    if (fileInput) fileInput.value = '';
 };
 
-window.previewUploadedFile = function(input) {
+window.previewUploadedFile = function (input) {
     if (input.files && input.files[0]) {
         const reader = new FileReader();
-        reader.onload = function(e) {
+        reader.onload = function (e) {
             const uploadZone = document.querySelector('.upload-zone');
             if (uploadZone) {
                 uploadZone.style.backgroundImage = `url(${e.target.result})`;
                 uploadZone.style.backgroundSize = 'cover';
                 uploadZone.style.backgroundPosition = 'center';
-                uploadZone.innerHTML = ''; 
+                uploadZone.innerHTML = '';
             }
-            currentSelection = { type: 'upload', value: e.target.result };
+            currentSelection = {type: 'upload', value: e.target.result};
         };
         reader.readAsDataURL(input.files[0]);
     }
 };
 
-window.confirmAvatarSelection = function() {
+window.confirmAvatarSelection = function () {
     const defaultInput = document.getElementById('input_default_avatar');
     const fileInput = document.getElementById('avatar_upload_input');
 
     if (currentSelection.type === 'default') {
         if (defaultInput) defaultInput.value = currentSelection.value;
-        if (fileInput) fileInput.value = ''; 
-        
-        // Podgląd tymczasowy (zostanie nadpisany po zapisie)
+        if (fileInput) fileInput.value = '';
+
         updateAvatarPreview(`Public/assets/avatars/${currentSelection.value}`);
 
     } else if (currentSelection.type === 'upload') {
         if (defaultInput) defaultInput.value = '';
-        // File input już ma plik
         updateAvatarPreview(currentSelection.value);
     }
 
     toggleAvatarModal(false);
 };
 
-// --- 4. Obsługa Popupów ---
-window.showPopup = function(title, message, type) {
+window.showPopup = function (title, message, type) {
     const popup = document.getElementById('messagePopup');
     const box = document.getElementById('popupBox');
     const icon = document.getElementById('popupIcon');
@@ -212,7 +197,6 @@ window.showPopup = function(title, message, type) {
 
     if (!popup) return;
 
-    // Reset klas
     box.className = 'popup-box';
     icon.className = 'fa-solid';
 
@@ -231,7 +215,7 @@ window.showPopup = function(title, message, type) {
     popup.style.opacity = '1';
 };
 
-window.closePopup = function() {
+window.closePopup = function () {
     const popup = document.getElementById('messagePopup');
     if (popup) {
         popup.style.opacity = '0';
@@ -241,7 +225,6 @@ window.closePopup = function() {
     }
 };
 
-// --- 5. Obsługa Motywu (Dark Mode) ---
 function setupThemeToggle() {
     const themeCheckbox = document.getElementById('themeToggleCheckbox');
     if (!themeCheckbox) return;

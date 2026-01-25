@@ -7,11 +7,13 @@ use App\Models\UserStatistics;
 readonly class UserStatisticsResponseDTO
 {
     public function __construct(
-        public int $gamesPlayed,
-        public int $gamesWon,
-        public int $highScore,
+        public int   $gamesPlayed,
+        public int   $gamesWon,
+        public int   $highScore,
         public float $winRate
-    ) {}
+    )
+    {
+    }
 
     public static function fromEntity(UserStatistics $stats): self
     {

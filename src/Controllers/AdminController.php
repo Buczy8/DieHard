@@ -6,40 +6,44 @@ use App\Annotation\AllowedMethods;
 use App\Annotation\RequireAdmin;
 use App\Repository\UserRepository;
 
-class AdminController extends AppController {
+class AdminController extends AppController
+{
     private UserRepository $userRepository;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->userRepository = UserRepository::getInstance();
     }
 
     #[RequireAdmin]
     #[AllowedMethods(['GET'])]
-    public function adminPanel(): void {
+    public function adminPanel(): void
+    {
         $this->render('admin');
     }
 
     #[RequireAdmin]
     #[AllowedMethods(['GET'])]
-    public function getAllUsersAPI(): void {
+    public function getAllUsersAPI(): void
+    {
         header('Content-Type: application/json');
         try {
-            // Parametry paginacji
+
             $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
             $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 8;
             if ($page < 1) $page = 1;
             if ($limit < 1) $limit = 8;
             $offset = ($page - 1) * $limit;
 
-            // Parametry filtrowania i sortowania
+
             $search = isset($_GET['search']) ? trim($_GET['search']) : '';
             $role = isset($_GET['role']) ? trim($_GET['role']) : 'all';
-            $sort = isset($_GET['sort']) ? trim($_GET['sort']) : 'DESC'; // Domyślnie najnowsze (ID DESC)
+            $sort = isset($_GET['sort']) ? trim($_GET['sort']) : 'DESC';
 
-            // Pobieramy dane
+
             $users = $this->userRepository->getUsersPaginated($limit, $offset, $search, $role, $sort);
-            
-            // Liczymy rekordy pasujące do filtrów (nie wszystkie w bazie!)
+
+
             $totalItems = $this->userRepository->countUsersWithFilters($search, $role);
             $totalPages = ceil($totalItems / $limit);
 
@@ -61,7 +65,8 @@ class AdminController extends AppController {
 
     #[RequireAdmin]
     #[AllowedMethods(['GET'])]
-    public function getStatsAPI(): void {
+    public function getStatsAPI(): void
+    {
         header('Content-Type: application/json');
         try {
             $totalUsers = $this->userRepository->countAllUsers();
@@ -81,7 +86,8 @@ class AdminController extends AppController {
 
     #[RequireAdmin]
     #[AllowedMethods(['DELETE'])]
-    public function deleteUserAPI(): void {
+    public function deleteUserAPI(): void
+    {
         $data = json_decode(file_get_contents('php://input'), true);
         $id = $data['id'] ?? null;
 
