@@ -208,7 +208,7 @@ function renderTable(users) {
         const roleClass = getRoleClass(user.role);
 
         tr.innerHTML = `
-            <td>
+            <td data-label="User">
                 <div class="user-cell">
                     <img src="${avatarSrc}" alt="${user.username}" class="user-avatar-img">
                     <div class="user-info">
@@ -217,13 +217,13 @@ function renderTable(users) {
                     </div>
                 </div>
             </td>
-            <td>
+            <td data-label="Role">
                 <span class="role-badge ${roleClass}">${user.role}</span>
             </td>
-            <td style="font-weight: 500; color: var(--text-main);">
+            <td data-label="Games Played" style="font-weight: 500; color: var(--text-main);">
                 ${gamesPlayed}
             </td>
-            <td class="actions-cell">
+            <td data-label="Actions" class="actions-cell">
                 ${user.role !== 'admin' ?
             `<div class="action-group">
                         <div class="custom-dropdown" id="dropdown-${user.id}">

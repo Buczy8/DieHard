@@ -95,7 +95,7 @@ class Routing
             $controllerObj = new $controller;
 
             CheckRequestAllowed::check($controllerObj, $action);
-            CheckAuthRequirements::Check($controllerObj, $action);
+            CheckAuthRequirements::check($controllerObj, $action);
             CheckHttps::check($controllerObj, $action);
 
             $controllerObj->$action();

@@ -113,6 +113,7 @@ W projekcie zastosowano szereg wzorców projektowych, aby zapewnić czytelność
 *   **Repository:** Warstwa abstrakcji pomiędzy logiką biznesową a bazą danych. Repozytoria (np. `GamesRepository`) odpowiadają za operacje CRUD i zapytania SQL, ukrywając szczegóły implementacji bazy danych przed kontrolerami.
 *   **Front Controller:** Wszystkie żądania trafiają do jednego punktu wejścia (`index.php`), który inicjalizuje środowisko i przekazuje sterowanie do odpowiedniego kontrolera za pośrednictwem routera.
 *   **Middleware:** Mechanizm pośredniczący w obsłudze żądań, wykorzystywany do sprawdzania uprawnień, autoryzacji czy poprawności metod HTTP (np. `CheckAuthRequirements`, `CheckRequestAllowed`).
+*   **Strategy:** Wykorzystywany do implementacji różnych poziomów trudności bota (Easy, Medium, Hard). Interfejs `BotStrategyInterface` definiuje metody decyzyjne, a konkretne klasy (`EasyBotStrategy`, `MediumBotStrategy`, `HardBotStrategy`) implementują algorytmy wyboru kości i kategorii punktacji.
 
 ## Baza danych
 
@@ -124,6 +125,8 @@ Główne tabele:
 *   `games`: Historia rozegranych gier.
 
 Baza zawiera również widoki (`v_user_leaderboard`) oraz triggery automatyzujące aktualizację statystyk.
+
+W projekcie wykorzystywane są **transakcje** bazodanowe, aby zapewnić spójność danych podczas operacji modyfikujących wiele rekordów jednocześnie przy aktualizacji profilu użytkownika.
 
 Domyślne konto administratora:
 *   **Email:** admin@admin.com

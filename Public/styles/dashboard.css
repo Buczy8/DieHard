@@ -143,6 +143,7 @@
     font-weight: 700;
     color: #fff;
     margin-right: 8px;
+    flex-shrink: 0;
 }
 
 .avatar-blue {
@@ -238,5 +239,35 @@
     .welcome-actions {
         flex-direction: column;
         width: 100%;
+    }
+
+    .games-table:not(.leaderboard-table) th:nth-child(1),
+    .games-table:not(.leaderboard-table) td:nth-child(1) {
+        display: none;
+    }
+
+    .games-table th, .games-table td {
+        padding: 12px 8px;
+        font-size: 13px;
+    }
+
+    .games-table-card {
+        overflow-x: hidden;
+    }
+
+    .games-table {
+        min-width: 100%;
+    }
+
+    .col-opponent {
+        max-width: 120px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .leaderboard-table td:last-child,
+    .leaderboard-table th:last-child {
+        text-align: center;
     }
 }
