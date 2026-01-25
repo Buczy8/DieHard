@@ -18,4 +18,21 @@ readonly class LoginDTO
             password: $data['password'] ?? ''
         );
     }
+
+    public static function validate(self $dto): ?string
+    {
+        if (empty($dto->email) || empty($dto->password)) {
+            return "Fill all fields";
+        }
+
+        if (strlen($dto->email) > 100) {
+            return "Email is too long";
+        }
+
+        if (!filter_var($dto->email, FILTER_VALIDATE_EMAIL)) {
+            return "Invalid email format";
+        }
+
+        return null;
+    }
 }

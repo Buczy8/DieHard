@@ -60,19 +60,10 @@ class SecurityController extends AppController
             }
             $loginDto = LoginDTO::fromRequest($_POST);
 
-            if (empty($loginDto->email) || empty($loginDto->password)) {
+            $validationError = LoginDTO::validate($loginDto);
+            if ($validationError) {
                 http_response_code(400);
-                return $this->render("login", ["message" => "Fill all fields"]);
-            }
-
-            if (strlen($loginDto->email) > 100) {
-                http_response_code(400);
-                return $this->render("login", ["message" => "Email is too long"]);
-            }
-
-            if (!filter_var($loginDto->email, FILTER_VALIDATE_EMAIL)) {
-                http_response_code(400);
-                return $this->render('login', ['message' => 'Invalid email format']);
+                return $this->render("login", ["message" => $validationError]);
             }
 
             $user = $this->userRepository->getUserByEmail($loginDto->email);
