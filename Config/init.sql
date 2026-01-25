@@ -122,5 +122,5 @@ EXECUTE FUNCTION update_user_stats_on_game();
 
 -- --- WSTĘPNE DANE ---
 INSERT INTO users (email, username, password, role)
-VALUES ('admin@admin.com', 'admin', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'admin')
+VALUES ('admin@admin.com', 'admin', '$2a$12$OcqJ1HoHzCYJqyWnSWIXQuZ3zlGGGIvjKqd/qptMR9Bu0EyW6dkGm', 'admin') ---hasło admina: admin
 ON CONFLICT (email) DO NOTHING;
