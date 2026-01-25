@@ -10,6 +10,7 @@ class DiceGameService
     private array $computerScorecard = [];
     private array $possibleScores = [];
     private string $difficulty = 'medium';
+    private BotStrategyInterface $botStrategy;
 
     private const CATEGORIES = [
         'score-aces', 'score-twos', 'score-threes', 'score-fours', 'score-fives', 'score-sixes',
@@ -24,8 +25,17 @@ class DiceGameService
         } else {
             $this->initializeNewGame($difficulty);
         }
+        $this->setBotStrategy($this->difficulty);
     }
 
+    private function setBotStrategy(string $difficulty): void
+    {
+        $this->botStrategy = match ($difficulty) {
+            'easy' => new EasyBotStrategy(),
+            'hard' => new HardBotStrategy(),
+            default => new MediumBotStrategy(),
+        };
+    }
 
     private function hydrateState(array $state): void
     {
@@ -136,7 +146,7 @@ class DiceGameService
 
             if ($rollNum === 3) break;
 
-            $heldIndices = $this->determineComputerHolds();
+            $heldIndices = $this->botStrategy->determineHolds($this->dice, $this->computerScorecard);
             $steps[] = ['type' => 'hold', 'heldIndices' => $heldIndices];
 
             if (count($heldIndices) === 5) break;
@@ -145,172 +155,11 @@ class DiceGameService
         return $steps;
     }
 
-    private function determineComputerHolds(): array
-    {
-        if ($this->difficulty === 'easy') {
-            return $this->getNoviceHolds();
-        }
-
-        if ($this->difficulty === 'medium') {
-            if (rand(1, 10) <= 3) {
-                return $this->getNoviceHolds();
-            }
-            return $this->getStandardHeldIndices();
-        }
-
-        $heldIndices = $this->getProHeldIndices();
-        sort($heldIndices);
-        return array_unique($heldIndices);
-    }
-
-    private function getNoviceHolds(): array
-    {
-        $diceValues = $this->dice;
-        $counts = array_count_values($diceValues);
-        arsort($counts);
-
-        $mostFrequentVal = array_key_first($counts);
-        $maxCount = reset($counts);
-
-        if ($maxCount >= 2) {
-            return array_keys(array_filter($diceValues, fn($v) => $v == $mostFrequentVal));
-        }
-
-        $sixes = array_keys(array_filter($diceValues, fn($v) => $v == 6));
-        if (!empty($sixes)) {
-            return $sixes;
-        }
-
-        return [];
-    }
-
-
-    private function getStandardHeldIndices(): array
-    {
-        $diceValues = $this->dice;
-        $counts = array_count_values($diceValues);
-        arsort($counts);
-        $mostFrequentVal = array_key_first($counts);
-        $maxCount = reset($counts);
-
-        if ($maxCount === 5) return [0, 1, 2, 3, 4];
-
-        if ($maxCount >= 4) {
-            return array_keys(array_filter($diceValues, fn($v) => $v == $mostFrequentVal));
-        }
-
-        $straightIndices = $this->checkStandardStraightStrategy();
-        if (!empty($straightIndices)) return $straightIndices;
-
-        if ($maxCount >= 2 || ($maxCount == 1 && $mostFrequentVal >= 4)) {
-            return array_keys(array_filter($diceValues, fn($v) => $v == $mostFrequentVal));
-        }
-
-        $maxVal = max($diceValues);
-        return array_keys(array_filter($diceValues, fn($v) => $v == $maxVal));
-    }
-
-    private function checkStandardStraightStrategy(): array
-    {
-        $needsLg = $this->computerScorecard['score-large-straight'] === null;
-        $needsSm = $this->computerScorecard['score-small-straight'] === null;
-
-        if (!$needsLg && !$needsSm) return [];
-
-        $uniqueDice = array_unique($this->dice);
-        $straightPatterns = ['1234', '2345', '3456'];
-
-        foreach ($straightPatterns as $pattern) {
-            $matchingValues = array_intersect(str_split($pattern), $uniqueDice);
-            $matches = count($matchingValues);
-
-            if (($matches >= 4 && $needsLg) || ($matches >= 3 && $needsSm)) {
-                $indicesToHold = [];
-                foreach ($this->dice as $idx => $val) {
-                    if (in_array($val, $matchingValues) && !in_array($idx, $indicesToHold)) {
-                        $indicesToHold[] = $idx;
-                    }
-                }
-                if (count($indicesToHold) >= 3) return $indicesToHold;
-            }
-        }
-        return [];
-    }
-
-
-    private function getProHeldIndices(): array
-    {
-        $diceValues = $this->dice;
-        $counts = array_count_values($diceValues);
-        arsort($counts);
-
-        $mostFrequentVal = array_key_first($counts);
-        $maxCount = reset($counts);
-        $uniqueDice = array_unique($diceValues);
-        sort($uniqueDice);
-
-        if ($maxCount === 5) return [0, 1, 2, 3, 4];
-
-        if ($maxCount >= 4) {
-            return array_keys(array_filter($diceValues, fn($v) => $v == $mostFrequentVal));
-        }
-
-        $needsLg = $this->computerScorecard['score-large-straight'] === null;
-        $needsSm = $this->computerScorecard['score-small-straight'] === null;
-
-        if ($needsLg || $needsSm) {
-            $longestRun = [];
-            $currentRun = [$uniqueDice[0] ?? 0];
-
-            for ($i = 0; $i < count($uniqueDice) - 1; $i++) {
-                if ($uniqueDice[$i + 1] == $uniqueDice[$i] + 1) {
-                    $currentRun[] = $uniqueDice[$i + 1];
-                } else {
-                    if (count($currentRun) > count($longestRun)) $longestRun = $currentRun;
-                    $currentRun = [$uniqueDice[$i + 1]];
-                }
-            }
-            if (count($currentRun) > count($longestRun)) $longestRun = $currentRun;
-
-            if (count($longestRun) >= 4 && $needsLg) {
-                return $this->getIndicesForValues($longestRun);
-            }
-
-            if (count($longestRun) >= 3 && $needsSm && $maxCount < 3) {
-                return $this->getIndicesForValues($longestRun);
-            }
-        }
-
-        if ($this->computerScorecard['score-full-house'] === null) {
-            if ($maxCount === 2 && count($counts) === 3) {
-                $pairs = array_keys(array_filter($counts, fn($c) => $c === 2));
-                return array_keys(array_filter($diceValues, fn($v) => in_array($v, $pairs)));
-            }
-        }
-
-        return array_keys(array_filter($diceValues, fn($v) => $v == $mostFrequentVal));
-    }
-
-    private function getIndicesForValues(array $valuesToKeep): array
-    {
-        $indices = [];
-        $tempDice = $this->dice;
-        foreach ($valuesToKeep as $val) {
-            $key = array_search($val, $tempDice);
-            if ($key !== false) {
-                $indices[] = $key;
-                unset($tempDice[$key]);
-            }
-        }
-        return $indices;
-    }
-
-
     private function finalizeComputerTurn(): array
     {
         $this->calculatePossibleScores();
 
-        $bestCategory = $this->decideComputerCategory();
+        $bestCategory = $this->botStrategy->decideCategory($this->possibleScores, $this->computerScorecard);
         $points = 0;
 
         if ($bestCategory) {
@@ -330,166 +179,6 @@ class DiceGameService
             'total' => $compTotal
         ];
     }
-
-    private function decideComputerCategory(): ?string
-    {
-        if ($this->difficulty === 'easy') {
-            return $this->findNoviceCategory();
-        }
-
-        if ($this->difficulty === 'medium') {
-            $cat = $this->findGreedyCategory();
-            return $cat ?: $this->findStandardFallbackCategory();
-        }
-
-        return $this->findProCategory();
-    }
-
-    private function findFirstAvailableCategory(): ?string
-    {
-        foreach ($this->possibleScores as $cat => $points) {
-            if (($this->computerScorecard[$cat] ?? null) === null) return $cat;
-        }
-        return null;
-    }
-
-    private function findNoviceCategory(): ?string
-    {
-
-        $bestCategory = null;
-        $maxPoints = -1;
-
-        foreach ($this->possibleScores as $cat => $points) {
-            if (($this->computerScorecard[$cat] ?? null) !== null) continue;
-
-            if ($points > $maxPoints) {
-                $maxPoints = $points;
-                $bestCategory = $cat;
-            }
-        }
-
-        if ($maxPoints > 0) {
-            return $bestCategory;
-        }
-
-        return $this->findFirstAvailableCategory();
-    }
-
-    private function findGreedyCategory(): ?string
-    {
-        if (($this->possibleScores['score-yahtzee'] ?? 0) == 50 && $this->computerScorecard['score-yahtzee'] === null) {
-            return 'score-yahtzee';
-        }
-
-        $bestCategory = null;
-        $maxPoints = -1;
-
-        foreach ($this->possibleScores as $cat => $points) {
-            if (($this->computerScorecard[$cat] ?? null) !== null) continue;
-
-            if ($cat === 'score-chance' && $points < 20) continue;
-
-            if ($points >= $maxPoints) {
-                $maxPoints = $points;
-                $bestCategory = $cat;
-            }
-        }
-        return $bestCategory;
-    }
-
-    private function findStandardFallbackCategory(): ?string
-    {
-        $scratchOrder = ['score-aces', 'score-twos', 'score-yahtzee', 'score-four-of-a-kind', 'score-large-straight'];
-        foreach ($scratchOrder as $cat) {
-            if (($this->computerScorecard[$cat] ?? null) === null) return $cat;
-        }
-        return $this->findFirstAvailableCategory();
-    }
-
-    private function findProCategory(): ?string
-    {
-        if (($this->possibleScores['score-yahtzee'] ?? 0) === 50 && $this->computerScorecard['score-yahtzee'] === null) {
-            return 'score-yahtzee';
-        }
-
-        foreach ([6, 5, 4, 3, 2, 1] as $dieVal) {
-            $catKey = $this->getCategoryKeyForDie($dieVal);
-            if ($this->computerScorecard[$catKey] !== null) continue;
-
-            $points = $this->possibleScores[$catKey];
-            $count = ($points > 0) ? ($points / $dieVal) : 0;
-
-            if ($count >= 4) return $catKey;
-
-            if ($count == 3) {
-                if ($dieVal <= 2 && ($this->possibleScores['score-full-house'] ?? 0) === 25 && $this->computerScorecard['score-full-house'] === null) {
-                    return 'score-full-house';
-                }
-                return $catKey;
-            }
-        }
-
-        if (($this->possibleScores['score-large-straight'] ?? 0) === 40 && $this->computerScorecard['score-large-straight'] === null) {
-            return 'score-large-straight';
-        }
-        if (($this->possibleScores['score-small-straight'] ?? 0) === 30 && $this->computerScorecard['score-small-straight'] === null) {
-            return 'score-small-straight';
-        }
-        if (($this->possibleScores['score-full-house'] ?? 0) === 25 && $this->computerScorecard['score-full-house'] === null) {
-            return 'score-full-house';
-        }
-
-        $sum = array_sum($this->dice);
-        if ($this->computerScorecard['score-four-of-a-kind'] === null && ($this->possibleScores['score-four-of-a-kind'] ?? 0) > 0) {
-            if ($sum >= 20) return 'score-four-of-a-kind';
-        }
-        if ($this->computerScorecard['score-three-of-a-kind'] === null && ($this->possibleScores['score-three-of-a-kind'] ?? 0) > 0) {
-            if ($sum >= 24) return 'score-three-of-a-kind';
-        }
-
-        if ($this->computerScorecard['score-chance'] === null && $sum >= 22) {
-            return 'score-chance';
-        }
-
-        foreach ([6, 5, 4] as $dieVal) {
-            $catKey = $this->getCategoryKeyForDie($dieVal);
-            if ($this->computerScorecard[$catKey] === null) {
-                if (($this->possibleScores[$catKey] ?? 0) >= ($dieVal * 2)) return $catKey;
-            }
-        }
-
-        return $this->findSmartScratchCategory();
-    }
-
-    private function findSmartScratchCategory(): string
-    {
-        $priorities = [
-            'score-aces',
-            'score-twos',
-            'score-yahtzee',
-            'score-four-of-a-kind',
-            'score-large-straight'
-        ];
-
-        foreach ($priorities as $cat) {
-            if (($this->computerScorecard[$cat] ?? null) === null) return $cat;
-        }
-
-        return $this->findFirstAvailableCategory();
-    }
-
-    private function getCategoryKeyForDie(int $val): string
-    {
-        return match ($val) {
-            1 => 'score-aces',
-            2 => 'score-twos',
-            3 => 'score-threes',
-            4 => 'score-fours',
-            5 => 'score-fives',
-            6 => 'score-sixes',
-        };
-    }
-
 
     private function calculatePossibleScores(): void
     {
