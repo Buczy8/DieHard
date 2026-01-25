@@ -46,13 +46,22 @@
         </div>
 
         <div class="filters-group">
-            <div class="select-wrapper">
-                <span class="select-label">Role:</span>
-                <label for="roleFilter"></label><select id="roleFilter" class="custom-select">
-                    <option value="all">All</option>
-                    <option value="admin">admin</option>
-                    <option value="user">Player</option>
-                </select>
+            <div class="custom-dropdown" id="roleFilterDropdown">
+                <div class="dropdown-selected" onclick="toggleFilterDropdown()">
+                    <span id="roleFilterLabel">All Roles</span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="dropdown-options">
+                    <div class="dropdown-option selected" onclick="selectFilterRole('all')">
+                        All Roles
+                    </div>
+                    <div class="dropdown-option" onclick="selectFilterRole('admin')">
+                        <i class="fa-solid fa-shield-halved"></i> Admin
+                    </div>
+                    <div class="dropdown-option" onclick="selectFilterRole('user')">
+                        <i class="fa-solid fa-user"></i> Player
+                    </div>
+                </div>
             </div>
 
             <button class="btn-secondary btn-sort">

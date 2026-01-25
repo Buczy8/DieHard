@@ -53,14 +53,14 @@ function showModal(title, message, type, callback) {
     btnConfirm.className = 'btn-primary modal-btn';
     
     if (type === 'delete') {
-        modalIconWrapper.classList.add('danger'); // Red
+        modalIconWrapper.classList.add('danger');
         modalIconWrapper.style.backgroundColor = '#fee2e2';
         modalIconWrapper.style.color = '#dc2626';
         modalIcon.className = 'fa-solid fa-trash-can';
         btnConfirm.classList.add('btn-danger');
         btnConfirm.innerText = 'Delete';
     } else {
-        modalIconWrapper.classList.add('warning'); // Yellow/Orange
+        modalIconWrapper.classList.add('warning');
         modalIconWrapper.style.backgroundColor = '#fef3c7';
         modalIconWrapper.style.color = '#d97706';
         modalIcon.className = 'fa-solid fa-triangle-exclamation';
@@ -89,13 +89,6 @@ function setupFilters() {
         }, 300);
     });
 
-    const roleFilter = document.getElementById('roleFilter');
-    roleFilter.addEventListener('change', (e) => {
-        currentRole = e.target.value;
-        currentPage = 1;
-        fetchUsers(currentPage);
-    });
-
     const sortBtn = document.querySelector('.btn-sort');
     sortBtn.addEventListener('click', () => {
         if (currentSort === 'DESC') {
@@ -107,6 +100,39 @@ function setupFilters() {
         }
         fetchUsers(currentPage);
     });
+}
+
+function toggleFilterDropdown() {
+    document.querySelectorAll('.custom-dropdown').forEach(el => {
+        if (el.id !== 'roleFilterDropdown') {
+            el.classList.remove('active');
+        }
+    });
+    const dropdown = document.getElementById('roleFilterDropdown');
+    dropdown.classList.toggle('active');
+}
+
+function selectFilterRole(role) {
+    currentRole = role;
+    currentPage = 1;
+    
+    const dropdown = document.getElementById('roleFilterDropdown');
+    dropdown.classList.remove('active');
+    
+    const label = document.getElementById('roleFilterLabel');
+    if (role === 'all') label.innerText = 'All Roles';
+    else if (role === 'admin') label.innerText = 'Admin';
+    else if (role === 'user') label.innerText = 'Player';
+    
+    const options = dropdown.querySelectorAll('.dropdown-option');
+    options.forEach(opt => {
+        opt.classList.remove('selected');
+        if (role === 'all' && opt.innerText.includes('All Roles')) opt.classList.add('selected');
+        if (role === 'admin' && opt.innerText.includes('Admin')) opt.classList.add('selected');
+        if (role === 'user' && opt.innerText.includes('Player')) opt.classList.add('selected');
+    });
+
+    fetchUsers(currentPage);
 }
 
 function fetchStats() {
