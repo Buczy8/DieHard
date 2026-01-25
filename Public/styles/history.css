@@ -128,6 +128,8 @@
 .avatar {
     width: 32px;
     height: 32px;
+    min-width: 32px; /* Zapobiega ściskaniu */
+    min-height: 32px; /* Zapobiega ściskaniu */
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -135,6 +137,7 @@
     font-size: 12px;
     font-weight: 700;
     color: #fff;
+    object-fit: cover; /* Dla obrazków */
 }
 
 .avatar-blue {
@@ -175,4 +178,33 @@
     text-align: center;
     padding: 20px;
     color: var(--text-secondary);
+}
+
+@media (max-width: 600px) {
+    .history-table th:nth-child(1),
+    .history-table td:nth-child(1) {
+        display: none; /* Ukryj datę */
+    }
+
+    .history-table th, .history-table td {
+        padding: 12px 8px;
+        font-size: 13px;
+    }
+
+    .col-opponent {
+        max-width: 120px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+
+    .section-header .btn-primary {
+        width: 100%;
+    }
 }

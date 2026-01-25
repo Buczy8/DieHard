@@ -79,7 +79,7 @@ function updateDashboard(data) {
                         <span>${escapeHtml(player.username)}</span>
                     </div>
                 </td>
-                <td style="text-align: right; font-weight: 600;">${player.high_score}</td>
+                <td class="score-col" style="font-weight: 600;">${player.high_score}</td>
             `;
             leaderboardBody.appendChild(tr);
         });

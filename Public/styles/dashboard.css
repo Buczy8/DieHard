@@ -143,6 +143,7 @@
     font-weight: 700;
     color: #fff;
     margin-right: 8px;
+    flex-shrink: 0;
 }
 
 .avatar-blue {
@@ -240,8 +241,8 @@
         width: 100%;
     }
 
-    .games-table th:nth-child(1),
-    .games-table td:nth-child(1) {
+    .games-table:not(.leaderboard-table) th:nth-child(1),
+    .games-table:not(.leaderboard-table) td:nth-child(1) {
         display: none;
     }
 
@@ -263,5 +264,10 @@
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+    }
+
+    .leaderboard-table td:last-child,
+    .leaderboard-table th:last-child {
+        text-align: center;
     }
 }
